@@ -1,10 +1,13 @@
+// 3Sum
+// ====
+// 
 // Given an integer array, `nums`, find and return all unique triplets `[nums[i], nums[j], nums[k]]`, such that
 // `i` ≠ `j`, `i` ≠ `k`, and `j` ≠ `k` and `nums[i] + nums[j] + nums[k]` == 0.
-//
+// 
 // > Note: The order of the triplets in the output *does not* matter.
-//
+// 
 // Constraints:
-//
+// 
 // - 3 ≤ `nums.length` ≤ 500
 // - -10^3 ≤ `nums[i]` ≤ 10^3
 
@@ -24,21 +27,22 @@ public class Solution
 
         for (int i = 0; i < nums.Length; i++)
         {
-            if (i > 0 && nums[i] == nums[i - 1]) { continue; }
+            if (i != 0 && nums[i] == nums[i - 1]) { continue; }
 
             for (int j = i + 1, k = nums.Length - 1; j < k;)
             {
-                if (j > i + 1 && nums[j] == nums[j - 1]) { j += 1; continue; }
-                if (k < nums.Length - 1 && nums[k] == nums[k + 1]) { k -= 1; continue; }
+                if (j != i && nums[j] == nums[j - 1]) { j++; continue; }
+                if (k != nums.Length - 1 && nums[k] == nums[k + 1]) { k--; continue; }
 
                 int sum = nums[i] + nums[j] + nums[k];
-                if (sum < 0) { j += 1; }
-                else if (sum > 0) { k -= 1; }
+
+                if (sum < 0) { j++; }
+                else if (sum > 0) { k--; }
                 else
                 {
                     triplets.Add(new List<int> { nums[i], nums[j], nums[k] });
-                    j += 1;
-                    k -= 1;
+                    j++;
+                    k--;
                 }
             }
         }
@@ -51,18 +55,24 @@ internal static class Tests
 {
     public static void Run()
     {
-        IList<IList<int>> result = new Solution().ThreeSum(new[] { -2, 0, 2, -2, 1, -1 });
+        Run(
+            nums: new[] { -2, 0, 2, -2, 1, -1 },
+            expectedResult: new List<IList<int>>
+            {
+                new List<int> { -2, 0, 2 },
+                new List<int> { -1, 0, 1 },
+            });
+    }
 
-        List<IList<int>> expected = new()
-        {
-            new List<int> { -2, 0, 2 },
-            new List<int> { -1, 0, 1 },
-        };
+    private static void Run(int[] nums, IList<IList<int>> expectedResult)
+    {
+        IList<IList<int>> result = new Solution().ThreeSum(nums);
+        Utilities.PrintSolution(nums, result);
 
-        Assert.AreEqual(expected.Count, result.Count);
-        for (int i = 0; i < expected.Count; i++)
+        Assert.AreEqual(expectedResult.Count, result.Count);
+        for (int i = 0; i < result.Count; i++)
         {
-            CollectionAssert.AreEqual(expected[i].ToArray(), result[i].ToArray());
+            CollectionAssert.AreEqual(expectedResult[i].ToArray(), result[i].ToArray());
         }
     }
 }

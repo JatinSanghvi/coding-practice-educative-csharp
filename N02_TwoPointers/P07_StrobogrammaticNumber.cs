@@ -1,10 +1,14 @@
+// Strobogrammatic Number
+// ======================
+// 
 // Given a string `num` representing an integer, determine whether it is a strobogrammatic number. Return TRUE if the
 // number is strobogrammatic or FALSE if it is not.
-//
+// 
 // > Note: A strobogrammatic number appears the same when pairs 180 degrees (viewed upside down). For example, "69" is
 // strobogrammatic because it looks the same when flipped upside down, while "962" is not.
-//
+// 
 // Constraints:
+// 
 // - 1 <= `num.length` <= 50
 // - `num` contains only digits.
 // - `num` has no leading zeros except when the number itself is zero.
@@ -22,7 +26,7 @@ public class Solution
 
         for (int left = 0, right = num.Length - 1; left <= right; left++, right--)
         {
-            if (!pairs.TryGetValue(num[left], out char rotated) || rotated != num[right])
+            if (!pairs.TryGetValue(num[left], out char pair) && pair != num[right])
             {
                 return false;
             }
@@ -36,7 +40,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Assert.IsTrue(Solution.IsStrobogrammatic("1068968901"));
-        Assert.IsFalse(Solution.IsStrobogrammatic("2"));
+        Run("1068968901", true);
+        Run("2", false);
+    }
+
+    private static void Run(string num, bool expectedResult)
+    {
+        bool result = Solution.IsStrobogrammatic(num);
+        Utilities.PrintSolution(num, result);
+        Assert.AreEqual(expectedResult, result);
     }
 }

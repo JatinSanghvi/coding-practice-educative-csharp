@@ -1,6 +1,5 @@
 {
-    "editor.fontFamily": "'JetBrains Mono', 'Rec Mono Linear', 'Recursive Sans Linear Static', 'Segoe UI Emoji'",
-    "workbench.colorTheme": "Noctis",
-    "workbench.preferredDarkColorTheme": "Noctis Bordo",
-    "workbench.preferredLightColorTheme": "Noctis Bordo"
+    "editor.fontFamily": "'Rec Mono Linear', 'Recursive Sans Linear Static', 'Segoe UI Emoji'",
+    "workbench.preferredDarkColorTheme": "Noctis Minimus",
+    "workbench.preferredLightColorTheme": "Noctis Minimus"
 }

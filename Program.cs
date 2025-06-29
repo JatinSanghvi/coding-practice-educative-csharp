@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview;
 
@@ -11,41 +10,41 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        int patternNum = args.Length != 2 ? -1 : int.Parse(args[0]);
-        int problemNum = args.Length != 2 ? -1 : int.Parse(args[1]);
+        int patternNum = args.Length == 2 ? int.Parse(args[0]) : -1;
+        int problemNum = args.Length == 2 ? int.Parse(args[1]) : -1;
 
-        string namespacePrefix = typeof(Program).Namespace! + ".";
+        string namespacePrefix = typeof(Program).Namespace + ".";
 
-        // I chose the format of the solution class to let it be submitted to Educative.io with minimal change.
-        Type[] testClasses = Assembly.GetExecutingAssembly().GetTypes()
-            // Static classes are represented as "abstract sealed" in IL.
+        // The structure for solution classes is chosen specifically to make it easier to be submitted to Educative.io.
+        Type[] classes = Assembly.GetExecutingAssembly().GetTypes()
+            // Static classes are designated as 'abstract sealed' in the IL.
             .Where(type => type.IsAbstract && type.IsSealed && type.IsClass && type.Name == "Tests")
-            .Where(type => type.Namespace!.StartsWith(namespacePrefix) && type.Namespace!.Split(".").Length == 4)
+            .Where(type => type.Namespace.StartsWith(namespacePrefix) && type.Namespace.Split(".").Length == 4)
             .ToArray();
 
-        string[] codingPatterns = testClasses
-            .Select(type => type.Namespace!.Split(".")[2])
+        string[] codingPatterns = classes
+            .Select(type => type.Namespace.Split(".")[2])
             .Distinct()
             .ToArray();
 
-        string selectedPattern = Program.UserSelect("Coding Pattern", codingPatterns, patternNum);
+        string selectedPattern = UserSelect("Coding Pattern", codingPatterns, patternNum);
 
-        string[] codingProblems = testClasses
-            .Where(type => type.Namespace!.Split(".")[2] == selectedPattern)
-            .Select(type => type.Namespace!.Split(".")[3])
+        string[] codingProblems = classes
+            .Where(type => type.Namespace.Split(".")[2] == selectedPattern)
+            .Select(type => type.Namespace.Split(".")[3])
             .ToArray();
 
-        string selectedProblem = Program.UserSelect("Problem", codingProblems, problemNum);
+        string selectedProblem = UserSelect("Coding Problem", codingProblems, problemNum);
 
         try
         {
-            // Invoke test method.
-            testClasses
-                .Single(type =>
-                    type.Namespace!.Split(".")[2] == selectedPattern &&
-                    type.Namespace!.Split(".")[3] == selectedProblem)
-                .GetMethod("Run", BindingFlags.Public | BindingFlags.Static)!
-                .Invoke(null, null);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            classes
+                .Where(type => type.Namespace.Split(".")[2] == selectedPattern)
+                .Where(type => type.Namespace.Split(".")[3] == selectedProblem)
+                .Single()
+                .GetMethod("Run", BindingFlags.Public | BindingFlags.Static)
+                .Invoke(obj: null, parameters: null);
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Test Succeeded!");
@@ -73,7 +72,7 @@ public static class Program
 
     public static string UserSelect(string category, string[] items, int id = -1)
     {
-        // Assumes options to be in format: A01_PascalCaseValue.
+        // Assume options to be in format: A01_PascalCaseValue.
         Dictionary<int, string> options = items.Order().ToDictionary(item => int.Parse(item[1..3]));
 
         if (id == -1)
@@ -83,17 +82,16 @@ public static class Program
             {
                 // Convert 'PascalCaseValue' to 'Pascal Case Value'.
                 string title = Regex.Replace(option.Value[4..], "(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ");
-                Console.WriteLine($"{option.Key}. {title}");
+                Console.WriteLine($"{option.Key,2}. {title}");
             }
 
             Console.ResetColor();
 
-            string? input = null;
-            while (!int.TryParse(input, out id) || !options.ContainsKey(id))
+            do
             {
                 Console.Write($"Select {category}: ");
-                input = Console.ReadLine();
             }
+            while (!int.TryParse(Console.ReadLine(), out id) || !options.ContainsKey(id));
         }
 
         return options[id];

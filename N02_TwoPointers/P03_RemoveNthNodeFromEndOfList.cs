@@ -1,7 +1,11 @@
+// Remove Nth Node from End of List
+// ================================
+// 
 // Given the `head` of a singly linked list and an integer `n`, remove the `n``th` node from the end of the list and
 // return the `head` of the modified list.
-//
+// 
 // Constraints:
+// 
 // - The number of nodes in the list is k.
 // - 1 ≤ k ≤ 10^3
 // - -10^3 ≤ `Node.value` ≤ 10^3
@@ -15,58 +19,68 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P03_RemoveNthNodeFromEndO
 
 public class Solution
 {
-    public static ListNode? RemoveNthLastNode(ListNode head, int n)
+    public static ListNode RemoveNthLastNode(ListNode head, int n)
     {
-        ListNode headParent = new(-1) { next = head };
-        ListNode left = headParent;
-        ListNode right = headParent;
+        ListNode parent = new() { next = head };
+        ListNode left = parent;
+        ListNode right = parent;
 
-        for (int i = 0; i < n; i++) { right = right.next!; }
-        while (right.next != null) { left = left.next!; right = right.next!; }
+        for (int i = 0; i < n; i++) { right = right.next; }
+        while (right.next is not null) { left = left.next; right = right.next; }
 
-        left.next = left.next!.next;
-        return headParent.next;
+        left.next = left.next.next;
+        return parent.next;
     }
 }
 
 public class ListNode(int val = 0)
 {
     public int val = val;
-    public ListNode? next;
+    public ListNode next;
 }
 
 internal static class Tests
 {
     public static void Run()
     {
-        CollectionAssert.Equals(Array.Empty<int>(), Solution.RemoveNthLastNode(new[] { 1 }.ToList()!, 1).ToArray());
-        CollectionAssert.Equals(new[] { 1, 2 }, Solution.RemoveNthLastNode(new[] { 1, 2, 3 }.ToList()!, 1).ToArray());
-        CollectionAssert.Equals(new[] { 1, 3 }, Solution.RemoveNthLastNode(new[] { 1, 2, 3 }.ToList()!, 2).ToArray());
-        CollectionAssert.Equals(new[] { 2, 3 }, Solution.RemoveNthLastNode(new[] { 1, 2, 3 }.ToList()!, 3).ToArray());
+        Run(new[] { 1 }, 1, Array.Empty<int>());
+        Run(new[] { 1, 2, 3 }, 1, new[] { 1, 2 });
+        Run(new[] { 1, 2, 3 }, 2, new[] { 1, 3 });
+        Run(new[] { 1, 2, 3 }, 3, new[] { 2, 3 });
     }
 
-    public static ListNode? ToList(this int[] array)
+    private static void Run(int[] values, int n, int[] expectedResult)
     {
-        ListNode parentNode = new();
-        ListNode prevNode = parentNode;
-        foreach (int num in array)
-        {
-            prevNode.next = new ListNode(num);
-            prevNode = prevNode.next;
-        }
-
-        return parentNode.next;
+        ListNode head = values.ToList();
+        int[] result = Solution.RemoveNthLastNode(head, n).ToArray();
+        Utilities.PrintSolution((values, n), result);
+        CollectionAssert.AreEqual(result, expectedResult);
     }
 
-    public static int[] ToArray(this ListNode? head)
+    public static ListNode ToList(this int[] values)
     {
-        List<int> list = new();
-        for (ListNode? node = head; node != null; node = node.next)
+        ListNode parent = new();
+        ListNode node = parent;
+
+        foreach (int value in values)
         {
-            list.Add(node.val);
+            node.next = new ListNode(value);
+            node = node.next;
         }
 
-        return list.ToArray();
+        return parent.next;
+    }
+
+    public static int[] ToArray(this ListNode head)
+    {
+        List<int> values = new();
+
+        for (ListNode node = head; node is not null; node = node.next)
+        {
+            values.Add(node.val);
+        }
+
+        return values.ToArray();
     }
 }
 

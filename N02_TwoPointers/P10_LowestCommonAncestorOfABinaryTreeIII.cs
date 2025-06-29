@@ -1,3 +1,6 @@
+// Lowest Common Ancestor of a Binary Tree III
+// ===========================================
+// 
 // You are given two nodes, `p` and `q`. The task is to return theirlowest common ancestor(LCA). Both nodes have a
 // reference to their parent node. The tree's root is not provided; you must use the parent pointers to find the nodes'
 // common ancestor.
@@ -9,6 +12,7 @@
 // > node itself.
 // 
 // Constraints:
+// 
 // - -10^4 ≤ `Node.data` ≤ 10^4
 // - The number of nodes in the tree is in the range [2,500].
 // - All `Node.data` are unique.
@@ -26,20 +30,20 @@ public class Solution
     public EduTreeNode LowestCommonAncestor(EduTreeNode p, EduTreeNode q)
     {
         int pDepth = 0;
-        for (EduTreeNode? ancestor = p; ancestor != null; ancestor = ancestor.parent)
+        for (EduTreeNode ancestor = p; ancestor != null; ancestor = ancestor.parent)
         {
-            pDepth += 1;
+            pDepth++;
         }
 
         int qDepth = 0;
-        for (EduTreeNode? ancestor = q; ancestor != null; ancestor = ancestor.parent)
+        for (EduTreeNode ancestor = q; ancestor != null; ancestor = ancestor.parent)
         {
-            qDepth += 1;
+            qDepth++;
         }
 
-        while (pDepth > qDepth) { p = p.parent!; pDepth -= 1; }
-        while (qDepth > pDepth) { q = q.parent!; qDepth -= 1; }
-        while (p.data != q.data) { p = p.parent!; q = q.parent!; }
+        while (pDepth > qDepth) { p = p.parent; pDepth--; }
+        while (qDepth > pDepth) { q = q.parent; qDepth--; }
+        while (p.data != q.data) { p = p.parent; q = q.parent; }
 
         return p;
     }
@@ -48,9 +52,9 @@ public class Solution
 public class EduTreeNode(int value)
 {
     public int data = value;
-    public EduTreeNode? left = null;
-    public EduTreeNode? right = null;
-    public EduTreeNode? parent = null;
+    public EduTreeNode left = null;
+    public EduTreeNode right = null;
+    public EduTreeNode parent = null;
 }
 
 internal static class Tests
@@ -59,60 +63,48 @@ internal static class Tests
     {
         int?[] values = new int?[] { 1, 2, 3, 4, 5, null, null, 6, null, null, 7 };
 
-        Assert.AreEqual(1, RunInternal(values, 1, 7));
-        Assert.AreEqual(2, RunInternal(values, 2, 7));
-        Assert.AreEqual(1, RunInternal(values, 3, 7));
-        Assert.AreEqual(2, RunInternal(values, 4, 7));
-        Assert.AreEqual(5, RunInternal(values, 5, 7));
-        Assert.AreEqual(2, RunInternal(values, 6, 7));
+        Run(values, 1, 7, 1);
+        Run(values, 2, 7, 2);
+        Run(values, 3, 7, 1);
+        Run(values, 4, 7, 2);
+        Run(values, 5, 7, 5);
+        Run(values, 6, 7, 2);
     }
 
-    private static int RunInternal(int?[] values, int pData, int qData)
+    private static void Run(int?[] values, int pData, int qData, int expectedResultData)
     {
-        EduTreeNode? tree = values.ToTree();
-        EduTreeNode p = tree.Find(pData)!;
-        EduTreeNode q = tree.Find(qData)!;
-        EduTreeNode ancestor = new Solution().LowestCommonAncestor(p, q);
-        return ancestor.data;
+        EduTreeNode tree = values.ToTree();
+        EduTreeNode p = tree.Find(pData);
+        EduTreeNode q = tree.Find(qData);
+
+        EduTreeNode result = new Solution().LowestCommonAncestor(p, q);
+        Utilities.PrintSolution((values, p.data, q.data), result.data);
+        Assert.AreEqual(expectedResultData, result.data);
     }
 
-    private static EduTreeNode? Find(this EduTreeNode? root, int data)
-    {
-        if (root is null) { return null; }
-        if (root.data == data) { return root; }
-
-        EduTreeNode? node;
-        if ((node = root.left.Find(data)) is not null) { return node; }
-        if ((node = root.right.Find(data)) is not null) { return node; }
-        return null;
-    }
-
-    private static EduTreeNode? ToTree(this int?[] values)
+    private static EduTreeNode ToTree(this int?[] values)
     {
         List<EduTreeNode> nodes = new() { new EduTreeNode(0) };
 
-        int index = 0;
+        int parentIndex = 0;
         bool isLeft = false;
         foreach (int? value in values)
         {
+            EduTreeNode node = null;
             if (value is not null)
             {
-                EduTreeNode node = new(value.Value) { parent = nodes[index] };
+                node = new(value.Value) { parent = nodes[parentIndex] };
                 nodes.Add(node);
-
-                if (isLeft)
-                {
-                    nodes[index].left = node;
-                }
-                else
-                {
-                    nodes[index].right = node;
-                }
             }
 
-            if (!isLeft)
+            if (isLeft)
             {
-                index += 1;
+                nodes[parentIndex].left = node;
+            }
+            else
+            {
+                nodes[parentIndex].right = node;
+                parentIndex++;
             }
 
             isLeft = !isLeft;
@@ -121,19 +113,29 @@ internal static class Tests
         return nodes[0].right;
     }
 
-    private static int?[] ToArray(this EduTreeNode? root)
+    private static int?[] ToArray(this EduTreeNode root)
     {
-        List<EduTreeNode?> nodes = new() { root };
-
+        List<EduTreeNode> nodes = new() { root };
         for (int index = 0; index < nodes.Count; index++)
         {
             if (nodes[index] is not null)
             {
-                nodes.Add(nodes[index]!.left);
-                nodes.Add(nodes[index]!.right);
+                nodes.Add(nodes[index].left);
+                nodes.Add(nodes[index].right);
             }
         }
 
         return nodes.Select(node => node?.data).ToArray();
+    }
+
+    private static EduTreeNode Find(this EduTreeNode root, int data)
+    {
+        if (root is null) { return null; }
+        if (root.data == data) { return root; }
+
+        EduTreeNode node;
+        if ((node = root.left.Find(data)) is not null) { return node; }
+        if ((node = root.right.Find(data)) is not null) { return node; }
+        return null;
     }
 }
