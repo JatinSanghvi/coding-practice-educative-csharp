@@ -1,0 +1,10 @@
+[*.cs]
+
+# CA1861: Avoid constant arrays as arguments
+dotnet_diagnostic.CA1861.severity = none
+
+# IDE0130: Namespace does not match folder structure
+dotnet_style_namespace_match_folder = false
+
+# IDE0305: Simplify collection initialization
+dotnet_style_prefer_collection_expression = never
