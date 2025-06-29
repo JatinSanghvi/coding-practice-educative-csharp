@@ -5,8 +5,10 @@
 
 - Remember to
     - Read and understand the problem statement well.
+    - Initalize complex variables like dictionaries.
     - Update the loop variable values.
     - Set correct visibility on methods and classes.
+    - Take modulus of answer if the problem mentions it.
 
 - Look out for
     - Redundant loop conditions.

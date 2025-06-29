@@ -11,7 +11,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P13_ValidPalindromeII;
+namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P16_ValidPalindromeII;
 
 public class Solution
 {
