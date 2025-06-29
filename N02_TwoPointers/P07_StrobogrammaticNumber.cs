@@ -22,11 +22,11 @@ public class Solution
 {
     public static bool IsStrobogrammatic(string num)
     {
-        Dictionary<char, char> pairs = new() { ['0'] = '0', ['1'] = '1', ['6'] = '9', ['8'] = '8', ['9'] = '6' };
+        var rotated = new Dictionary<char, char> { ['0'] = '0', ['1'] = '1', ['6'] = '9', ['8'] = '8', ['9'] = '6' };
 
         for (int left = 0, right = num.Length - 1; left <= right; left++, right--)
         {
-            if (!pairs.TryGetValue(num[left], out char pair) && pair != num[right])
+            if (!rotated.TryGetValue(num[left], out char rotatedLeft) || rotatedLeft != num[right])
             {
                 return false;
             }

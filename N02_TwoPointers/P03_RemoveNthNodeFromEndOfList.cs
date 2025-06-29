@@ -21,15 +21,25 @@ public class Solution
 {
     public static ListNode RemoveNthLastNode(ListNode head, int n)
     {
-        ListNode parent = new() { next = head };
-        ListNode left = parent;
-        ListNode right = parent;
+        var superHead = new ListNode { next = head };
 
-        for (int i = 0; i < n; i++) { right = right.next; }
-        while (right.next != null) { left = left.next; right = right.next; }
+        ListNode back = superHead;
+        ListNode front = superHead;
 
-        left.next = left.next.next;
-        return parent.next;
+        // Create distance of n between front and back nodes.
+        for (int i = 0; i < n; i++)
+        {
+            front = front.next;
+        }
+
+        while (front.next != null)
+        {
+            back = back.next;
+            front = front.next;
+        }
+
+        back.next = back.next.next;
+        return superHead.next;
     }
 }
 
@@ -75,7 +85,7 @@ internal static class Tests
     {
         List<int> values = new();
 
-        for (ListNode node = head; node !=null; node = node.next)
+        for (ListNode node = head; node != null; node = node.next)
         {
             values.Add(node.val);
         }

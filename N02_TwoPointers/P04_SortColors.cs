@@ -18,6 +18,7 @@
 // - 1 ≤ n ≤ 300
 // - `colors[i]` is either 0, 1, or 2
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P04_SortColors;
@@ -26,12 +27,29 @@ public class Solution
 {
     public static int[] SortColors(int[] colors)
     {
-        int left = 0, mid = 0, right = colors.Length - 1;
-        while (mid <= right)
+        // Loop invariance:
+        // Elements in colors[..redRight] are red.
+        // Elements in colors[redRight..whiteRight] are white.
+        // Elements in colors[blueLeft..] are blue.
+
+        int redRight = 0;
+        int whiteRight = 0;
+        int blueLeft = colors.Length;
+
+        while (whiteRight < blueLeft)
         {
-            if (colors[mid] == 0) { Swap(left++, mid++); }
-            else if (colors[mid] == 1) { mid++; }
-            else if (colors[mid] == 2) { Swap(mid, right--); }
+            if (colors[whiteRight] == 0)
+            {
+                Swap(redRight++, whiteRight++);
+            }
+            else if (colors[whiteRight] == 1)
+            {
+                whiteRight++;
+            }
+            else
+            {
+                Swap(whiteRight, --blueLeft);
+            }
         }
 
         return colors;
@@ -54,7 +72,10 @@ internal static class Tests
 
     private static void Run(int[] colors, int[] expectedResult)
     {
-        int[] result = Solution.SortColors(colors);
+        var colorsCopy = new int[colors.Length];
+        Array.Copy(colors, colorsCopy, colors.Length);
+
+        int[] result = Solution.SortColors(colorsCopy);
         Utilities.PrintSolution(colors, result);
         CollectionAssert.AreEqual(expectedResult, result);
     }

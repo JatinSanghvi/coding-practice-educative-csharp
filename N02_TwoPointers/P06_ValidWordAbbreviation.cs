@@ -34,24 +34,25 @@ public class Solution
 {
     public static bool ValidWordAbbreviation(string word, string abbr)
     {
-        int abbrIndex = 0;
         int wordIndex = 0;
+        int abbrIndex = 0;
 
-        while (abbrIndex < abbr.Length && wordIndex < word.Length)
+        while (wordIndex < word.Length && abbrIndex < abbr.Length)
         {
             if (abbr[abbrIndex] == '0')
             {
                 return false;
             }
-            else if (abbr[abbrIndex] >= 'a' && abbr[abbrIndex] <= 'z')
+
+            if (abbr[abbrIndex] >= 'a' && abbr[abbrIndex] <= 'z')
             {
                 if (word[wordIndex] != abbr[abbrIndex])
                 {
                     return false;
                 }
 
-                abbrIndex++;
                 wordIndex++;
+                abbrIndex++;
             }
             else
             {
@@ -66,7 +67,7 @@ public class Solution
             }
         }
 
-        return abbrIndex == abbr.Length && wordIndex == word.Length;
+        return wordIndex == word.Length && abbrIndex == abbr.Length;
     }
 }
 

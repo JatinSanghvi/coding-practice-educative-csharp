@@ -29,7 +29,7 @@ public class Solution
         char[] numArray = numStr[..(numStr.Length / 2)].ToCharArray();
 
         int i;
-        for (i = numArray.Length - 2; i > -1 && numArray[i] >= numArray[i + 1]; i--) ;
+        for (i = numArray.Length - 2; i >= 0 && numArray[i] >= numArray[i + 1]; i--) ;
 
         if (i == -1) { return string.Empty; }
 

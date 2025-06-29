@@ -5,7 +5,7 @@ List of annotations:
 
 - **Difficulty** - Difficulty level of the problem.
 - **Quality** - How elegant the solution that is required is.
-- **Important** - Should the problem be considered when quickly glossing over.
+- **Important** - Is the problem important enough to be considered when short on time.
 
 ## 2. Two Pointers
 
@@ -17,32 +17,32 @@ Grasp the fundamentals of solving coding problems using the two-pointer techniqu
 |             2 | 3Sum                                        | Medium     | Good      |           |
 |             3 | Remove Nth Node From End Of List            | Easy       | Tricky    |           |
 |             4 | Sort Colors                                 | Easy       | Good      |           |
-|             5 | Reverse Words in a String                   | Medium     | Average   | Yes       |
-|             6 | Valid Word Abbreviation                     | Medium     | Average   | Yes       |
+|             5 | Reverse Words in a String                   | Medium     | Okay      | Yes       |
+|             6 | Valid Word Abbreviation                     | Medium     | Okay      | Yes       |
 |             7 | Strobogrammatic Number                      | Easy       | Good      |           |
 |             8 | Minimum Number of Moves to Make Palindrome  | Medium     | Tricky    |           |
-|             9 | Next Palindrome Using Same Digits           | Medium     | Tinker    |           |
-|            10 | Lowest Common Ancestor of a Binary Tree III | Easy       | Average   |           |
+|             9 | Next Palindrome Using Same Digits           | Medium     | Fiddle    |           |
+|            10 | Lowest Common Ancestor of a Binary Tree III | Easy       | Okay      |           |
 |            11 | Count Pairs Whose Sum is Less than Target   | Medium     | Excellent | Yes       |
-|            12 | Count Subarrays With Fixed Bounds           | Easy       | Good      |           |
-|            13 | Valid Palindrome II                         | Easy       | Average   |           |
+|            12 | Count Subarrays With Fixed Bounds           | Medium     | Good      | Yes       |
+|            13 | Valid Palindrome II                         | Easy       | Okay      |           |
 
 ## 3. Fast and Slow Pointers
 
 Work your way through the fast and slow pointers method to identify cycles and solve linked list problems.
 
-| Serial Number | Title                             | Difficulty | Quality | Important |
-| ------------: | --------------------------------- | ---------- | ------- | --------- |
-|             1 | Happy Number                      | Easy       | Good    |           |
-|             2 | Linked List Cycle                 | Easy       | Tricky  |           |
-|             3 | Middle Of The Linked List         | Easy       | Average |           |
-|             4 | Circular Array Loop               | Medium     | Tinker  | Yes       |
-|             5 | Find The Duplicate Number         | Medium     | Tricky  | Yes       |
-|             6 | Palindrome Linked List            | Medium     | Tinker  |           |
-|             7 | Maximum Twin Sum Of A Linked List | Medium     | Tinker  |           |
-|             8 | Split A Circular Linked List      | Easy       | Good    |           |
-|             9 | Linked List Cycle III             | Easy       | Average |           |
-|            10 | Linked List Cycle IV              | Medium     | Corner  | Yes       |
+| Serial Number | Title                             | Difficulty | Quality  | Important |
+| ------------: | --------------------------------- | ---------- | -------- | --------- |
+|             1 | Happy Number                      | Easy       | Good     |           |
+|             2 | Linked List Cycle                 | Easy       | Tricky   |           |
+|             3 | Middle Of The Linked List         | Easy       | Okay     |           |
+|             4 | Circular Array Loop               | Medium     | Fiddle   | Yes       |
+|             5 | Find The Duplicate Number         | Medium     | Tricky   | Yes       |
+|             6 | Palindrome Linked List            | Medium     | Fiddle   |           |
+|             7 | Maximum Twin Sum Of A Linked List | Medium     | Fiddle   |           |
+|             8 | Split A Circular Linked List      | Easy       | Good     |           |
+|             9 | Linked List Cycle III             | Easy       | Okay     |           |
+|            10 | Linked List Cycle IV              | Medium     | Edgecase | Yes       |
 
 ## 4. Sliding Window
 

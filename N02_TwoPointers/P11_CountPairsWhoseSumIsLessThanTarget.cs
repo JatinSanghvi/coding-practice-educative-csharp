@@ -28,15 +28,15 @@ public class Solution
 
         for (int left = 0, right = numsArray.Length - 1; left < right;)
         {
-            if (numsArray[left] + numsArray[right] >= target)
+            if (numsArray[left] + numsArray[right] < target)
             {
-                right--;
+                // numsArray[left] + { numsArray[left + 1] .. numsArray[right] }.
+                count += right - left;
+                left++;
             }
             else
             {
-                // nums[left] + any(nums[left + 1] .. nums[right]) < target.
-                count += right - left;
-                left++;
+                right--;
             }
         }
 

@@ -28,20 +28,22 @@ public class Solution
             if (!char.IsAsciiLetterOrDigit(s[left]))
             {
                 left++;
+                continue;
             }
-            else if (!char.IsAsciiLetterOrDigit(s[right]))
+
+            if (!char.IsAsciiLetterOrDigit(s[right]))
             {
                 right--;
+                continue;
             }
-            else if (char.ToLower(s[left]) == char.ToLower(s[right]))
-            {
-                left++;
-                right--;
-            }
-            else
+
+            if (char.ToLower(s[left]) != char.ToLower(s[right]))
             {
                 return false;
             }
+
+            left++;
+            right--;
         }
 
         return true;

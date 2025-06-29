@@ -31,16 +31,18 @@ public class Solution
             if (match == right)
             {
                 // Number of moves required to shift the unmatched character to middle.
-                moves += right - (s.Length / 2);
+                moves += right - (chars.Length / 2);
             }
             else
             {
                 moves += match - left;
-                while (match > left)
+
+                // Move characters from left to (match-1) one position to the right.
+                for (; match > left; match--)
                 {
-                    (chars[match - 1], chars[match]) = (chars[match], chars[match - 1]);
-                    match--;
+                    chars[match] = chars[match - 1];
                 }
+
                 left++;
             }
         }

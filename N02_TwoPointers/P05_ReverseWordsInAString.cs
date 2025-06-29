@@ -24,29 +24,25 @@ public class Solution
 {
     public static string ReverseWords(string sentence)
     {
-        StringBuilder stringBuilder = new();
+        var reversed = new StringBuilder();
+        int length = sentence.Length;
 
-        int start = 0; // Probable start index of next word.
-
-        for (int end = 0; end < sentence.Length + 1; end++)
+        for (int start = length - 1, end = length; start >= -1; start--)
         {
-            if (end == sentence.Length || sentence[end] == ' ')
+            if (start == -1 || sentence[start] == ' ')
             {
-                if (start != end)
+                // If the spaces are not consecutive, it's a word to be appended.
+                if (end != start + 1)
                 {
-                    if (stringBuilder.Length != 0)
-                    {
-                        stringBuilder.Insert(0, ' ');
-                    }
-
-                    stringBuilder.Insert(0, sentence[start..end]);
+                    if (reversed.Length > 0) { reversed.Append(' '); }
+                    reversed.Append(sentence[(start + 1)..end]);
                 }
 
-                start = end + 1;
+                end = start; // Last encountered index of space character.
             }
         }
 
-        return stringBuilder.ToString();
+        return reversed.ToString();
     }
 }
 

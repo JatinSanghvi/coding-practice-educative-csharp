@@ -1,7 +1,7 @@
 // Lowest Common Ancestor of a Binary Tree III
 // ===========================================
 // 
-// You are given two nodes, `p` and `q`. The task is to return theirlowest common ancestor(LCA). Both nodes have a
+// You are given two nodes, `p` and `q`. The task is to return their lowest common ancestor(LCA). Both nodes have a
 // reference to their parent node. The tree's root is not provided; you must use the parent pointers to find the nodes'
 // common ancestor.
 // 
@@ -30,20 +30,19 @@ public class Solution
     public EduTreeNode LowestCommonAncestor(EduTreeNode p, EduTreeNode q)
     {
         int pDepth = 0;
-        for (EduTreeNode ancestor = p; ancestor != null; ancestor = ancestor.parent)
-        {
-            pDepth++;
-        }
-
         int qDepth = 0;
-        for (EduTreeNode ancestor = q; ancestor != null; ancestor = ancestor.parent)
-        {
-            qDepth++;
-        }
 
-        while (pDepth > qDepth) { p = p.parent; pDepth--; }
-        while (qDepth > pDepth) { q = q.parent; qDepth--; }
-        while (p.data != q.data) { p = p.parent; q = q.parent; }
+        for (EduTreeNode ancestor = p; ancestor != null; ancestor = ancestor.parent) { pDepth++; }
+        for (EduTreeNode ancestor = q; ancestor != null; ancestor = ancestor.parent) { qDepth++; }
+
+        for (; pDepth > qDepth; pDepth--) { p = p.parent; }
+        for (; qDepth > pDepth; qDepth--) { q = q.parent; }
+
+        while (p != q)
+        {
+            p = p.parent;
+            q = q.parent;
+        }
 
         return p;
     }
@@ -84,26 +83,33 @@ internal static class Tests
 
     private static EduTreeNode ToTree(this int?[] values)
     {
-        List<EduTreeNode> nodes = new() { new EduTreeNode(0) };
-
+        var nodes = new List<EduTreeNode> { new EduTreeNode(0) };
         int parentIndex = 0;
         bool isLeft = false;
+
         foreach (int? value in values)
         {
-            EduTreeNode node = null;
             if (value != null)
             {
-                node = new(value.Value) { parent = nodes[parentIndex] };
+                var node = new EduTreeNode(value.Value)
+                {
+                    parent = nodes[parentIndex]
+                };
+
+                if (isLeft)
+                {
+                    nodes[parentIndex].left = node;
+                }
+                else
+                {
+                    nodes[parentIndex].right = node;
+                }
+
                 nodes.Add(node);
             }
 
-            if (isLeft)
+            if (!isLeft)
             {
-                nodes[parentIndex].left = node;
-            }
-            else
-            {
-                nodes[parentIndex].right = node;
                 parentIndex++;
             }
 
@@ -115,13 +121,14 @@ internal static class Tests
 
     private static int?[] ToArray(this EduTreeNode root)
     {
-        List<EduTreeNode> nodes = new() { root };
+        var nodes = new List<EduTreeNode> { root };
         for (int index = 0; index < nodes.Count; index++)
         {
-            if (nodes[index] != null)
+            var node = nodes[index];
+            if (node != null)
             {
-                nodes.Add(nodes[index].left);
-                nodes.Add(nodes[index].right);
+                nodes.Add(node.left);
+                nodes.Add(node.right);
             }
         }
 
@@ -133,9 +140,6 @@ internal static class Tests
         if (root == null) { return null; }
         if (root.data == data) { return root; }
 
-        EduTreeNode node;
-        if ((node = root.left.Find(data)) != null) { return node; }
-        if ((node = root.right.Find(data)) != null) { return node; }
-        return null;
+        return root.left.Find(data) ?? root.right.Find(data);
     }
 }

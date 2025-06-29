@@ -24,23 +24,22 @@ public class Solution
     public long CountSubarrays(int[] nums, int minK, int maxK)
     {
         long count = 0;
-        int start = 0;
-        int lastMin = -1, lastMax = -1;
+        int lastMin = -1;
+        int lastMax = -1;
 
-        for (int end = 0; end < nums.Length; end++)
+        for (int start = 0, end = 0; end < nums.Length; end++)
         {
             if (nums[end] < minK || nums[end] > maxK)
             {
                 start = end + 1;
-                lastMin = lastMax = end;
             }
             else
             {
                 if (nums[end] == minK) { lastMin = end; }
                 if (nums[end] == maxK) { lastMax = end; }
-
-                count += Math.Min(lastMin, lastMax) - start + 1;
             }
+
+            count += Math.Max(0, Math.Min(lastMin, lastMax) - start + 1);
         }
 
         return count;
