@@ -12,7 +12,7 @@ internal static class Utilities
         Console.WriteLine(input.Print() + " => " + result.Print());
     }
 
-    private static string Print<T>(this T value)
+    public static string Print<T>(this T value)
     {
         return value switch
         {

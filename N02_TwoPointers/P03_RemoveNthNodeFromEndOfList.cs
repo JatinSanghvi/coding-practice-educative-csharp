@@ -26,7 +26,7 @@ public class Solution
         ListNode right = parent;
 
         for (int i = 0; i < n; i++) { right = right.next; }
-        while (right.next is not null) { left = left.next; right = right.next; }
+        while (right.next != null) { left = left.next; right = right.next; }
 
         left.next = left.next.next;
         return parent.next;
@@ -75,7 +75,7 @@ internal static class Tests
     {
         List<int> values = new();
 
-        for (ListNode node = head; node is not null; node = node.next)
+        for (ListNode node = head; node !=null; node = node.next)
         {
             values.Add(node.val);
         }
@@ -83,5 +83,3 @@ internal static class Tests
         return values.ToArray();
     }
 }
-
-

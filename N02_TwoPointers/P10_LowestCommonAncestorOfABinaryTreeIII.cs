@@ -91,7 +91,7 @@ internal static class Tests
         foreach (int? value in values)
         {
             EduTreeNode node = null;
-            if (value is not null)
+            if (value != null)
             {
                 node = new(value.Value) { parent = nodes[parentIndex] };
                 nodes.Add(node);
@@ -118,7 +118,7 @@ internal static class Tests
         List<EduTreeNode> nodes = new() { root };
         for (int index = 0; index < nodes.Count; index++)
         {
-            if (nodes[index] is not null)
+            if (nodes[index] != null)
             {
                 nodes.Add(nodes[index].left);
                 nodes.Add(nodes[index].right);
@@ -130,12 +130,12 @@ internal static class Tests
 
     private static EduTreeNode Find(this EduTreeNode root, int data)
     {
-        if (root is null) { return null; }
+        if (root == null) { return null; }
         if (root.data == data) { return root; }
 
         EduTreeNode node;
-        if ((node = root.left.Find(data)) is not null) { return node; }
-        if ((node = root.right.Find(data)) is not null) { return node; }
+        if ((node = root.left.Find(data)) != null) { return node; }
+        if ((node = root.right.Find(data)) != null) { return node; }
         return null;
     }
 }
