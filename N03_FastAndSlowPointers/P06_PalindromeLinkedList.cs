@@ -21,42 +21,40 @@ public class Solution
 {
     public static bool Palindrome(ListNode head)
     {
-        ListNode slow, fast;
-        slow = fast = new ListNode() { next = head };
+        ListNode slow = head, fast = head;
 
-        while (fast?.next != null)
+        while (fast.next?.next != null)
         {
             slow = slow.next;
             fast = fast.next.next;
         }
 
-        // Slow pointer points to node with index (size - 1) / 2. Reverse the second half of linked list.
-        ListNode revHead = null, head2 = slow.next;
-        while (head2 != null)
+        // Reverse the right half of the linked list.
+        ListNode revHead = null, rightHead = slow.next;
+        while (rightHead != null)
         {
-            ListNode temp = head2.next;
-            head2.next = revHead;
-            revHead = head2;
-            head2 = temp;
+            ListNode rightNext = rightHead.next;
+            rightHead.next = revHead;
+            revHead = rightHead;
+            rightHead = rightNext;
         }
 
         // Compare linked lists.
-        for (ListNode node = head, node2 = revHead; node2 != null; node = node.next, node2 = node2.next)
+        for (ListNode left = head, right = revHead; right != null; left = left.next, right = right.next)
         {
-            if (node2.val != node.val)
+            if (left.val != right.val)
             {
                 return false;
             }
         }
 
-        // Rebuild the original linked lists.
-        ListNode tail = null;
+        // Rebuld the linked list.
         while (revHead != null)
         {
-            ListNode temp = revHead.next;
-            revHead.next = tail;
-            tail = revHead;
-            revHead = temp;
+            ListNode revNext = revHead.next;
+            revHead.next = rightHead;
+            rightHead = revHead;
+            revHead = revNext;
         }
 
         return true;

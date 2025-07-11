@@ -31,13 +31,15 @@ public class Solution
 {
     public static bool CircularArrayLoop(int[] nums)
     {
+        int length = nums.Length;
         bool[] visited = new bool[nums.Length];
 
-        for (int index = 0; index < nums.Length; index++)
+        for (int index = 0; index < length; index++)
         {
             if (visited[index]) { continue; }
 
             int slow = index, fast = index;
+
             while (true)
             {
                 int nextFast = GetNextIndex(fast);
@@ -59,8 +61,8 @@ public class Solution
 
         int GetNextIndex(int index)
         {
-            int next = (index + nums[index]) % nums.Length;
-            return next >= 0 ? next : next + nums.Length;
+            int next = (index + nums[index]) % length;
+            return next >= 0 ? next : next + length;
         }
     }
 }

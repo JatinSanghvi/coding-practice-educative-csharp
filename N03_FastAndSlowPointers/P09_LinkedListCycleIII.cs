@@ -25,21 +25,25 @@ public class Solution
 
         do
         {
-            if (fast?.next == null) { return 0; }
+            if (fast?.next == null)
+            {
+                return 0;
+            }
+
             slow = slow.next;
             fast = fast.next.next;
         }
         while (slow != fast);
 
-        int count = 0;
+        int length = 0;
         do
         {
+            length++;
             slow = slow.next;
-            count++;
         }
         while (slow != fast);
 
-        return count;
+        return length;
     }
 }
 

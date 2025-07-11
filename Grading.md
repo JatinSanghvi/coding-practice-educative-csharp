@@ -15,12 +15,12 @@ Grasp the fundamentals of solving coding problems using the two-pointer techniqu
 | ------------: | ------------------------------------------- | ---------- | --------- | --------- |
 |             1 | Valid Palindrome                            | Easy       | Good      |           |
 |             2 | 3Sum                                        | Medium     | Good      |           |
-|             3 | Remove Nth Node From End Of List            | Easy       | Tricky    |           |
+|             3 | Remove Nth Node From End Of List            | Easy       | Trick     |           |
 |             4 | Sort Colors                                 | Easy       | Good      |           |
 |             5 | Reverse Words in a String                   | Medium     | Okay      | Yes       |
 |             6 | Valid Word Abbreviation                     | Medium     | Okay      | Yes       |
 |             7 | Strobogrammatic Number                      | Easy       | Good      |           |
-|             8 | Minimum Number of Moves to Make Palindrome  | Medium     | Tricky    |           |
+|             8 | Minimum Number of Moves to Make Palindrome  | Medium     | Trick     |           |
 |             9 | Next Palindrome Using Same Digits           | Medium     | Fiddle    |           |
 |            10 | Lowest Common Ancestor of a Binary Tree III | Easy       | Okay      |           |
 |            11 | Count Pairs Whose Sum is Less than Target   | Medium     | Excellent | Yes       |
@@ -34,10 +34,10 @@ Work your way through the fast and slow pointers method to identify cycles and s
 | Serial Number | Title                             | Difficulty | Quality  | Important |
 | ------------: | --------------------------------- | ---------- | -------- | --------- |
 |             1 | Happy Number                      | Easy       | Good     |           |
-|             2 | Linked List Cycle                 | Easy       | Tricky   |           |
+|             2 | Linked List Cycle                 | Easy       | Trick    |           |
 |             3 | Middle Of The Linked List         | Easy       | Okay     |           |
 |             4 | Circular Array Loop               | Medium     | Fiddle   | Yes       |
-|             5 | Find The Duplicate Number         | Medium     | Tricky   | Yes       |
+|             5 | Find The Duplicate Number         | Medium     | Trick    | Yes       |
 |             6 | Palindrome Linked List            | Medium     | Fiddle   |           |
 |             7 | Maximum Twin Sum Of A Linked List | Medium     | Fiddle   |           |
 |             8 | Split A Circular Linked List      | Easy       | Good     |           |

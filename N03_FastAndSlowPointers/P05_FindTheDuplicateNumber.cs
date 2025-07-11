@@ -9,7 +9,7 @@
 // 
 // Constraints:
 // - 1 ≤ n ≤ 10^3
-// - `nums.length` =n+1
+// - `nums.length` = n+1
 // - 1 ≤ `nums[i]` ≤ n
 // - All the integers in `nums` are unique, except for one integer that will appear more than once.
 
@@ -21,7 +21,11 @@ public class Solution
 {
     public static int FindDuplicate(int[] nums)
     {
-        // Since none of the values can be zero, we will never reach the starting point and make a full circle.
+        // Traversing the array based on element values will:
+        // - Never end, as all values are valid indexes.
+        // - Never circle back to the start point, as none of the values are zero.
+        // Hence, this approach is guaranteed to reach the duplicate number.
+
         int slow = 0, fast = 0;
 
         do

@@ -21,19 +21,23 @@ public class Solution
 {
     public static ListNode RemoveCycle(ListNode head)
     {
-        // Required for handling the case when the last node points to the head.
-        ListNode parent = new ListNode { next = head };
-        ListNode slow = parent, fast = parent;
+        // Required for handling the edge case, where the last node points to the head.
+        ListNode superHead = new ListNode(0, head);
+        ListNode slow = superHead, fast = superHead;
 
         do
         {
-            if (fast?.next == null) { return head; }
+            if (fast?.next == null)
+            {
+                return head;
+            }
+
             slow = slow.next;
             fast = fast.next.next;
         }
         while (slow != fast);
 
-        slow = parent;
+        slow = superHead;
         while (slow.next != fast.next)
         {
             slow = slow.next;

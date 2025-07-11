@@ -29,19 +29,23 @@ public class Solution
     public static ListNode[] SplitCircularLinkedList(ListNode head)
     {
         ListNode slow = head, fast = head;
-        bool moveSlow = false;
 
-        while (fast.next != head)
+        while (fast.next != head && fast.next.next != head)
         {
-            if (moveSlow) { slow = slow.next; }
-            fast = fast.next;
-            moveSlow = !moveSlow;
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
-        fast.next = slow.next;
-        slow.next = head;
+        if (fast.next != head)
+        {
+            fast = fast.next;
+        }
 
-        return new ListNode[] { slow.next, fast.next };
+        ListNode rightHead = slow.next;
+        slow.next = head;
+        fast.next = rightHead;
+
+        return new[] { head, rightHead };
     }
 }
 

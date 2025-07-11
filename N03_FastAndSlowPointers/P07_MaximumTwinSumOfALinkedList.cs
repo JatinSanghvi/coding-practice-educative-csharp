@@ -1,7 +1,7 @@
 // Maximum Twin Sum of a Linked List
 // ================================
 // 
-// In a linked list with an even number of nodes (n), each node at position i (using 0--based indexing) is paired
+// In a linked list with an even number of nodes (n), each node at position i (using 0-based indexing) is paired
 // with the node at position (n-1-i). These pairs are called twins for all 0 ≤ i < n/2.
 // 
 // For example, if n=4, the twin pairs are:
@@ -25,43 +25,41 @@ public class Solution
 {
     public static int TwinSum(ListNode head)
     {
-        ListNode slow, fast;
-        slow = fast = new ListNode() { next = head };
+        ListNode slow = head, fast = head;
 
-        while (fast?.next != null)
+        while (fast.next?.next != null)
         {
             slow = slow.next;
             fast = fast.next.next;
         }
 
-        // Slow pointer points to node with index (size - 1) / 2. Reverse the second half of linked list.
-        ListNode revHead = null, head2 = slow.next;
-        while (head2 != null)
+        // Reverse the right half of the linked list.
+        ListNode revHead = null, rightHead = slow.next;
+        while (rightHead != null)
         {
-            ListNode temp = head2.next;
-            head2.next = revHead;
-            revHead = head2;
-            head2 = temp;
+            ListNode rightNext = rightHead.next;
+            rightHead.next = revHead;
+            revHead = rightHead;
+            rightHead = rightNext;
         }
 
         // Traverse both linked lists.
-        int maxSum = 0;
-        for (ListNode node = head, node2 = revHead; node2 != null; node = node.next, node2 = node2.next)
+        int twinSum = 0;
+        for (ListNode left = head, right = revHead; right != null; left = left.next, right = right.next)
         {
-            maxSum = Math.Max(maxSum, node.val + node2.val);
+            twinSum = Math.Max(twinSum, left.val + right.val);
         }
 
-        // Rebuild the original linked lists.
-        ListNode tail = null;
+        // Rebuild the linked list.
         while (revHead != null)
         {
-            ListNode temp = revHead.next;
-            revHead.next = tail;
-            tail = revHead;
-            revHead = temp;
+            ListNode revNext = revHead.next;
+            revHead.next = rightHead;
+            rightHead = revHead;
+            revHead = revNext;
         }
 
-        return maxSum;
+        return twinSum;
     }
 }
 
