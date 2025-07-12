@@ -4,7 +4,7 @@ filtering and picking the right ones at a later time for revising.
 List of annotations:
 
 - **Difficulty** - Difficulty level of the problem.
-- **Quality** - Quality suggests how elegant the required solution is.
+- **Quality** - How elegant the solution that is required is.
 - **Important** - Should the problem be considered when quickly glossing over.
 
 ## 2. Two Pointers
