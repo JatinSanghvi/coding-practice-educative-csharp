@@ -1,5 +1,14 @@
 // Longest Palindromic Substring
 // =============================
+//
+// Given a string `s`, return the longest palindromic substring in `s`.
+//
+// > Note: If there are multiple valid palindromic substrings of the same length, return any of them.
+//
+// Constraints
+//
+// - 1 ≤ `s.length` ≤ 1000
+// - `s` consist of only digits and English letters.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -1,5 +1,15 @@
 // Permutations II
 // ===============
+//
+// For a given integer list, `nums`, which might contain duplicates, return all possible unique permutations derived
+// from `nums`.
+//
+// > Note: The order in which the permutations appear doesn't matter.
+//
+// Constraints:
+//
+// - 1 ≤ `nums.length` ≤ 8
+// - -10 ≤ `nums[i]` ≤ 10
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

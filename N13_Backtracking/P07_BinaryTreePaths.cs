@@ -1,5 +1,14 @@
 // Binary Tree Paths
 // =================
+//
+// Given the `root` of a binary tree, return all paths from the root to the leaf nodes in any order. Each path should be
+// represented as a string of node values, separated by arrows (`→`), where a leaf is defined as a node with no
+// children.
+//
+// Constraints:
+//
+// - 1 ≤ `nodes` ≤ 100
+// - -10^4 ≤ `nodes.data` ≤ 10^4
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

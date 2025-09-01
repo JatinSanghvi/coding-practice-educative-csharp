@@ -1,5 +1,17 @@
 // Permutations
 // ============
+//
+// Given an input string, return all possible permutations of the string.
+//
+// > Note: The order of permutations does not matter.
+//
+// Constraints:
+//
+// - All characters in `word` are unique.
+//
+// - 1 ≤ `word.length` ≤ 6
+//
+// - All characters in `word` are lowercase English letters.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

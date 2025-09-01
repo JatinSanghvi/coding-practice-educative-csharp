@@ -1,5 +1,13 @@
 // Fraction to Recurring Decimal
 // =============================
+//
+// Given the two integer values of a fraction, `numerator` and `denominator`, implement a function that returns the
+// fraction in string format. If the fractional part repeats, enclose the repeating part in parentheses.
+//
+// Constraints:
+//
+// - `denominator` != 0
+// - -2^31 ≤ `numerator`, `denominator` ≤ 2^31 - 1
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

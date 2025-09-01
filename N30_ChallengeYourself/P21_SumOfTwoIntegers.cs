@@ -1,5 +1,11 @@
 // Sum of Two Integers
 // ===================
+//
+// Given two integers, `a` and `b`, return their sum without using the addition or subtraction operators.
+//
+// Constraints
+//
+// - -1000 ≤ `a`, `b` ≤ 1000
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

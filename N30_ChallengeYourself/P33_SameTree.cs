@@ -1,5 +1,14 @@
 // Same Tree
 // =========
+//
+// Given the roots of two binary trees, `p` and `q`, write a function to check whether or not they are the same. Two
+// binary trees are considered the same if they're structurally identical and the nodes have the same value.
+//
+// Constraints:
+//
+// - The number of nodes in the tree is in the range [0,100]
+//
+// - -104≤ `node.data` ≤104
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

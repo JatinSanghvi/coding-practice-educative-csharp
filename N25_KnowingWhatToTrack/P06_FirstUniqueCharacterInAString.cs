@@ -1,5 +1,13 @@
 // First Unique Character in a String
 // ==================================
+//
+// For a given string of characters, `s`, your task is to find the first non-repeating character and return its index.
+// Return -1 if there's no unique character in the given string.
+//
+// Constraints:
+//
+// - Only lowercase English letters are accepted.
+// - There are no spaces in the string.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

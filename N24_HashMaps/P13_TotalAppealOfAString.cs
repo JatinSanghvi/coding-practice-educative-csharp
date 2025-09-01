@@ -1,5 +1,16 @@
 // Total Appeal of a String
 // ========================
+//
+// Given a string `s`, return its total appeal, which is calculated by summing the appeals of all its substrings.
+//
+// > The appeal of a string is defined as the count of unique characters present in that string.
+//
+// For instance, the appeal of "xyzxz" is 3, as it contains three distinct characters: 'x', 'y', and 'z'.
+//
+// Constraints:
+//
+// - 1 ≤ `s.length` ≤ 10^3
+// - `s` consists of only lowercase English letters.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

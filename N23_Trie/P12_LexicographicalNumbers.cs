@@ -1,5 +1,11 @@
 // Lexicographical Numbers
 // =======================
+//
+// Given an integer value n, write a function that returns all the numbers in the range 1 to n in lexicographical order.
+//
+// Constraints:
+//
+// - 1 ≤ n ≤ 5×10^4
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

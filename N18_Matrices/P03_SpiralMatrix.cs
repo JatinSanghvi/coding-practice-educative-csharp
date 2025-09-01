@@ -1,5 +1,14 @@
 // Spiral Matrix
 // =============
+//
+// Given an m × n matrix, return an array containing the matrix elements in spiral order, starting from the top-left
+// cell.
+//
+// Constraints:
+//
+// - 1 ≤ `matrix.length` ≤ 10
+// - 1 ≤ `matrix[i].length` ≤ 10
+// - -100 ≤ `matrix[i][j]` ≤ 100
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

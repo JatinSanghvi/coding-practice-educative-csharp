@@ -1,25 +1,25 @@
 // Valid Word Abbreviation
 // =======================
-// 
+//
 // Given a string `word` and an abbreviation `abbr`, return TRUE if the abbreviation matches the given string.
 // Otherwise, return FALSE.
-// 
+//
 // A certain word `"calendar"` can be abbreviated as follows:
 // - `"cal3ar"` (`"cal ``end`` ar"` skipping three characters `"end"` from the word `"calendar"` still matches the
 //   provided abbreviation)
 // - `"c6r"` (`"c ``alenda`` r"` skipping six characters `"alenda"` from the word `"calendar"` still matches the
 //   provided abbreviation)
-// 
+//
 // The word `"internationalization"` can also be abbreviated as `"i18n"` (the abbreviation comes from skipping 18
 // characters in `"internationalization"`, leaving the first and last letters `"i"` and `"n"`).
-// 
+//
 // The following are *not* valid abbreviations:
 // - `"c06r"` (has leading zeroes)
 // - `"cale0ndar"` (replaces an empty string)
 // - `"c24r"` (`"c ``al``enda`` r"` the replaced substrings are adjacent)
-// 
+//
 // Constraints:
-// 
+//
 // - 1 ≤ `word.length` ≤ 20
 // - `word` consists of only lowercase English letters.
 // - 1 ≤ `abbr.length` ≤ 10

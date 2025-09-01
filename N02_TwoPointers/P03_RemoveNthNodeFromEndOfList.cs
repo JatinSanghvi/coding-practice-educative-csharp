@@ -1,11 +1,11 @@
 // Remove Nth Node from End of List
 // ================================
-// 
+//
 // Given the `head` of a singly linked list and an integer `n`, remove the `n``th` node from the end of the list and
 // return the `head` of the modified list.
-// 
+//
 // Constraints:
-// 
+//
 // - The number of nodes in the list is k.
 // - 1 ≤ k ≤ 10^3
 // - -10^3 ≤ `Node.value` ≤ 10^3

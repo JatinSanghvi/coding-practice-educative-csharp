@@ -1,5 +1,15 @@
 // Longest Palindrome
 // ==================
+//
+// Given a string `s` that only contains alphabets, return the length of the longest palindrome that may be composed
+// using those letters.
+//
+// > Note: Letters are case-sensitive. Hence, combinations such as "`Aa`" are not considered palindromes.
+//
+// Constraints:
+//
+// - 1 ≤ `s.length` ≤ 10^3
+// - `s` consists of lowercase and/or uppercase English letters only.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

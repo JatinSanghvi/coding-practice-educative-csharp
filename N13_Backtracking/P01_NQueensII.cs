@@ -1,5 +1,13 @@
 // N-Queens II
 // ===========
+//
+// Given an integer, `n`, representing the size of an `n x n` chessboard, return the number of distinct ways to place
+// `n` queens so that no two queens attack each other. A queen can attack another queen if they are in the same row,
+// column, or diagonal.
+//
+// Constraints:
+//
+// - 1 ≤ `n` ≤ 9
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

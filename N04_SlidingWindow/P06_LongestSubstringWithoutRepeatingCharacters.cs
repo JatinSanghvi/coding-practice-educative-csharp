@@ -1,5 +1,12 @@
 // Longest Substring without Repeating Characters
 // ==============================================
+//
+// Given a string, `str`, return the length of the longest substring without repeating characters.
+//
+// Constraints:
+//
+// - 1 ≤ `str.length` ≤ 1000
+// - `str` consists of English letters, digits, and spaces.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

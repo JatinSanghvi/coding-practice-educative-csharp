@@ -1,5 +1,14 @@
 // Palindromic Substrings
-// =====================
+// ======================
+//
+// Given a string, `s`, return the number of palindromic substrings contained in it. A substring is a contiguous
+// sequence of characters in a string. A palindrome is a phrase, word, or sequence that reads the same forward and
+// backward.
+//
+// Constraints:
+//
+// - 1 ≤ `s.length` ≤ 1000
+// - `s` consists of only lowercase English characters.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

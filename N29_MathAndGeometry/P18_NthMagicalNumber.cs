@@ -1,5 +1,16 @@
 // Nth Magical Number
 // ==================
+//
+// Given three integers `n`, `a`, and `b`, return the n_th magical number.
+//
+// A magical number is defined as a positive integer that is divisible by either `a` or `b`.
+//
+// As the result may be very large, return it modulo 10^9 + 7.
+//
+// Constraints:
+//
+// - 1 ≤ `n` ≤ 10^9
+// - 2 ≤ `a`, `b` ≤ 4 × 10^4
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

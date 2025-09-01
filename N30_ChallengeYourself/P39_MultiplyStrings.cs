@@ -1,5 +1,14 @@
 // Multiply Strings
 // ================
+//
+// Given two non-negative integers, `str1` and `str2`, represented as strings, return the product of these integers,
+// `result`, which is also represented as strings.
+//
+// Constraints:
+//
+// - `str1` and `str2` consist of digits only.
+// - 1≤ `str1.length`, `str2.length` ≤200
+// - No leading 0 in `str1` or `str2`
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

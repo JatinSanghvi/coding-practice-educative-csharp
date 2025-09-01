@@ -1,5 +1,13 @@
 // Palindrome Permutation
 // ======================
+//
+// For a given string, `st`, find whether or not a permutation of this string is a palindrome. You should return TRUE if
+// such a permutation is possible and FALSE if it isn't possible.
+//
+// Constraints:
+//
+// - 1 ≤ `st.length` ≤ 1000
+// - The string will contain lowercase English letters.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

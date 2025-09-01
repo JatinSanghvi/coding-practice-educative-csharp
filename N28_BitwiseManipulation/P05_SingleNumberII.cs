@@ -1,5 +1,15 @@
 // Single Number II
 // ================
+//
+// Given a non-empty array `arr`, in which exactly two elements appear once, and all the other elements appear twice,
+// return the two elements that appeared only once.
+//
+// > Note: The result can be returned in any order. The solution should use only constant extra space.
+//
+// Constraints:
+//
+// - 2 ≤ `arr.length` ≤ 10^3
+// - -2^31 ≤ `arr[i]` ≤ 2^31 - 1
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

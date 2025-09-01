@@ -1,5 +1,12 @@
 // Contains Duplicate
 // ==================
+//
+// For a given array of integers, `nums`, return TRUE if it contains duplicates. Otherwise, return FALSE.
+//
+// Constraints:
+//
+// - 1 ≤ `nums.length` ≤ 10^5
+// - -10^9 ≤ `nums[i]` ≤ 10^9
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

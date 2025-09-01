@@ -1,5 +1,15 @@
 // Longest Happy Prefix
 // ====================
+//
+// Given a string, `s`, find the longest happy prefix. If no such prefix exists, return an empty string `""`.
+//
+// > Note: A happy prefix of a string is a non-empty substring at the beginning that also appears at the end (but not
+// > the entire string itself).
+//
+// Constraints:
+//
+// - 1 ≤ `s.length` ≤ 10^5
+// - `s` contains only lowercase English letters.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

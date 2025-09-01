@@ -1,16 +1,16 @@
 // Reverse Words in a String
 // =========================
-// 
+//
 // You are given a string, `sentence`, comprising words and leading or trailing spaces or multiple spaces between words.
 // Your task is to reverse the order of its words without affecting the order of letters within the given word. Return
 // the modified `sentence`.
-// 
+//
 // > Note: A word is defined as a continuous sequence of non-space characters. Multiple words separated by single spaces
 // form a valid English sentence. Therefore, ensure there is only a single space between any two words in the returned
 // string, with no leading, trailing, or extra spaces.
-// 
+//
 // Constraints:
-// 
+//
 // - The `sentence` contains English uppercase and lowercase letters, digits, and spaces.
 // - There is at least one word in a `sentence`.
 // -1 ≤ `sentence.length` ≤ 10^4

@@ -1,18 +1,18 @@
 // Lowest Common Ancestor of a Binary Tree III
 // ===========================================
-// 
+//
 // You are given two nodes, `p` and `q`. The task is to return their lowest common ancestor(LCA). Both nodes have a
 // reference to their parent node. The tree's root is not provided; you must use the parent pointers to find the nodes'
 // common ancestor.
-// 
+//
 // > Note: The lowest common ancestor of two nodes, `p` and `q`, is the lowest node in the binary tree, with both `p`
 // > and `q` as descendants.
 // >
 // > In a tree, a descendant of a node is any node reachable by following edges downward from that node, including the
 // > node itself.
-// 
+//
 // Constraints:
-// 
+//
 // - -10^4 ≤ `Node.data` ≤ 10^4
 // - The number of nodes in the tree is in the range [2,500].
 // - All `Node.data` are unique.

@@ -1,5 +1,18 @@
 // Smallest Range Covering Elements from K Lists
-// ============================================
+// =============================================
+//
+// You are given k sorted lists of integers, `nums`, where each list in `nums` is in non-decreasing order. Your task is
+// to find the smallest range that contains at least one element from each of the k lists.
+//
+// A range [a, b] is considered smaller than another range [c, d] if b - a < d - c, or a < c if b - a == d - c.
+//
+// Constraints:
+//
+// - `nums.length` == k
+// - 1 ≤ k ≤ 100
+// - 1 ≤ `nums[i].length` ≤ 50
+// - -10^3 ≤ `nums[i][j]` ≤ 10^3
+// - `nums[i]` is sorted in a non-decreasing order.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -1,5 +1,17 @@
 // Ransom Note
 // ===========
+//
+// Given two strings, `ransomNote` and `magazine`, check if `ransomNote` can be constructed using the letters from
+// `magazine`. Return TRUE if it can be constructed, FALSE otherwise.
+//
+// > Note: A ransom note is a written message that can be constructed by using the letters available in the given
+// > magazine. The magazine can have multiple instances of the same letter. Each instance of the letter in the magazine
+// > can only be used once to construct the ransom note.
+//
+// Constraints:
+//
+// - 1 ≤ `ransomNote.length`, `magazine.length` ≤ 10^5
+// - The `ransomNote` and `magazine` consist of lowercase English letters.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -1,5 +1,14 @@
 // Single Number
 // =============
+//
+// Given an array of integers, where every element appears twice except for one, find the element that occurs only once.
+//
+// > Note: The solution must have linear runtime and constant space complexity.
+//
+// Constraints:
+//
+// - 1 ≤ `nums.length` ≤ 10^3
+// - -3 × 10^3 ≤ `nums[i]` ≤ 3 × 10^3
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

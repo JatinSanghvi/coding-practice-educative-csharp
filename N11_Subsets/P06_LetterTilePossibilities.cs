@@ -1,5 +1,18 @@
 // Letter Tile Possibilities
-// ========================
+// =========================
+//
+// You are given a string, `tiles`, consisting of uppercase English letters. You can arrange the tiles into sequences of
+// any length (from 1 to the length of `tiles`), and each sequence must include at most one tile, `tiles[i]`, from
+// `tiles`.
+//
+// Your task is to return the number of possible non-empty unique sequences you can make using the letters represented
+// on `tiles[i]`.
+//
+// Constraints:
+//
+// - 1 ≤ `tiles.length` ≤ 7
+//
+// - The `tiles` string consists of uppercase English letters.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

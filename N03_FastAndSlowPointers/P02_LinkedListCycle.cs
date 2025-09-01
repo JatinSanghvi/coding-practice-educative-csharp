@@ -1,14 +1,14 @@
 // Linked List Cycle
 // =================
-// 
+//
 // Given the `head` of a linked list, determine whether the list contains a cycle. A cycle exists if a node in the list
 // can be revisited by continuously following the `next` pointers. Return TRUE if a cycle is present; otherwise, return
 // FALSE.
-// 
+//
 // Constraints:
-// 
+//
 // Let `n` be the number of nodes in a linked list.
-// 
+//
 // - 0 ≤ `n` ≤ 500
 // - -10^5 ≤ `Node.value` ≤ 10^5
 

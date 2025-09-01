@@ -1,5 +1,16 @@
 // Largest Palindromic Number
-// =========================
+// ==========================
+//
+// You are given a string `num` consisting of digits from 0 to 9. Your task is to return the largest possible
+// palindromic number as a string by using some or all of the digits in `num`. The resulting palindromic number must not
+// have leading zeros.
+//
+// Note: You may reorder the digits freely, and you must use at least one digit from the `num` string.
+//
+// Constraints:
+//
+// - 1 ≤ `num.length` ≤ 1000
+// - `num` consists of digits
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

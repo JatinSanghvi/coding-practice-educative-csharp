@@ -1,5 +1,15 @@
 // Max Points on a Line
 // ====================
+//
+// Given an integer array of `points` where `points[i]` = [x_i, y_i] represents a point on the X--Y plane, your task is
+// to return the maximum number of points on the same straight line.
+//
+// Constraints:
+//
+// - 1 ≤ `points.length` ≤ 300
+// - `points[i].length` = 2
+// - -10^4 ≤ x_i, y_i ≤ 10^4
+// - All the points are unique.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

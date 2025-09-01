@@ -1,5 +1,11 @@
 // Maximum Swap
 // ============
+//
+// Given an integer `num`, return the maximum number that can be formed by swapping at least two digits once.
+//
+// Constraints:
+//
+// - 0 ≤ `num` ≤ 10^5
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
