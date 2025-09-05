@@ -21,9 +21,26 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P14_CountSubarraysWithS
 
 public class Solution
 {
-    public static bool Function()
+    public long CountSubarrays(int[] nums, long k)
     {
-        return true;
+        int subarrays = 0;
+        int sum = 0;
+
+        int start = 0;
+        for (int end = 0; end < nums.Length; end++)
+        {
+            sum += nums[end];
+
+            while (sum * ((end + 1) - start) >= k)
+            {
+                sum -= nums[start];
+                start++;
+            }
+
+            subarrays += (end + 1) - start;
+        }
+
+        return subarrays;
     }
 }
 
@@ -31,13 +48,17 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(new int[] { 1, 2, 3, 2, 1 }, 1, 0);
+        Run(new int[] { 1, 2, 3, 2, 1 }, 2, 2);
+        Run(new int[] { 1, 2, 3, 2, 1 }, 4, 5);
+        Run(new int[] { 1, 2, 3, 2, 1 }, 18, 9);
+        Run(new int[] { 1, 2, 3, 2, 1 }, 19, 11);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int k, long expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        long result = new Solution().CountSubarrays(nums, k);
+        Utilities.PrintSolution((nums, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

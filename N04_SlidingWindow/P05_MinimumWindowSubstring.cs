@@ -14,15 +14,60 @@
 // - Strings `s` and `t` consist of uppercase and lowercase English characters.
 // - 1 ≤ `s.length`, `t.length` ≤ 10^3
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P05_MinimumWindowSubstring;
 
 public class Solution
 {
-    public static bool Function()
+    public static string MinWindow(string s, string t)
     {
-        return true;
+        // Count of character in t minus count of character in current s-window.
+        var charCounts = new Dictionary<char, int>();
+
+        foreach (char ch in t)
+        {
+            charCounts.TryAdd(ch, 0);
+            charCounts[ch]++;
+        }
+
+        // Count of distinct characters in t that aren't entirely present in current s-window.
+        int absentChars = charCounts.Count;
+        string minWindow = string.Empty;
+
+        int start = 0;
+        for (int end = 0; end < s.Length; end++)
+        {
+            char ch = s[end];
+            charCounts.TryAdd(ch, 0);
+            charCounts[ch]--;
+
+            if (charCounts[ch] == 0)
+            {
+                absentChars--;
+            }
+
+            while (absentChars == 0)
+            {
+                ch = s[start];
+                charCounts[ch]++;
+
+                if (charCounts[ch] == 1)
+                {
+                    absentChars++;
+
+                    if (string.IsNullOrEmpty(minWindow) || minWindow.Length > end - start + 1)
+                    {
+                        minWindow = s[start..(end + 1)];
+                    }
+                }
+
+                start++;
+            }
+        }
+
+        return minWindow;
     }
 }
 
@@ -30,13 +75,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("abaaacaabaca", "cb", "bac");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string s, string t, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = Solution.MinWindow(s, t);
+        Utilities.PrintSolution((s, t), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

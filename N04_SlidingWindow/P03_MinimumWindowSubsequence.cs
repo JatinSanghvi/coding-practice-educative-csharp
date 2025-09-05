@@ -1,16 +1,16 @@
 // Minimum Window Subsequence
 // ==========================
 //
-// Given two strings, `s1` and `s2`, find and return the shortest substring of `s1` in which all the characters
-// of `s2` appear in the same order, but not necessarily next to each other (i.e., `s2` should be a subsequence of
-// the substring).
+// Given two strings, `s1` and `s2`, find and return the shortest substring of `s1` in which all the characters of `s2`
+// appear in the same order, but not necessarily next to each other (i.e., `s2` should be a subsequence of the
+// substring).
 //
-// If no such substring exists, return an empty string `""`. If there are multiple shortest substrings, return the
-// one that appears first in `s1` (i.e., with the left-most starting index).
+// If no such substring exists, return an empty string `""`. If there are multiple shortest substrings, return the one
+// that appears first in `s1` (i.e., with the left-most starting index).
 //
-// > Note: A substring is a contiguous sequence of characters within a string. A subsequence is a sequence of
-// characters that can be derived from a string by deleting some characters without changing the order of the
-// remaining characters. For example, "edu" is a substring and "cave" is a subsequence of "educative."
+// > Note: A substring is a contiguous sequence of characters within a string. A subsequence is a sequence of characters
+// > that can be derived from a string by deleting some characters without changing the order of the remaining
+// > characters. For example, "edu" is a substring and "cave" is a subsequence of "educative."
 //
 // Constraints:
 //
@@ -24,9 +24,38 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P03_MinimumWindowSubseq
 
 public class Solution
 {
-    public static bool Function()
+    public static string MinWindow(string s1, string s2)
     {
-        return true;
+        string minWindow = string.Empty;
+
+        int pos1 = 0, pos2 = 0;
+
+        while (pos1 < s1.Length)
+        {
+            if (s1[pos1] == s2[pos2]) { pos2++; }
+            pos1++;
+
+            if (pos2 == s2.Length)
+            {
+                // Backtrack to minimize the sliding window;
+                int rpos1 = pos1 - 1, rpos2 = pos2 - 1;
+                while (rpos2 >= 0)
+                {
+                    if (s1[rpos1] == s2[rpos2]) { rpos2--; }
+                    rpos1--;
+                }
+
+                if (string.IsNullOrEmpty(minWindow) || minWindow.Length > (pos1 - rpos1 - 1))
+                {
+                    minWindow = s1[(rpos1 + 1)..pos1];
+                }
+
+                pos1 = rpos1 + 2;
+                pos2 = 0;
+            }
+        }
+
+        return minWindow;
     }
 }
 
@@ -34,13 +63,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("a", "a", "a");
+        Run("ababacac", "abc", "abac");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string s1, string s2, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = Solution.MinWindow(s1, s2);
+        Utilities.PrintSolution((s1, s2), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

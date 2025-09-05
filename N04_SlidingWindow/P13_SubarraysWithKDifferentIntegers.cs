@@ -12,15 +12,57 @@
 // - 1 ≤ `nums.length` ≤ 2∗10^4
 // - 1 ≤ `nums[i]`, `k` ≤ `nums.length`
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P13_SubarraysWithKDifferentIntegers;
 
 public class Solution
 {
-    public static bool Function()
+    public int SubarraysWithKDistinct(int[] nums, int k)
     {
-        return true;
+        return SubarraysWithKMax(k) - SubarraysWithKMax(k - 1);
+
+        int SubarraysWithKMax(int k)
+        {
+            int subarrays = 0;
+
+            var numCounts = new Dictionary<int, int>();
+            int distincts = 0;
+
+            int start = 0;
+            for (int end = 0; end < nums.Length; end++)
+            {
+                int end_num = nums[end];
+                numCounts.TryAdd(end_num, 0);
+                numCounts[end_num]++;
+
+                if (numCounts[end_num] == 1) // Distinct numbers increased.
+                {
+                    distincts += 1;
+
+                    if (distincts == k + 1)
+                    {
+                        while (true)
+                        {
+                            int start_num = nums[start];
+                            numCounts[start_num]--;
+                            start++;
+
+                            if (numCounts[start_num] == 0) // Distinct numbers reduced.
+                            {
+                                distincts = k;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                subarrays += (end + 1) - start;
+            }
+
+            return subarrays;
+        }
     }
 }
 
@@ -28,13 +70,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(new int[] { 1, 2, 3, 1, 2, 3 }, 2, 5);
+        Run(new int[] { 1, 2, 3, 1, 2, 3 }, 3, 10);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int k, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().SubarraysWithKDistinct(nums, k);
+        Utilities.PrintSolution((nums, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

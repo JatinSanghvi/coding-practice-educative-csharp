@@ -13,15 +13,40 @@
 // - 1 ≤ `k` ≤ `s.length`
 // - `s` consists only of lowercase English letters.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P15_CountSubstringsWithKFrequencyCharactersII;
 
 public class Solution
 {
-    public static bool Function()
+    public long NumberOfSubstrings(string s, int k)
     {
-        return true;
+        int substrings = 0;
+
+        var charCounts = new Dictionary<char, int>();
+
+        int start = 0;
+        for (int end = 0; end < s.Length; end++)
+        {
+            char ch = s[end];
+            charCounts.TryAdd(ch, 0);
+            charCounts[ch]++;
+
+            if (charCounts[ch] == k)
+            {
+                while (charCounts[ch] == k)
+                {
+                    charCounts[s[start]]--;
+                    start++;
+                }
+            }
+
+            // All substrings starting from index 0 to 'start-1', and ending at index 'end'.
+            substrings += start;
+        }
+
+        return substrings;
     }
 }
 
@@ -29,13 +54,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("abcba", 1, 15);
+        Run("abcba", 2, 4);
+        Run("abcba", 3, 0);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string s, int k, long expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        long result = new Solution().NumberOfSubstrings(s, k);
+        Utilities.PrintSolution((s, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

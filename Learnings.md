@@ -12,3 +12,8 @@
 
 - Look out for
     - Redundant loop conditions.
+
+- Keep in mind
+    - Bitwise operators (`&`) have lower precedence than shift operators (`<<`).
+    - Shift operators (`<<`) have lower precedence than arithmetic operators (`+`).
+    - Initialize variable to `int.MinValue` not `0` if negative numbers are involved.

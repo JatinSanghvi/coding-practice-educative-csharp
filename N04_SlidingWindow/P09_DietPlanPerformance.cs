@@ -21,15 +21,31 @@
 // - 0 ≤ `calories[i]` ≤ 20000
 // - 0 ≤ `lower` ≤ `upper`
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P09_DietPlanPerformance;
 
 public class Solution
 {
-    public static bool Function()
+    public static int dietPlanPerformance(List<int> calories, int k, int lower, int upper)
     {
-        return true;
+        int points = 0;
+        int sum = 0;
+        for (int day = 0; day < calories.Count; day++)
+        {
+            sum += calories[day];
+
+            if (day >= k - 1)
+            {
+                if (sum < lower) { points--; }
+                else if (sum > upper) { points++; }
+
+                sum -= calories[day - (k - 1)];
+            }
+        }
+
+        return points;
     }
 }
 
@@ -37,13 +53,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(new List<int> { 1, 2, 3, 2, 1 }, 2, 3, 4, 2);
+        Run(new List<int> { 1, 2, 3, 2, 1 }, 2, 4, 5, -2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(List<int> calories, int k, int lower, int upper, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.dietPlanPerformance(calories, k, lower, upper);
+        Utilities.PrintSolution((calories, k, lower, upper), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

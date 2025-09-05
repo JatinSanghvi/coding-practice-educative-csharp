@@ -1,9 +1,9 @@
 // Fruit Into Baskets
 // ==================
 //
-// While visiting a farm of fruits, you have been given a row of fruits represented by an integer array, `fruits`,
-// where `fruits[i]` is the type of fruit the ithith tree produces. You have to collect fruits, but there are some
-// rules that you must follow while collecting fruits:
+// While visiting a farm of fruits, you have been given a row of fruits represented by an integer array, `fruits`, where
+// `fruits[i]` is the type of fruit the i-th tree produces. You have to collect fruits, but there are some rules that
+// you must follow while collecting fruits:
 //
 // - You are given only two baskets, each capable of holding an unlimited quantity of a single type of fruit.
 //
@@ -19,15 +19,50 @@
 // - 1 ≤ `fruits.length` ≤ 10^3
 // - 0 ≤ `fruits[i]` < `fruits.length`
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P10_FruitIntoBaskets;
 
 public class Solution
 {
-    public static bool Function()
+    public int TotalFruit(int[] fruits)
     {
-        return true;
+        int fruit1 = -1, fruit2 = -1;
+        int start = 0, end1 = -1, end2 = -1;
+
+        int maxTotal = 0;
+        for (int i = 0; i < fruits.Length; i++)
+        {
+            if (fruits[i] == fruit1)
+            {
+                end1 = i;
+            }
+            else if (fruits[i] == fruit2)
+            {
+                end2 = i;
+            }
+            else
+            {
+
+                if (end1 < end2)
+                {
+                    start = end1 + 1;
+                    end1 = i;
+                    fruit1 = fruits[i];
+                }
+                else
+                {
+                    start = end2 + 1;
+                    end2 = i;
+                    fruit2 = fruits[i];
+                }
+            }
+
+            maxTotal = Math.Max(maxTotal, (i + 1) - start);
+        }
+
+        return maxTotal;
     }
 }
 
@@ -35,13 +70,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(new int[] { 1, 2, 3, 2, 1 }, 3);
+        Run(new int[] { 1, 2, 3, 1, 2 }, 2);
+        Run(new int[] { 1, 2, 1, 3, 1 }, 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] fruits, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().TotalFruit(fruits);
+        Utilities.PrintSolution(fruits, result);
         Assert.AreEqual(expectedResult, result);
     }
 }
