@@ -28,6 +28,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P13_GetTheMaximumScore;
 
 public class Solution
 {
+    // Time complexity: O(m+n), Space complexity: O(1).
     public int MaxSum(int[] nums1, int[] nums2)
     {
         long maxSum = 0;

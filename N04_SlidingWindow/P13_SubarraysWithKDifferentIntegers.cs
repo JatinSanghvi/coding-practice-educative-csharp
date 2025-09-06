@@ -19,8 +19,11 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P13_SubarraysWithKDiffe
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(n).
     public int SubarraysWithKDistinct(int[] nums, int k)
     {
+        // It is easier to find number of subarrays with "maximum" k distinct characters.
+        // Subarrays with "exactly" k chars = subarrays with max k chars - subarrays with max k-1 chars.
         return SubarraysWithKMax(k) - SubarraysWithKMax(k - 1);
 
         int SubarraysWithKMax(int k)
@@ -58,6 +61,7 @@ public class Solution
                     }
                 }
 
+                // Subarrays nums[start..(end+1)] .. nums[end..(end+1)] contain at most k distinct elements.
                 subarrays += (end + 1) - start;
             }
 

@@ -22,6 +22,7 @@ public class Solution
 {
     public static int CountCycleLength(ListNode head)
     {
+        // Time complexity: O(n), Space complexity: O(1).
         ListNode slow = head, fast = head;
 
         do

@@ -28,6 +28,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P09_DietPlanPerformance
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static int dietPlanPerformance(List<int> calories, int k, int lower, int upper)
     {
         int points = 0;

@@ -31,6 +31,8 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P14_FindTheLexicographica
 
 public class Solution
 {
+    // Time complexity: O(n^2), Space complexity: O(1).
+    // There is another algorithm with theoretically better time complexity, but it's too complex.
     public static string AnswerString(string word, int numFriends)
     {
         if (numFriends == 1)
@@ -44,7 +46,8 @@ public class Solution
         for (int start = 0; start < word.Length; start++)
         {
             int end = Math.Min(start + maxLength, word.Length);
-            string split = word[start..end];
+            string split = word[start..end]; // Consumes fixed amount of memory.
+
             if (string.CompareOrdinal(maxSplit, split) < 0)
             {
                 maxSplit = split;

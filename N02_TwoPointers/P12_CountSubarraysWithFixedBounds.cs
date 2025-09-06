@@ -22,6 +22,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P12_CountSubarraysWithFix
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public long CountSubarrays(int[] nums, int minK, int maxK)
     {
         long count = 0;
@@ -40,6 +41,8 @@ public class Solution
                 if (nums[end] == maxK) { lastMax = end; }
             }
 
+            // Subarrays start points range from 'start' up to 'index' such that nums[index..(end+1)] contains both min
+            // and max elements.
             count += Math.Max(0, Math.Min(lastMin, lastMax) - start + 1);
         }
 

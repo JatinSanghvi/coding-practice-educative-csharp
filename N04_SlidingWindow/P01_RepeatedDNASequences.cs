@@ -21,6 +21,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P01_RepeatedDNASequence
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(n).
     public static IList<string> FindRepeatedDnaSequences(string s)
     {
         var sequence = new List<string>();
@@ -39,6 +40,7 @@ public class Solution
                 _ => throw new InvalidOperationException(),
             };
 
+            // Shift bits to the left, trim to least significant 20 bits, and append value.
             hash = (hash << 2) & 0xFFFFF | value;
 
             if (pos >= 9)

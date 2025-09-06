@@ -20,6 +20,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P15_CountSubstringsWith
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1) as the size of `charCounts` won't exceed 26.
     public long NumberOfSubstrings(string s, int k)
     {
         int substrings = 0;
@@ -33,16 +34,13 @@ public class Solution
             charCounts.TryAdd(ch, 0);
             charCounts[ch]++;
 
-            if (charCounts[ch] == k)
+            while (charCounts[ch] == k)
             {
-                while (charCounts[ch] == k)
-                {
-                    charCounts[s[start]]--;
-                    start++;
-                }
+                charCounts[s[start]]--;
+                start++;
             }
 
-            // All substrings starting from index 0 to 'start-1', and ending at index 'end'.
+            // Substrings s[0..(end+1)] to s[(start-1)..(end+1) contain at least one character k times.
             substrings += start;
         }
 

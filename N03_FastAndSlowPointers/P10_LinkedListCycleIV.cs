@@ -20,6 +20,7 @@ namespace JatinSanghvi.CodingInterview.N03_FastAndSlowPointers.P10_LinkedListCyc
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static ListNode RemoveCycle(ListNode head)
     {
         // Required for handling the edge case, where the last node points to the head.
@@ -38,6 +39,12 @@ public class Solution
         }
         while (slow != fast);
 
+        // Let slow and fast meet at node 'x'. Slow cannot circle the cycle more than once before fast catches it.
+        // Distance traveled by slow == x.
+        // Distance traveled by fast == 2x == x + nc, where c = cycle length and n = number of cycles made by fast.
+        // Therefore, x == nc i.e., the approach always yields an x that is a muliple of cycle length.
+        // If slow begins from root and fast begins from x at same speed, they will eventually unite and travel together.
+        // To make it possible, the first node where they unite should also be the first node in the cycle.
         slow = superHead;
         while (slow.next != fast.next)
         {

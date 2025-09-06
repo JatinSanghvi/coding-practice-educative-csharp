@@ -22,6 +22,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P05_ReverseWordsInAString
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(n).
     public static string ReverseWords(string sentence)
     {
         var reversed = new StringBuilder();

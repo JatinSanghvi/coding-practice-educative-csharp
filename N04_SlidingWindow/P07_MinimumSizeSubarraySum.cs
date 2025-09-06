@@ -17,6 +17,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P07_MinimumSizeSubarray
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static int MinSubArrayLen(int target, int[] nums)
     {
         int minLength = int.MaxValue;

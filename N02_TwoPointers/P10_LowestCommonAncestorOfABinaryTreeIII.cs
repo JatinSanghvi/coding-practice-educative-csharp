@@ -27,6 +27,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P10_LowestCommonAncestorO
 
 public class Solution
 {
+    // Time complexity: O(h) where height of tree, h is not necessarily logn, Space complexity: O(1).
     public EduTreeNode LowestCommonAncestor(EduTreeNode p, EduTreeNode q)
     {
         int pDepth = 0;

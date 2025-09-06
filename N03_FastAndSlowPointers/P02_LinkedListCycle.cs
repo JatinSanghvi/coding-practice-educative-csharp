@@ -20,6 +20,7 @@ namespace JatinSanghvi.CodingInterview.N03_FastAndSlowPointers.P02_LinkedListCyc
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static bool DetectCycle(ListNode head)
     {
         ListNode slow = head, fast = head;

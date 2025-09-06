@@ -20,12 +20,13 @@ namespace JatinSanghvi.CodingInterview.N03_FastAndSlowPointers.P05_FindTheDuplic
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static int FindDuplicate(int[] nums)
     {
         // Traversing the array based on element values will:
         // - Never end, as all values are valid indexes.
-        // - Never circle back to the start point, as none of the values are zero.
-        // Hence, this approach is guaranteed to reach the duplicate number.
+        // - Never circles back to the start point, as none of the values are zero.
+        // Hence, this approach is guaranteed to loop and reach the duplicate number.
 
         int slow = 0, fast = 0;
 

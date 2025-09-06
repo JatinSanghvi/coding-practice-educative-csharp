@@ -24,6 +24,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P09_NextPalindromeUsingSa
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(n).
     public static string FindNextPalindrome(string numStr)
     {
         char[] numArray = numStr[..(numStr.Length / 2)].ToCharArray();

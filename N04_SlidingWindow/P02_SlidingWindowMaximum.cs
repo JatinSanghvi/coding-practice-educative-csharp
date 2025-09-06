@@ -19,6 +19,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P02_SlidingWindowMaximu
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(w).
     public static int[] FindMaxSlidingWindow(int[] nums, int w)
     {
         var maximums = new int[nums.Length - w + 1];

@@ -15,6 +15,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P16_ValidPalindromeII;
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static bool IsPalindrome(string str)
     {
         int left, right, left2, right2;

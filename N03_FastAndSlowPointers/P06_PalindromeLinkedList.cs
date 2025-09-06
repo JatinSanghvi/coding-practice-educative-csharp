@@ -19,6 +19,7 @@ namespace JatinSanghvi.CodingInterview.N03_FastAndSlowPointers.P06_PalindromeLin
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static bool Palindrome(ListNode head)
     {
         ListNode slow = head, fast = head;

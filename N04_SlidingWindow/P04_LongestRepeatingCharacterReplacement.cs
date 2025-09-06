@@ -12,16 +12,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P04_LongestRepeatingCharacterReplacement;
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1) as the size of `charCounts` won't exceed 26.
     public static int LongestRepeatingCharacterReplacement(string s, int k)
     {
         var charCounts = new Dictionary<char, int>();
+
+        // Maximum count across all characters and across all windows seen so far (unintuitive optimization).
         int maxCount = 0;
         int longestLen = 0;
         int currentLen = 0;
@@ -32,7 +34,6 @@ public class Solution
             charCounts[s[i]]++;
             currentLen++;
 
-            // Unintuitive optimization: Maximum count of character across all windows seen so far.
             maxCount = Math.Max(maxCount, charCounts[s[i]]);
             if (currentLen - maxCount > k)
             {

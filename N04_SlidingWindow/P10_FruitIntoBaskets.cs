@@ -26,10 +26,12 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P10_FruitIntoBaskets;
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public int TotalFruit(int[] fruits)
     {
         int fruit1 = -1, fruit2 = -1;
-        int start = 0, end1 = -1, end2 = -1;
+        int start = 0; // Start index of basket.
+        int end1 = -1, end2 = -1; // Last indexes of fruit1 and fruit2 respectively.
 
         int maxTotal = 0;
         for (int i = 0; i < fruits.Length; i++)
@@ -44,11 +46,10 @@ public class Solution
             }
             else
             {
-
-                if (end1 < end2)
+                if (end1 < end2) // fruit2 was the last fruit. 
                 {
-                    start = end1 + 1;
-                    end1 = i;
+                    start = end1 + 1; // Index after which only fruit2 appeared.
+                    end1 = i; // Set new fruit as fruit1.
                     fruit1 = fruits[i];
                 }
                 else

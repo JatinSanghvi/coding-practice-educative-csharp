@@ -32,6 +32,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P06_ValidWordAbbreviation
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static bool ValidWordAbbreviation(string word, string abbr)
     {
         int wordIndex = 0;

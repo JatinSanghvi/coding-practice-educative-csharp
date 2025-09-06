@@ -24,6 +24,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P03_MinimumWindowSubseq
 
 public class Solution
 {
+    // Time complexity: O(n*m), Space complexity: O(1).
     public static string MinWindow(string s1, string s2)
     {
         string minWindow = string.Empty;
@@ -37,7 +38,7 @@ public class Solution
 
             if (pos2 == s2.Length)
             {
-                // Backtrack to minimize the sliding window;
+                // Backtrack to minimize the sliding window length.
                 int rpos1 = pos1 - 1, rpos2 = pos2 - 1;
                 while (rpos2 >= 0)
                 {

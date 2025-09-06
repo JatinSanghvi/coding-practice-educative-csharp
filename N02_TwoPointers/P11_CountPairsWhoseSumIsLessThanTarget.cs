@@ -21,10 +21,11 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P11_CountPairsWhoseSumIsL
 
 public class Solution
 {
+    // Time complexity: O(n*logn), Space complexity: O(n).
     public static int CountPairs(IList<int> nums, int target)
     {
         int count = 0;
-        int[] numsArray = nums.Order().ToArray();
+        int[] numsArray = nums.Order().ToArray(); // O(n.logn)
 
         for (int left = 0, right = numsArray.Length - 1; left < right;)
         {

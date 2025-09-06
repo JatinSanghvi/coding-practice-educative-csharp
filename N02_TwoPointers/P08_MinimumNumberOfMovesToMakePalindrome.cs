@@ -18,6 +18,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P08_MinimumNumberOfMovesT
 
 public class Solution
 {
+    // Time complexity: O(n^2), Space complexity: O(n).
     public int MinMovesToMakePalindrome(string s)
     {
         int moves = 0;

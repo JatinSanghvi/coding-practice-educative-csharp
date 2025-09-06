@@ -18,6 +18,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P11_ContainsDuplicateII
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(min(n,k)).
     public static bool ContainsNearbyDuplicate(int[] nums, int k)
     {
         var numSet = new HashSet<int>();

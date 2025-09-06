@@ -20,6 +20,7 @@ namespace JatinSanghvi.CodingInterview.N03_FastAndSlowPointers.P01_HappyNumber;
 
 public class Solution
 {
+    // Time complexity: O(logn), Space complexity: O(1).
     public static bool IsHappyNumber(int n)
     {
         int slow = n, fast = n;

@@ -19,6 +19,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P03_RemoveNthNodeFromEndO
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static ListNode RemoveNthLastNode(ListNode head, int n)
     {
         var superHead = new ListNode { next = head };

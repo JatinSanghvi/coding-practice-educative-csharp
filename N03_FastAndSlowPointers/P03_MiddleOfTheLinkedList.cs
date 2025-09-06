@@ -18,6 +18,7 @@ namespace JatinSanghvi.CodingInterview.N03_FastAndSlowPointers.P03_MiddleOfTheLi
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static ListNode MiddleNode(ListNode head)
     {
         ListNode slow = head, fast = head;

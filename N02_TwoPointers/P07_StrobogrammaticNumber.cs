@@ -20,6 +20,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P07_StrobogrammaticNumber
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static bool IsStrobogrammatic(string num)
     {
         var rotated = new Dictionary<char, char> { ['0'] = '0', ['1'] = '1', ['6'] = '9', ['8'] = '8', ['9'] = '6' };

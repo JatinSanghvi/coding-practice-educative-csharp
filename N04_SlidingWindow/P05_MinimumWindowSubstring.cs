@@ -21,6 +21,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P05_MinimumWindowSubstr
 
 public class Solution
 {
+    // Time complexity: O(m+n), Space complexity: O(1) as the size of `charCounts` won't exceed 52.
     public static string MinWindow(string s, string t)
     {
         // Count of character in t minus count of character in current s-window.

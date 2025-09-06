@@ -16,21 +16,22 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P06_LongestSubstringWit
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1) as the size of `charSet` won't exceed 63.
     public static int FindLongestSubstring(string str)
     {
-        var chars = new HashSet<char>();
+        var charSet = new HashSet<char>();
         int longest = 0;
 
         int start = 0;
         for (int end = 0; end < str.Length; end++)
         {
-            while (chars.Contains(str[end]))
+            while (charSet.Contains(str[end]))
             {
-                chars.Remove(str[start]);
+                charSet.Remove(str[start]);
                 start++;
             }
 
-            chars.Add(str[end]);
+            charSet.Add(str[end]);
             longest = Math.Max(longest, (end + 1) - start);
         }
 

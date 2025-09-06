@@ -20,12 +20,13 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P02_3Sum;
 
 public class Solution
 {
+    // Time complexity: O(n^2), Space complexity: O(1).
     public IList<IList<int>> ThreeSum(int[] nums)
     {
         var triplets = new List<IList<int>>();
-        Array.Sort(nums);
+        Array.Sort(nums); // O(n.logn)
 
-        for (int i = 0; i < nums.Length; i++)
+        for (int i = 0; i < nums.Length; i++) // O(n^2)
         {
             if (i != 0 && nums[i] == nums[i - 1])
             {

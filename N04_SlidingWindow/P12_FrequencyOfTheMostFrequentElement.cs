@@ -27,6 +27,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P12_FrequencyOfTheMostF
 
 public class Solution
 {
+    // Time complexity: O(n*logn), Space complexity: O(1).
     public static int MaxFrequency(int[] nums, int k)
     {
         Array.Sort(nums);
@@ -37,7 +38,7 @@ public class Solution
         int start = 0;
         for (int end = 1; end < nums.Length; end++)
         {
-            additions += (nums[end] - nums[end - 1]) * (end - start); // Difference * Window size.
+            additions += (nums[end] - nums[end - 1]) * (end - start); // Difference * Previous window size.
 
             while (additions > k)
             {

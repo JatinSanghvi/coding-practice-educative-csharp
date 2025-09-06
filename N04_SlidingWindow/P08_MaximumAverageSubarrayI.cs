@@ -16,6 +16,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P08_MaximumAverageSubar
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static double FindMaxAverage(int[] nums, int k)
     {
         int maxSum = int.MinValue;

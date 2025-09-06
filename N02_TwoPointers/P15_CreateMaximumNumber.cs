@@ -27,6 +27,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P15_CreateMaximumNumber;
 
 public class Solution
 {
+    // Time complexity: O((m+n).k^2), Space complexity: O((m+n).k).
     public static int[] MaxNumber(int[] num1, int[] num2, int k)
     {
         var cache = new Dictionary<(int start1, int start2, int k), IEnumerable<int>>();
@@ -74,18 +75,18 @@ public class Solution
     public static (int, int) GetMaxDigitIndex(int[] num, int start, int take)
     {
         int maxIndex = -1;
-        int maxDIgit = -1;
+        int maxDigit = -1;
 
         for (int index = start; index < start + take && index < num.Length; index++)
         {
-            if (maxDIgit < num[index])
+            if (maxDigit < num[index])
             {
                 maxIndex = index;
-                maxDIgit = num[index];
+                maxDigit = num[index];
             }
         }
 
-        return (maxIndex, maxDIgit);
+        return (maxIndex, maxDigit);
     }
 
     public static IEnumerable<int> GetMaxSequence(IEnumerable<int> num1, IEnumerable<int> num2)

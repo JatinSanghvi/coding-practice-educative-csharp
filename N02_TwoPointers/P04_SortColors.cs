@@ -25,6 +25,7 @@ namespace JatinSanghvi.CodingInterview.N02_TwoPointers.P04_SortColors;
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static int[] SortColors(int[] colors)
     {
         // Loop invariance:

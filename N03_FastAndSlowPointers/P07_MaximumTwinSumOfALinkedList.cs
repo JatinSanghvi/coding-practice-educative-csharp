@@ -24,6 +24,7 @@ namespace JatinSanghvi.CodingInterview.N03_FastAndSlowPointers.P07_MaximumTwinSu
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static int TwinSum(ListNode head)
     {
         ListNode slow = head, fast = head;

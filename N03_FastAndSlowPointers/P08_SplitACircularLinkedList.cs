@@ -26,6 +26,7 @@ namespace JatinSanghvi.CodingInterview.N03_FastAndSlowPointers.P08_SplitACircula
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static ListNode[] SplitCircularLinkedList(ListNode head)
     {
         ListNode slow = head, fast = head;

@@ -3,10 +3,12 @@
 //
 // There is a circular list of non-zero integers called `nums`. Each number in the list tells you how many steps to move
 // forward or backward from your current position:
+//
 // - If `nums[i]` is positive, move `nums[i]` steps forward.
 // - If `nums[i]` is negative, move `nums[i]` steps backward.
 //
 // As the list is circular:
+//
 // - Moving forward from the last element takes you back to the first element.
 // - Moving backward from the first element takes you to the last element.
 //
@@ -30,6 +32,7 @@ namespace JatinSanghvi.CodingInterview.N03_FastAndSlowPointers.P04_CircularArray
 
 public class Solution
 {
+    // Time complexity: O(n^2), Space complexity: O(1).
     public static bool CircularArrayLoop(int[] nums)
     {
         int length = nums.Length;

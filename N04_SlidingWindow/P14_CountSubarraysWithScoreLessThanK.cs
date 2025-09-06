@@ -21,6 +21,7 @@ namespace JatinSanghvi.CodingInterview.N04_SlidingWindow.P14_CountSubarraysWithS
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public long CountSubarrays(int[] nums, long k)
     {
         int subarrays = 0;
@@ -31,6 +32,8 @@ public class Solution
         {
             sum += nums[end];
 
+            // Since all numbers are positive, adding a new one will always increase the score, and deleting will
+            // decrease the score. 
             while (sum * ((end + 1) - start) >= k)
             {
                 sum -= nums[start];
