@@ -1,8 +1,8 @@
 // Interval List Intersections
 // ===========================
 //
-// Given two lists of closed intervals, `intervalLista` and `intervalListb`, return the intersection of the two
-// interval lists.
+// Given two lists of closed intervals, `intervalLista` and `intervalListb`, return the intersection of the two interval
+// lists.
 //
 // Each interval in the lists has its own start and end time and is represented as `[start, end]`. Specifically:
 //
@@ -25,15 +25,39 @@
 // - 0 ≤ start_j < end_j ≤ 10^9
 // - end_j < start[j + 1]
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N05_MergeIntervals.P03_IntervalListIntersections;
 
 public class Solution
 {
-    public static bool Function()
+     // Time complexity: O(a+b), Space complexity: O(1) if space required to store output is excluded.
+    public static int[][] IntervalsIntersection(int[][] intervalLista, int[][] intervalListb)
     {
-        return true;
+        var intersection = new List<int[]>();
+
+        // Since the pairs are disjoint, the intersections will be disjoint too, so there is no need to merge them.
+        int a = 0, b = 0;
+        while (a < intervalLista.Length && b < intervalListb.Length)
+        {
+            // Overlap test.
+            if (intervalLista[a][1] >= intervalListb[b][0] && intervalLista[a][0] <= intervalListb[b][1])
+            {
+                intersection.Add(new int[]
+                {
+                    Math.Max(intervalLista[a][0], intervalListb[b][0]),
+                    Math.Min(intervalLista[a][1], intervalListb[b][1])
+                });
+            }
+
+            // Skip the interval that ends sooner.
+            if (intervalLista[a][1] <= intervalListb[b][1]) { a++; }
+            else { b++; }
+        }
+
+        return intersection.ToArray();
     }
 }
 
@@ -41,13 +65,16 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(
+            [[1, 2], [4, 5], [7, 8], [10, 11], [13, 14], [16, 17]],
+            [[2, 3], [6, 7], [11, 16]],
+            [[2, 2], [7, 7], [11, 11], [13, 14], [16, 16]]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] intervalLista, int[][] intervalListb, int[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[][] result = Solution.IntervalsIntersection(intervalLista, intervalListb);
+        Utilities.PrintSolution((intervalLista, intervalListb), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

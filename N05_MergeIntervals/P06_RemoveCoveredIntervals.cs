@@ -14,15 +14,32 @@
 // - 0 ≤ l_i < r_i ≤ 10^5
 // - All the given intervals are unique.
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N05_MergeIntervals.P06_RemoveCoveredIntervals;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(1).
+    public int RemoveCoveredIntervals(int[][] intervals)
     {
-        return true;
+        // Sort in ascending order by start position, and then in descending order by end position.
+        Array.Sort(intervals, (i1, i2) => i1[0] == i2[0] ? i2[1] - i1[1] : i1[0] - i2[0]);
+
+        int uncoveredCount = 0;
+        int end = -1;
+
+        foreach (int[] interval in intervals)
+        {
+            if (interval[1] > end)
+            {
+                uncoveredCount++;
+                end = interval[1];
+            }
+        }
+
+        return uncoveredCount;
     }
 }
 
@@ -30,13 +47,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 9], [2, 8], [3, 7], [4, 6]], 1);
+        Run([[1, 6], [2, 7], [3, 8], [4, 9]], 4);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] intervals, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().RemoveCoveredIntervals(intervals);
+        Utilities.PrintSolution(intervals, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

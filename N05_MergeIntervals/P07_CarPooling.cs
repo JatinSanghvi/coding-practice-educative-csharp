@@ -27,8 +27,28 @@ namespace JatinSanghvi.CodingInterview.N05_MergeIntervals.P07_CarPooling;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public bool CarPooling(int[][] trips, int capacity)
     {
+        var capacityDiffs = new int[1001];
+
+        foreach (int[] trip in trips)
+        {
+            (int numPassengers, int start, int end) = (trip[0], trip[1], trip[2]);
+            capacityDiffs[start] += numPassengers;
+            capacityDiffs[end] -= numPassengers;
+        }
+
+        int occupancy = 0;
+        foreach (int diff in capacityDiffs)
+        {
+            occupancy += diff;
+            if (occupancy > capacity)
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 }
@@ -37,13 +57,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[2, 1, 3], [2, 2, 4], [2, 3, 5]], 4, true);
+        Run([[2, 1, 3], [2, 2, 4], [2, 3, 5]], 3, false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] trips, int capacity, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = new Solution().CarPooling(trips, capacity);
+        Utilities.PrintSolution((trips, capacity), result);
         Assert.AreEqual(expectedResult, result);
     }
 }
