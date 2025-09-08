@@ -20,7 +20,7 @@ namespace JatinSanghvi.CodingInterview.N05_MergeIntervals.P01_MergeIntervals;
 
 public class Solution
 {
-    // Time complexity: O(n*logn), Space complexity: O(1) if space required to store output is excluded.
+    // Time complexity: O(n*logn), Space complexity: O(1).
     public static int[][] MergeIntervals(int[][] intervals)
     {
         Array.Sort(intervals, (x, y) => x[0] - y[0]);

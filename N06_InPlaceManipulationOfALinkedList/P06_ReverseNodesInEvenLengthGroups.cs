@@ -1,8 +1,8 @@
 // Reverse Nodes in Even Length Groups
 // ===================================
 //
-// Given the head of a linked list, the nodes in it are assigned to each group in a sequential manner. The length
-// of these groups follows the sequence of natural numbers. Natural numbers are positive whole numbers denoted by
+// Given the head of a linked list, the nodes in it are assigned to each group in a sequential manner. The length of
+// these groups follows the sequence of natural numbers. Natural numbers are positive whole numbers denoted by
 // (1, 2, 3, 4...).
 //
 // In other words:
@@ -22,29 +22,70 @@
 // - 1 ≤ Number of nodes ≤ 500
 // - 0 ≤ `Node.val` ≤ 10^3
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N06_InPlaceManipulationOfALinkedList.P06_ReverseNodesInEvenLengthGroups;
 
 public class Solution
 {
-    public static bool Function()
+    public static ListNode ReverseEvenLengthGroups(ListNode head)
     {
-        return true;
+        throw new NotImplementedException();
     }
+}
+
+public class ListNode(int val = 0)
+{
+    public int val = val;
+    public ListNode next = null;
 }
 
 internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1], [1]);
+        Run([1, 2], [1, 2]);
+        Run([1, 2, 3], [1, 3, 2]);
+        Run([1, 2, 3, 4], [1, 3, 2, 4]);
+        Run([1, 2, 3, 4, 5], [1, 3, 2, 5, 4]);
+        Run([1, 2, 3, 4, 5, 6], [1, 3, 2, 4, 5, 6]);
+        Run([1, 2, 3, 4, 5, 6, 7, 8], [1, 3, 2, 4, 5, 6, 8, 7]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] headValues, int[] expectedResultValues)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        ListNode head = headValues.ToList();
+        ListNode result = Solution.ReverseEvenLengthGroups(head);
+
+        int[] resultValues = result.ToValues();
+        Utilities.PrintSolution(headValues, resultValues);
+        CollectionAssert.AreEqual(expectedResultValues, resultValues);
+    }
+
+    public static ListNode ToList(this int[] values)
+    {
+        ListNode superHead = new ListNode();
+        ListNode node = superHead;
+        foreach (int value in values)
+        {
+            node.next = new ListNode(value);
+            node = node.next;
+        }
+
+        return superHead.next;
+    }
+
+    public static int[] ToValues(this ListNode head)
+    {
+        var values = new List<int>();
+        for (ListNode node = head; node != null; node = node.next)
+        {
+            values.Add(node.val);
+        }
+
+        return values.ToArray();
     }
 }

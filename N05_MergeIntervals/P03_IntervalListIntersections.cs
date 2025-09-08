@@ -33,7 +33,7 @@ namespace JatinSanghvi.CodingInterview.N05_MergeIntervals.P03_IntervalListInters
 
 public class Solution
 {
-     // Time complexity: O(a+b), Space complexity: O(1) if space required to store output is excluded.
+     // Time complexity: O(a+b), Space complexity: O(1).
     public static int[][] IntervalsIntersection(int[][] intervalLista, int[][] intervalListb)
     {
         var intersection = new List<int[]>();

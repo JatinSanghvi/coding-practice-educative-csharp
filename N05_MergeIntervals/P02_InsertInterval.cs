@@ -27,7 +27,7 @@ namespace JatinSanghvi.CodingInterview.N05_MergeIntervals.P02_InsertInterval;
 
 public class Solution
 {
-    // Time complexity: O(n), Space complexity: O(1) if space required to store output is excluded.
+    // Time complexity: O(n), Space complexity: O(1).
     public static int[][] InsertInterval(int[][] existingIntervals, int[] newInterval)
     {
         var intervals = new List<int[]>();

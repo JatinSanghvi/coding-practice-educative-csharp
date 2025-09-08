@@ -10,34 +10,33 @@ You can run the project and select a coding pattern and problem interactively:
 dotnet run
 ```
 
-Alternatively, you can specify the pattern and problem numbers as command-line arguments:
-
-```
-dotnet run <PatternNumber> <ProblemNumber>
-```
-
-Example:
+Alternatively, you can specify the pattern and problem numbers as command-line arguments. For example, the following will run the first problem in the 'Two Pointers' pattern.
 
 ```
 dotnet run 2 1
 ```
 
-This will run the first problem in the Two Pointers pattern.
+## Project Information
 
-## Project Structure
+- The Educative course is composed of various chapters grouped by coding patterns.
 
-- The course is composed of various chapters, each signifying a coding pattern.
-
-- The project is structured to resemble the course:
+- The source files in this project are organized to resemble the course:
     - Each folder (e.g., `N02_TwoPointers`) corresponds to a 'coding pattern' chapter.
-    - Each file (e.g., `P01_ValidPalindrome.cs`) corresponds to a 'coding problem'.
+    - Each file (e.g., `P01_ValidPalindrome.cs`) corresponds to a 'coding problem' within the chapter.
 
-- Namespaces and class names are chosen to make it easier to submit the solution with minimal changes.
-- Each file contains the problem statement added as a comment.
-- Each file contains a `Tests` class that runs tests on the solution.
-- The files are self-sufficient; all required data structures and methods to compose and decompose them are included in the same files.
-- The `Utilities.cs` file contains methods, such as printing values, that are commonly required for all tests.
-- Test results are color-coded: yellow for running, green for success, and red for failure.
+- The namespaces and class names are specifically chosen to make it easier to submit the solutions with minimal changes.
+
+- Each source file contains
+    - The problem statement as top-level comment.
+    - Time and space complexity numbers as method comments.
+    - `Tests` class that runs basic tests on the solution.
+    - Custom data structures used for problem inputs and outputs.
+    - Methods to compose and decompose values into custom data structures.
+
+- Space complexity calculations do not include the space required for storing input and output data.
+- `Utilities.cs` contains methods, such as printing values, that are commonly required for all tests.
+- Test results are color-coded: yellow for run output, green for success, and red for failure.
+- Skipped solutions will throw `NotImplementedException`.
 
 ## Requirements
 
