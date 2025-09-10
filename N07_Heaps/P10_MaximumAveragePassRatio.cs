@@ -28,15 +28,49 @@
 // - 1 ≤ `pass_i` ≤ `total_i` ≤ 10^4
 // - 1 ≤ `extraStudents` ≤ 10^4
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N07_Heaps.P10_MaximumAveragePassRatio;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O((s+n)*logn) where s=extraStudents, Space complexity: O(n).
+    public static double MaxAverageRatio(int[][] classes, int extraSudents)
     {
-        return true;
+        var classQueue = new PriorityQueue<int, double>();
+
+        for (int ci = 0; ci < classes.Length; ci++)
+        {
+            Enqueue(ci);
+        }
+
+        for (int si = 0; si < extraSudents; si++)
+        {
+            int ci = classQueue.Dequeue();
+            classes[ci][0]++;
+            classes[ci][1]++;
+            Enqueue(ci);
+        }
+
+        double sumRatio = 0.0;
+        foreach (int[] class_ in classes)
+        {
+            sumRatio += (double)class_[0] / class_[1];
+        }
+
+        return sumRatio / classes.Length;
+
+        void Enqueue(int index)
+        {
+            int passing = classes[index][0];
+            int total = classes[index][1];
+
+            // Difference a student makes to pass ratio.
+            double passRatioIncrease = (double)(total - passing) / (total * (total + 1));
+            classQueue.Enqueue(index, -passRatioIncrease);
+        }
     }
 }
 
@@ -44,13 +78,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 2], [2, 3], [3, 4]], 6, 0.8);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] classes, int extraStudents, double expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var classesCopy = classes.Select(class_ => class_.ToArray()).ToArray();
+        double result = Solution.MaxAverageRatio(classes, extraStudents);
+        Utilities.PrintSolution((classesCopy, extraStudents), result);
+        Assert.AreEqual(expectedResult, result, 1e-5);
     }
 }

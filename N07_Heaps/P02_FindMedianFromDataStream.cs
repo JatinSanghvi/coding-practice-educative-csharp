@@ -19,15 +19,53 @@
 // - There will be at least one element in the data structure before the median is computed.
 // - At most, 500 calls will be made to the function that calculates the median.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N07_Heaps.P02_FindMedianFromDataStream;
 
-public class Solution
+// Space complexity: O(n).
+public class MedianOfStream
 {
-    public static bool Function()
+    private readonly PriorityQueue<int, int> lowerNums = new();
+    private readonly PriorityQueue<int, int> upperNums = new();
+
+    // Time complexity: O(logn).
+    public void InsertNum(int num)
     {
-        return true;
+        if (lowerNums.Count == 0 || num <= lowerNums.Peek())
+        {
+            // Enqueue before dequeue as the number, if dequeued earlier, can turn out to be smaller than the inserted
+            // number.
+            lowerNums.Enqueue(num, -num);
+            if (lowerNums.Count == upperNums.Count + 2)
+            {
+                int num2 = lowerNums.Dequeue();
+                upperNums.Enqueue(num2, num2);
+            }
+        }
+        else
+        {
+            upperNums.Enqueue(num, num);
+            if (upperNums.Count == lowerNums.Count + 1)
+            {
+                int num2 = upperNums.Dequeue();
+                lowerNums.Enqueue(num2, -num2);
+            }
+        }
+    }
+
+    // Time complexity: O(1).
+    public double FindMedian()
+    {
+        if (lowerNums.Count == upperNums.Count)
+        {
+            return (lowerNums.Peek() + upperNums.Peek()) / 2.0;
+        }
+        else
+        {
+            return lowerNums.Peek();
+        }
     }
 }
 
@@ -35,13 +73,28 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["Insert 1", "Find", "Insert 2", "Find", "Insert 3", "Find"], [1.0, 1.5, 2.0]);
+        Run(["Insert 1", "Find", "Insert 3", "Find", "Insert 2", "Find"], [1.0, 2.0, 2.0]);
+        Run(["Insert 3", "Find", "Insert 1", "Find", "Insert 2", "Find"], [3.0, 2.0, 2.0]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] operations, double[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var medianOfStream = new MedianOfStream();
+        var result = new List<double>();
+        foreach (string operation in operations)
+        {
+            if (operation.StartsWith("Insert "))
+            {
+                medianOfStream.InsertNum(int.Parse(operation[7..]));
+            }
+            else if (operation == "Find")
+            {
+                result.Add(medianOfStream.FindMedian());
+            }
+        }
+
+        Utilities.PrintSolution(operations, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

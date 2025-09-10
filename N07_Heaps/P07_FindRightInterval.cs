@@ -18,15 +18,40 @@
 // - -10^6 ≤ start_i ≤ end_i ≤ 10^6
 // - The start times are guaranteed to be unique.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N07_Heaps.P07_FindRightInterval;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(n).
+    public static int[] FindRightInterval(int[][] intervals)
     {
-        return true;
+        // Since, it's a heap problem, solving it using heap data structure.
+        var startQueue = new PriorityQueue<(int time, int index), int>();
+        var endQueue = new PriorityQueue<(int time, int index), int>();
+
+        for (int i = 0; i < intervals.Length; i++)
+        {
+            startQueue.Enqueue((intervals[i][0], i), intervals[i][0]);
+            endQueue.Enqueue((intervals[i][1], i), intervals[i][1]);
+        }
+
+        var rightInterval = new int[intervals.Length];
+
+        while (endQueue.Count != 0)
+        {
+            (int endTime, int endIndex) = endQueue.Dequeue();
+            while (startQueue.Count != 0 && startQueue.Peek().time < endTime)
+            {
+                startQueue.Dequeue();
+            }
+
+            rightInterval[endIndex] = startQueue.Count != 0 ? startQueue.Peek().index : -1;
+        }
+
+        return rightInterval;
     }
 }
 
@@ -34,13 +59,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[3, 4], [2, 3], [1, 3]], [-1, 0, 0]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] intervals, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.FindRightInterval(intervals);
+        Utilities.PrintSolution(intervals, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

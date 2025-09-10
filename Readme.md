@@ -33,6 +33,7 @@ dotnet run 2 1
     - Custom data structures used for problem inputs and outputs.
     - Methods to compose and decompose values into custom data structures.
 
+- All solutions employ standard data structures available in the .NET library.
 - Space complexity calculations do not include the space required for storing input and output data.
 - `Utilities.cs` contains methods, such as printing values, that are commonly required for all tests.
 - Test results are color-coded: yellow for run output, green for success, and red for failure.

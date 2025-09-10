@@ -10,15 +10,38 @@
 //
 // - 1 ≤ `num` ≤ 10^9
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N07_Heaps.P06_LargestNumberAfterDigitSwapsByParity;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(d*logd) where d=digits, Space complexity: O(d).
+    public static int LargestInteger(int num)
     {
-        return true;
+        var oddQueue = new PriorityQueue<int, int>();
+        var evenQueue = new PriorityQueue<int, int>();
+
+        for (int num2 = num; num2 != 0; num2 /= 10)
+        {
+            int digit = num2 % 10;
+            if (digit % 2 == 0) { evenQueue.Enqueue(digit, digit); }
+            else { oddQueue.Enqueue(digit, digit); }
+        }
+
+        int result = 0;
+        int times = 1;
+        for (int num2 = num; num2 != 0; num2 /= 10)
+        {
+            int digit = num2 % 10;
+            if (digit % 2 == 0) { result += evenQueue.Dequeue() * times; }
+            else { result += oddQueue.Dequeue() * times; }
+
+            times *= 10;
+        }
+
+        return result;
     }
 }
 
@@ -26,13 +49,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(1, 1);
+        Run(12341234, 34341212);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int num, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.LargestInteger(num);
+        Utilities.PrintSolution(num, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -21,15 +21,53 @@
 // - 0 ≤ `a`, `b`, `c` ≤ 100
 // - a + b + c > 0
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N07_Heaps.P09_LongestHappyString;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(a+b+c), Space complexity: O(1).
+    public string LongestDiverseString(int a, int b, int c)
     {
-        return true;
+        // Using a simple approach, since the heap-based solution is far too complicated.
+        a = Math.Min(a, 2 * (b + c + 1));
+        b = Math.Min(b, 2 * (c + a + 1));
+        c = Math.Min(c, 2 * (a + b + 1));
+
+        var substring = new System.Text.StringBuilder();
+        char last_char1 = 'x', last_char2 = 'x';
+        while (a + b + c != 0)
+        {
+            char ch;
+            if (last_char1 == 'a' && last_char2 == 'a')
+            {
+                ch = b >= c ? 'b' : 'c';
+            }
+            else if (last_char1 == 'b' && last_char2 == 'b')
+            {
+                ch = a >= c ? 'a' : 'c';
+            }
+            else if (last_char1 == 'c' && last_char2 == 'c')
+            {
+                ch = a >= b ? 'a' : 'b';
+            }
+            else
+            {
+                ch = a >= b && a >= c ? 'a' : b >= c ? 'b' : 'c';
+            }
+
+            substring.Append(ch);
+
+            if (ch == 'a') { a--; }
+            else if (ch == 'b') { b--; }
+            else { c--; }
+
+            (last_char1, last_char2) = (ch, last_char1);
+        }
+
+        return substring.ToString();
     }
 }
 
@@ -37,13 +75,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(0, 0, 1, "c");
+        Run(1, 9, 2, "bbcbbabbcbb");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int a, int b, int c, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = new Solution().LongestDiverseString(a, b, c);
+        Utilities.PrintSolution((a, b, c), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

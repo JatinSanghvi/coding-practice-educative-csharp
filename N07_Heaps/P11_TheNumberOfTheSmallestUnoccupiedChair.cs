@@ -22,15 +22,52 @@
 // - 0 ≤ `target_friend` ≤ n - 1
 // - Each `arrival_i` time is unique.
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N07_Heaps.P11_TheNumberOfTheSmallestUnoccupiedChair;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(n).
+    public static int SmallestChair(int[][] times, int targetFriend)
     {
-        return true;
+        var freeChairs = new PriorityQueue<int, int>();
+        var occupiedChairs = new PriorityQueue<(int number, int endTime), int>();
+
+        var friends = new (int index, int startTime, int endTime)[times.Length];
+        for (int i = 0; i < times.Length; i++)
+        {
+            friends[i] = (i, times[i][0], times[i][1]);
+        }
+
+        Array.Sort(friends, (f1, f2) => f1.startTime - f2.startTime);
+
+        foreach (var friend in friends)
+        {
+            while (occupiedChairs.Count != 0 && occupiedChairs.Peek().endTime <= friend.startTime)
+            {
+                int number = occupiedChairs.Dequeue().number;
+                freeChairs.Enqueue(number, number);
+            }
+
+            if (freeChairs.Count == 0)
+            {
+                int number = occupiedChairs.Count;
+                freeChairs.Enqueue(number, number);
+            }
+
+            int smallestNumber = freeChairs.Dequeue();
+            if (friend.index == targetFriend)
+            {
+                return smallestNumber;
+            }
+
+            occupiedChairs.Enqueue((smallestNumber, friend.endTime), friend.endTime);
+        }
+
+        return -1;
     }
 }
 
@@ -38,13 +75,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[5, 6], [4, 5], [3, 4], [2, 6], [1, 7]], 1, 2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] times, int targetFriend, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.SmallestChair(times, targetFriend);
+        Utilities.PrintSolution((times, targetFriend), result);
         Assert.AreEqual(expectedResult, result);
     }
 }
