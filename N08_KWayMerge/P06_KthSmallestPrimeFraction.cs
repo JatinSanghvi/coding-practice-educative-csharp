@@ -20,15 +20,34 @@
 // - All the numbers of `arr` are unique and sorted in strictly increasing order.
 // - 1 ≤ `k` ≤ `arr.length` × (`arr.length` - 1)
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N08_KWayMerge.P06_KthSmallestPrimeFraction;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n^2*logn), Space complexity: O(n).
+    public static int[] KthSmallestPrimeFraction(int[] arr, int k)
     {
-        return true;
+        var queue = new PriorityQueue<(int, int), double>();
+
+        for (int den = 1; den < arr.Length; den++)
+        {
+            queue.Enqueue((0, den), (double)arr[0] / arr[den]);
+        }
+
+        for (int i = 1; i < k; i++)
+        {
+            (int num, int den) = queue.Dequeue();
+            if (num != arr.Length - 1)
+            {
+                queue.Enqueue((num + 1, den), (double)arr[num + 1] / arr[den]);
+            }
+        }
+
+        (int ansNum, int ansDen) = queue.Peek();
+        return new int[] { arr[ansNum], arr[ansDen] };
     }
 }
 
@@ -36,13 +55,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 3, 11, 13, 31], 1, [1, 31]);
+        Run([1, 3, 11, 13, 31], 10, [11, 13]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] arr, int k, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.KthSmallestPrimeFraction(arr, k);
+        Utilities.PrintSolution((arr, k), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

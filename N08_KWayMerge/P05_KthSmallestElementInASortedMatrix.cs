@@ -15,15 +15,35 @@
 // - -10^3 ≤ `matrix[i][j]` ≤ 10^3
 // - 1 ≤ `k` ≤ n^2
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N08_KWayMerge.P05_KthSmallestElementInASortedMatrix;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(k*logn), Space complexity: O(n);
+    public static int KthSmallestElement(int[][] matrix, int k)
     {
-        return true;
+        var queue = new PriorityQueue<(int, int), int>();
+
+        for (int row = 0; row < matrix.Length; row++)
+        {
+            queue.Enqueue((row, 0), matrix[row][0]);
+        }
+
+        int columns = matrix[0].Length;
+        for (int i = 1; i < k; i++)
+        {
+            (int row, int col) = queue.Dequeue();
+            if (col != columns - 1)
+            {
+                queue.Enqueue((row, col + 1), matrix[row][col + 1]);
+            }
+        }
+
+        (int ansRow, int ansCol) = queue.Peek();
+        return matrix[ansRow][ansCol];
     }
 }
 
@@ -31,13 +51,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 3, 6], [2, 5, 8], [3, 7, 11]], 5, 5);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] matrix, int k, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.KthSmallestElement(matrix, k);
+        Utilities.PrintSolution((matrix, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }
