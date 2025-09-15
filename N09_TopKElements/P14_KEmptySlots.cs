@@ -19,15 +19,57 @@
 // - `bulbs` is a permutation of numbers from 1 to n
 // - 0 ≤ k ≤ 10^3
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N09_TopKElements.P14_KEmptySlots;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(n).
+    public int KEmptySlots(int[] bulbs, int k)
     {
-        return true;
+        // Days when bulbs at different position was switched on.
+        var days = new int[bulbs.Length];
+        for (int i = 0; i < bulbs.Length; i++)
+        {
+            days[bulbs[i] - 1] = i + 1;
+        }
+
+        // Find two bulbs separated by distance k + 1, with 'days' greater than all bulbs in between. If there are
+        // multiple such bulbs, select the ones with minimum 'days'.
+        var betweenDays = new LinkedList<int>();
+        int minCombinedDay = -1;
+
+        for (int i = 0; i < days.Length; i++)
+        {
+            if (i >= k + 1)
+            {
+                if (days[i - (k + 1)] == betweenDays.First.Value)
+                {
+                    betweenDays.RemoveFirst();
+                }
+
+                int combinedDay = Math.Max(days[i], days[i - (k + 1)]);
+                if (betweenDays.Count == 0 || combinedDay < betweenDays.First.Value)
+                {
+                    if (minCombinedDay == -1 || minCombinedDay > combinedDay)
+                    {
+                        minCombinedDay = combinedDay;
+                    }
+                }
+            }
+
+            while (betweenDays.Count != 0 && betweenDays.Last.Value > days[i])
+            {
+                betweenDays.RemoveLast();
+            }
+
+            betweenDays.AddLast(days[i]);
+        }
+
+        return minCombinedDay;
     }
 }
 
@@ -35,13 +77,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 5, 3, 7, 2, 6, 4, 8], 3, 2);
+        Run([1, 5, 3, 7, 2, 6, 4, 8], 1, 3);
+        Run([1, 5, 3, 7, 2, 6, 4, 8], 0, 5);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] bulbs, int k, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().KEmptySlots(bulbs, k);
+        Utilities.PrintSolution((bulbs, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

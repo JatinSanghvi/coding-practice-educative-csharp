@@ -14,15 +14,34 @@
 // - `nums[i]` consists of only digits.
 // - `nums[i]` will not have any leading zeros.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N09_TopKElements.P10_FindTheKthLargestIntegerInTheArray;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logk), Space complexity: O(n).
+    public static string KthLargestInteger(string[] nums, int k)
     {
-        return true;
+        var numComparer = Comparer<string>.Create((s1, s2) =>
+        {
+            if (s1.Length != s2.Length) { return s1.Length - s2.Length; }
+            return s1.CompareTo(s2);
+        });
+
+        var numQueue = new PriorityQueue<string, string>(numComparer);
+
+        foreach (string num in nums)
+        {
+            numQueue.Enqueue(num, num);
+            if (numQueue.Count > k)
+            {
+                numQueue.Dequeue();
+            }
+        }
+
+        return numQueue.Peek();
     }
 }
 
@@ -30,13 +49,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["1", "10", "11", "20", "100", "1", "10", "11", "20", "100"], 2, "100");
+        Run(["1", "10", "11", "20", "100", "1", "10", "11", "20", "100"], 5, "11");
+        Run(["1", "10", "11", "20", "100", "1", "10", "11", "20", "100"], 10, "1");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] nums, int k, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = Solution.KthLargestInteger(nums, k);
+        Utilities.PrintSolution((nums, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

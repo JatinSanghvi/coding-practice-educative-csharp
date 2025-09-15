@@ -12,6 +12,7 @@
     - Enqueue number in heap before dequeuing the one it replaces.
     - Include sorting time when calculating time complexity.
     - Compose numbers in correct direction (RTL or LTR).
+    - Use min-heap to store the largest elements and max-heap for the smallest.
 
 - Look out for
     - Redundant loop conditions.

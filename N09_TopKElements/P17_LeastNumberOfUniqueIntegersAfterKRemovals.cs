@@ -11,15 +11,35 @@
 // - 1 ≤ `arr[i]` ≤ 10^5
 // - 0 ≤ k ≤ `arr.length`
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N09_TopKElements.P17_LeastNumberOfUniqueIntegersAfterKRemovals;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(n).
+    public int FindLeastNumOfUniqueInts(int[] arr, int k)
     {
-        return true;
+        var numCounts = new Dictionary<int, int>();
+
+        foreach (int num in arr)
+        {
+            numCounts.TryAdd(num, 0);
+            numCounts[num]++;
+        }
+
+        int[] counts = numCounts.Select(pair => pair.Value).Order().ToArray();
+
+        int i;
+        for (i = 0; i < counts.Length; i++)
+        {
+            if (k < counts[i]) { break; }
+            k -= counts[i];
+        }
+
+        return counts.Length - i;
     }
 }
 
@@ -27,13 +47,16 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3, 4, 4], 0, 4);
+        Run([1, 2, 3, 4, 4], 2, 2);
+        Run([1, 2, 3, 4, 4], 4, 1);
+        Run([1, 2, 3, 4, 4], 5, 0);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int k, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().FindLeastNumOfUniqueInts(nums, k);
+        Utilities.PrintSolution((nums, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

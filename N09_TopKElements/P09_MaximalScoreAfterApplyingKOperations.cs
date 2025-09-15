@@ -19,15 +19,29 @@
 // - 1 ≤ `nums.length`, k ≤ 10^3
 // - 1 ≤ `nums[i]` ≤ 10^5
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N09_TopKElements.P09_MaximalScoreAfterApplyingKOperations;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(k*logn), Space complexity: O(n).
+    public static int MaxScore(int[] nums, int target)
     {
-        return true;
+        var scores = new PriorityQueue<int, int>(nums.Select(n => (n, -n)));
+
+        int maxScore = 0;
+        for (int i = 0; i < target; i++)
+        {
+            int score = scores.Dequeue();
+            maxScore += score;
+            int newScore = (score + 2) / 3;
+            scores.Enqueue(newScore, -newScore);
+        }
+
+        return maxScore;
     }
 }
 
@@ -35,13 +49,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3, 10, 11, 12], 1, 12);
+        Run([1, 2, 3, 10, 11, 12], 9, 52);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int target, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MaxScore(nums, target);
+        Utilities.PrintSolution((nums, target), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -21,15 +21,50 @@
 // - 1 ≤ k ≤ n ≤ 10^3
 // - 1 ≤ `quality[i]`, `wage[i]` ≤ 10^3
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N09_TopKElements.P08_MinimumCostToHireKWorkers;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(n).
+    public static double MinCostToHireWorkers(int[] quality, int[] wage, int k)
     {
-        return true;
+        // Worker with maximum wage-to-quality ratio in a group will determine the pay for rest of the group.
+        // Our group should have one worker with minimum ratio and other workers with minimum quality.
+        var wageToQualities = new (double, int)[quality.Length];
+
+        for (int i = 0; i < quality.Length; i++)
+        {
+            wageToQualities[i] = ((double)wage[i] / quality[i], quality[i]);
+        }
+
+        Array.Sort(wageToQualities);
+
+        var qualities = new PriorityQueue<int, int>(k + 1);
+        int totalQuality = 0;
+        double minCost = double.MaxValue;
+
+        foreach ((double wageToQuality, int currQuality) in wageToQualities)
+        {
+            qualities.Enqueue(currQuality, -currQuality);
+            totalQuality += currQuality;
+
+            if (qualities.Count > k)
+            {
+                int oldQuality = qualities.Dequeue();
+                totalQuality -= oldQuality;
+            }
+
+            if (qualities.Count == k)
+            {
+                minCost = Math.Min(minCost, wageToQuality * totalQuality);
+            }
+        }
+
+        return minCost;
     }
 }
 
@@ -37,13 +72,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3], [1, 2, 3], 2, 5.0);
+        Run([1, 2, 3], [3, 2, 1], 2, 5.0);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] quality, int[] wage, int k, double expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        double result = Solution.MinCostToHireWorkers(quality, wage, k);
+        Utilities.PrintSolution((quality, wage, k), result);
+        Assert.AreEqual(expectedResult, result, 1e-5);
     }
 }

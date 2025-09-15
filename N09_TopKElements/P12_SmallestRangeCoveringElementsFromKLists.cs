@@ -14,15 +14,50 @@
 // - -10^3 ≤ `nums[i][j]` ≤ 10^3
 // - `nums[i]` is sorted in a non-decreasing order.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N09_TopKElements.P12_SmallestRangeCoveringElementsFromKLists;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logk), Space complexity: O(k).
+    public int[] SmallestRange(List<List<int>> nums)
     {
-        return true;
+        var numsQueue = new PriorityQueue<(int i1, int i2), int>();
+
+        int max = int.MinValue;
+        for (int i1 = 0; i1 < nums.Count; i1++)
+        {
+            int num = nums[i1][0];
+            numsQueue.Enqueue((i1, 0), num);
+            max = Math.Max(max, num);
+        }
+
+        int rangeMin = -1000; // Setting to int.MinValue will cause integer overflow when computing max - min.
+        int rangeMax = max;
+
+        while (true)
+        {
+            (int i1, int i2) = numsQueue.Dequeue();
+
+            int min = nums[i1][i2];
+            if (max - min < rangeMax - rangeMin)
+            {
+                (rangeMin, rangeMax) = (min, max);
+            }
+
+            if (i2 == nums[i1].Count - 1)
+            {
+                return new int[] { rangeMin, rangeMax };
+            }
+
+            int nextNum = nums[i1][i2 + 1];
+            numsQueue.Enqueue((i1, i2 + 1), nextNum);
+            max = Math.Max(max, nextNum);
+        }
     }
 }
 
@@ -30,13 +65,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 4, 7], [3, 6], [6, 8, 10]], [6, 7]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] numsArray, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        List<List<int>> nums = numsArray.Select(nums => nums.ToList()).ToList();
+        int[] result = new Solution().SmallestRange(nums);
+        Utilities.PrintSolution(numsArray, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -12,15 +12,36 @@
 // - 1 ≤ k ≤ number of unique elements in an array.
 // - It is guaranteed that the answer is unique.
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N09_TopKElements.P04_TopKFrequentElements;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logk), Space complexity: O(n+k).
+    public static int[] TopKFrequent(int[] arr, int k)
     {
-        return true;
+        var counts = new Dictionary<int, int>();
+        foreach (int num in arr)
+        {
+            counts.TryAdd(num, 0);
+            counts[num]++;
+        }
+
+        var countQueue = new PriorityQueue<int, int>();
+
+        foreach (KeyValuePair<int, int> pair in counts)
+        {
+            countQueue.Enqueue(pair.Key, pair.Value);
+            if (countQueue.Count > k)
+            {
+                countQueue.Dequeue();
+            }
+        }
+
+        return countQueue.UnorderedItems.Select(item => item.Element).ToArray();
     }
 }
 
@@ -28,13 +49,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3, 1, 2], 2, [1, 2]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] arr, int k, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.TopKFrequent(arr, k);
+        Utilities.PrintSolution((arr, k), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -10,15 +10,33 @@
 // - -10^5 ≤ `nums[i]` ≤ 10^5
 // - 1 ≤ k ≤ `nums.length`
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N09_TopKElements.P07_FindSubsequenceOfLengthKWithTheLargestSum;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logk), Space complexity: O(k).
+    public static int[] MaxSubsequence(int[] nums, int k)
     {
-        return true;
+        var numsQueue = new PriorityQueue<int, int>();
+
+        for (int i = 0; i < nums.Length; i++)
+        {
+            numsQueue.Enqueue(i, nums[i]);
+            if (numsQueue.Count > k)
+            {
+                numsQueue.Dequeue();
+            }
+        }
+
+        return numsQueue.UnorderedItems
+            .Select(items => items.Element)
+            .Order()
+            .Select(index => nums[index])
+            .ToArray();
     }
 }
 
@@ -26,13 +44,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3, 4, 4, 3, 2, 1], 5, [3, 4, 4, 3, 2]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int k, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.MaxSubsequence(nums, k);
+        Utilities.PrintSolution((nums, k), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

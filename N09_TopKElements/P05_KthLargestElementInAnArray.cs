@@ -10,15 +10,28 @@
 // - 1 ≤ k ≤ `nums.length` ≤ 10^3
 // - -10^4 ≤ `nums[i]` ≤ 10^4
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N09_TopKElements.P05_KthLargestElementInAnArray;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logk), Space complexity: O(k).
+    public static int FindKthLargest(int[] nums, int k)
     {
-        return true;
+        var numQueue = new PriorityQueue<int, int>();
+
+        foreach (int num in nums)
+        {
+            numQueue.Enqueue(num, num);
+            if (numQueue.Count > k)
+            {
+                numQueue.Dequeue();
+            }
+        }
+
+        return numQueue.Peek();
     }
 }
 
@@ -26,13 +39,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3, 1, 3], 3, 2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int k, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.FindKthLargest(nums, k);
+        Utilities.PrintSolution((nums, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }
