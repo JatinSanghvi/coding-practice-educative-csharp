@@ -19,15 +19,50 @@
 // - 1 ≤ k ≤ m
 // - `matrix[i][j]` is either 0 or 1.
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P08_TheKWeakestRowsInAMatrix;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(m*logn + m*logk), Space complexity: O(k).
+    public static int[] FindKWeakestRows(int[][] matrix, int k)
     {
-        return true;
+        int rows = matrix.Length;
+        int cols = matrix[0].Length;
+
+        var weakestRows = new PriorityQueue<int, (int, int)>(rows);
+
+        for (int row = 0; row != rows; row++)
+        {
+            int low = -1, high = cols;
+            while (high - low != 1)
+            {
+                int mid = (low + high) / 2;
+                if (mid == -1 || matrix[row][mid] == 1) { low = mid; }
+                else { high = mid; }
+            }
+
+            int soldiers = high;
+            weakestRows.Enqueue(row, (-soldiers, -row));
+
+            if (weakestRows.Count == k)
+            {
+                weakestRows.Dequeue();
+            }
+        }
+
+        var result = new int[k];
+
+        for (int i = k - 1; i != -1; i--)
+        {
+            result[i] = weakestRows.Dequeue();
+            Console.WriteLine(result[i]);
+        }
+
+        return result;
     }
 }
 
@@ -35,13 +70,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 0, 0], [1, 1, 0], [1, 1, 1], [0, 0, 0], [1, 0, 0]], 4, [3, 0, 4, 1]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] matrix, int k, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.FindKWeakestRows(matrix, k);
+        Utilities.PrintSolution((matrix, k), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

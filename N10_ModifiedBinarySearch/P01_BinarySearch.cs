@@ -17,9 +17,19 @@ namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P01_BinarySearch
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(logn), Space complexity: O(1).
+    public static int BinarySearch(int[] nums, int target)
     {
-        return true;
+        int low = 0, high = nums.Length;
+        while (high - low != 1)
+        {
+            int mid = (low + high) / 2;
+
+            if (target < nums[mid]) { high = mid; }
+            else { low = mid; }
+        }
+
+        return target == nums[low] ? low : -1;
     }
 }
 
@@ -27,13 +37,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 3], 0, -1);
+        Run([1, 3], 1, 0);
+        Run([1, 3], 2, -1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int target, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.BinarySearch(nums, target);
+        Utilities.PrintSolution((nums, target), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

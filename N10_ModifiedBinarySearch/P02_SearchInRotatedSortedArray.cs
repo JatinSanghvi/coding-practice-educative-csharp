@@ -20,9 +20,29 @@ namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P02_SearchInRota
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(logn), Space complexity: O(1).
+    public static int BinarySearchRotated(int[] nums, int target)
     {
-        return true;
+        int low = 0, high = nums.Length;
+        while (high - low != 1)
+        {
+            int mid = (low + high) / 2;
+
+            // At least one of the two halves is unrotated. Check for the presence of target in the unrotated half to
+            // choose between the two halves.
+            if (nums[low] <= nums[mid - 1])
+            {
+                if (nums[low] <= target && target <= nums[mid - 1]) { high = mid; }
+                else { low = mid; }
+            }
+            else
+            {
+                if (nums[mid] <= target && target <= nums[high - 1]) { low = mid; }
+                else { high = mid; }
+            }
+        }
+
+        return nums[low] == target ? low : -1;
     }
 }
 
@@ -30,13 +50,18 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 3, 5], 1, 0);
+        Run([5, 1, 3], 3, 2);
+        Run([3, 5, 1], 5, 1);
+        Run([1, 3, 5], 0, -1);
+        Run([5, 1, 3], 2, -1);
+        Run([3, 5, 1], 4, -1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int target, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.BinarySearchRotated(nums, target);
+        Utilities.PrintSolution((nums, target), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -16,15 +16,33 @@
 // - `nums` is sorted in ascending order.
 // - -10^4 ≤ `nums[i]`, `target` ≤ 10^4
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P05_FindKClosestElements;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(logn+k), Space complexity: O(1).
+    public static IList<int> FindClosestElements(int[] nums, int k, int target)
     {
-        return true;
+        int low = 0, high = nums.Length;
+        while (high - low != 1)
+        {
+            int mid = (low + high) / 2;
+
+            if (target < nums[mid]) { high = mid; }
+            else { low = mid; }
+        }
+
+        while (high - (low + 1) != k)
+        {
+            if (high == nums.Length || (low != -1 && target - nums[low] <= nums[high] - target)) { low--; }
+            else { high++; }
+        }
+
+        return new List<int>(nums[(low + 1)..high]);
     }
 }
 
@@ -32,13 +50,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3, 4, 5], 3, 0, [1, 2, 3]);
+        Run([1, 2, 3, 4, 5], 3, 3, [2, 3, 4]);
+        Run([1, 2, 3, 4, 5], 3, 6, [3, 4, 5]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int k, int target, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        IList<int> result = Solution.FindClosestElements(nums, k, target);
+        Utilities.PrintSolution((nums, k, target), result);
+        CollectionAssert.AreEqual(expectedResult, result.ToArray());
     }
 }

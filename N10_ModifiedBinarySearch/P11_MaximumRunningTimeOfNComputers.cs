@@ -21,15 +21,34 @@
 // - 1 ≤ `n` ≤ `batteries.length` ≤ 10^5
 // - 1 ≤ `batteries[i]` ≤ 10^5
 
+using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P11_MaximumRunningTimeOfNComputers;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*log(avg-capacity)), Space complexity: O(1).
+    public long MaxRunTime(int[] batteries, int n)
     {
-        return true;
+        long canRunMax = -1;
+        long cannotRunMin = batteries.Select(capacity => (long)capacity).Sum() / n + 1;
+
+        while (cannotRunMin - canRunMax != 1)
+        {
+            long mid = (canRunMax + cannotRunMin) / 2;
+
+            if (CanRun(mid)) { canRunMax = mid; }
+            else { cannotRunMin = mid; }
+        }
+
+        return canRunMax;
+
+        bool CanRun(long time)
+        {
+            return batteries.Select(capacity => Math.Min(capacity, time)).Sum() >= n * time;
+        }
     }
 }
 
@@ -37,13 +56,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([2, 2, 2], 2, 3);
+        Run([1, 2, 5], 2, 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] batteries, int n, long expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        long result = new Solution().MaxRunTime(batteries, n);
+        Utilities.PrintSolution((batteries, n), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

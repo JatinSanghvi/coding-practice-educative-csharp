@@ -16,11 +16,26 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P03_FirstBadVersion;
 
-public class Solution
+public class BadVersion(int firstBadVersion)
 {
-    public static bool Function()
+    protected bool IsBadVersion(int version) => version >= firstBadVersion;
+}
+
+public class Solution(int v) : BadVersion(v)
+{
+    // Time complexity: O(logn), Space complexity: O(1).
+    public int FirstBadVersion(int n)
     {
-        return true;
+        int low = 1, high = n + 1;
+        while (high - low != 1)
+        {
+            int mid = (low + high) / 2;
+
+            if (IsBadVersion(mid)) { high = mid; }
+            else { low = mid; }
+        }
+
+        return IsBadVersion(low) ? low : low + 1;
     }
 }
 
@@ -28,13 +43,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(9, 1, 1);
+        Run(9, 2, 2);
+        Run(9, 9, 9);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int v, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution(v).FirstBadVersion(n);
+        Utilities.PrintSolution((n, v), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

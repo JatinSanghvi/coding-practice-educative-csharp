@@ -28,9 +28,21 @@ namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P10_FindMinimumI
 
 public class Solution
 {
-    public static bool Function()
+    public int FindMin(int[] nums)
     {
-        return true;
+        int low = 0, high = nums.Length - 1;
+
+        while (low != high)
+        {
+            int mid = (low + high) / 2;
+            if (nums[mid] > nums[high]) { low = mid + 1; }
+            else if (nums[mid] < nums[high]) { high = mid; }
+
+            // Min can lie anywhere but at least, we can reduce the range without losing it.
+            else { high--; }
+        }
+
+        return nums[low];
     }
 }
 
@@ -38,13 +50,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([3, 3, 3, 1, 2, 2], 1);
+        Run([3, 3, 3, 1, 1, 2], 1);
+        Run([3, 1, 1, 1, 2, 2], 1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().FindMin(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

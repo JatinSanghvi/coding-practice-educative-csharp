@@ -19,9 +19,40 @@ namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P13_DivideChocol
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(nlog(result)), Space complexity: O(1).
+    public int MaximizeSweetness(int[] sweetness, int k)
     {
-        return true;
+        int testValue;
+        for (testValue = 2; IsPossible(testValue); testValue *= 2) ;
+
+        int minImpossible = testValue;
+        int maxPossible = testValue / 2;
+
+        while (minImpossible - maxPossible != 1)
+        {
+            testValue = (maxPossible + minImpossible) / 2;
+            if (IsPossible(testValue)) { maxPossible = testValue; }
+            else { minImpossible = testValue; }
+        }
+
+        return maxPossible;
+
+        bool IsPossible(int testValue)
+        {
+            int pieces = 0;
+            int sum = 0;
+            for (int i = 0; i != sweetness.Length && pieces != k + 1; i++)
+            {
+                sum += sweetness[i];
+                if (sum >= testValue)
+                {
+                    pieces++;
+                    sum = 0;
+                }
+            }
+
+            return pieces == k + 1;
+        }
     }
 }
 
@@ -29,13 +60,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 1, 3, 1, 4], 2, 4);
+        Run([1, 2, 1, 3, 1, 4], 3, 1);
+        Run([1, 2, 1, 3, 1, 4], 5, 1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] sweetness, int k, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().MaximizeSweetness(sweetness, k);
+        Utilities.PrintSolution((sweetness, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

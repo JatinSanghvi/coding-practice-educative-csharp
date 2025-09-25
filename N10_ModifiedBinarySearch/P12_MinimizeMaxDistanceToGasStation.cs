@@ -16,15 +16,46 @@
 // - The `stations` array is sorted in a strictly increasing order.
 // - 1 ≤ `k` ≤ 10^6
 
+using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P12_MinimizeMaxDistanceToGasStation;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*log(maxGap/1e-7)), Space complexity: O(n).
+    public double MinimizeGasDistance(int[] stations, int k)
     {
-        return true;
+        var gaps = new double[stations.Length - 1];
+        for (int i = 0; i != stations.Length - 1; i++)
+        {
+            gaps[i] = stations[i + 1] - stations[i];
+        }
+
+        double maxImpossibleDistance = 0.0, minPossibleDistance = gaps.Max();
+
+        while (minPossibleDistance - maxImpossibleDistance >= 1e-7)
+        {
+            double distance = (maxImpossibleDistance + minPossibleDistance) / 2;
+
+            if (IsPossible(distance)) { minPossibleDistance = distance; }
+            else { maxImpossibleDistance = distance; }
+        }
+
+        return minPossibleDistance;
+
+        bool IsPossible(double distance)
+        {
+            int newStations = 0;
+            foreach (double gap in gaps)
+            {
+                newStations += (int)Math.Floor(gap / distance);
+                if (newStations > k) { return false; }
+            }
+
+            return true;
+        }
     }
 }
 
@@ -32,13 +63,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([-2, -1, 7, 9, 13], 1, 4.0);
+        Run([-2, -1, 7, 9, 13], 11, 1.0);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] stations, int k, double expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        double result = new Solution().MinimizeGasDistance(stations, k);
+        Utilities.PrintSolution((stations, k), result);
+        Assert.AreEqual(expectedResult, result, 1e-6);
     }
 }

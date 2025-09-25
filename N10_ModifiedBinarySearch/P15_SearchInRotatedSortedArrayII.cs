@@ -27,9 +27,33 @@ namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P15_SearchInRota
 
 public class Solution
 {
-    public static bool Function()
+    public static bool Search(int[] arr, int target)
     {
-        return true;
+        int low = 0, high = arr.Length - 1;
+
+        while (low <= high)
+        {
+            int mid = (low + high) / 2;
+
+            if (arr[mid] == target) { return true; }
+
+            if (arr[mid] < arr[high])
+            {
+                if (arr[mid] < target && target <= arr[high]) { low = mid + 1; }
+                else { high = mid - 1; }
+            }
+            else if (arr[mid] > arr[high])
+            {
+                if (arr[low] <= target && target < arr[mid]) { high = mid - 1; }
+                else { low = mid + 1; }
+            }
+            else
+            {
+                high--;
+            }
+        }
+
+        return false;
     }
 }
 
@@ -37,13 +61,18 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 1, 1, 1, 3], 3, true);
+        Run([1, 1, 3, 1, 1], 3, true);
+        Run([3, 1, 1, 1, 1], 3, true);
+        Run([1, 1, 1, 1, 3], 2, false);
+        Run([1, 1, 3, 1, 1], 2, false);
+        Run([3, 1, 1, 1, 1], 2, false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] arr, int target, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.Search(arr, target);
+        Utilities.PrintSolution((arr, target), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

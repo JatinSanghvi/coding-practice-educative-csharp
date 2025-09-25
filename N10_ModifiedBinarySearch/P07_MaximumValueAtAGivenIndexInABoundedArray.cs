@@ -21,9 +21,35 @@ namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P07_MaximumValue
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(log(ans)), Space complexity: O(1).
+    public static int MaxValue(int n, int index, int maxSum)
     {
-        return true;
+        (int low, int high) = (1, 2);
+
+        while (GetSum(n, high, index) <= maxSum)
+        {
+            (low, high) = (high, high * 2);
+        }
+
+        while (high - low != 1)
+        {
+            int mid = (low + high) / 2;
+
+            if (GetSum(n, mid, index) <= maxSum) { low = mid; }
+            else { high = mid; }
+        }
+
+        return low;
+    }
+
+    private static int GetSum(int length, int value, int index)
+    {
+        value--; // To simplify calculation.
+
+        return length // Lower base.
+            + value * value // Isosceles triangle area.
+            - (index >= value - 1 ? 0 : (value - index - 1) * (value - index) / 2) // Extra area on left.
+            - (index <= length - value ? 0 : (value - (length - index)) * (value - (length - index) + 1) / 2); // Extra area on right.
     }
 }
 
@@ -31,13 +57,16 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(100, 90, 416, 20);
+        Run(100, 90, 415, 19);
+        Run(100, 9, 416, 20);
+        Run(100, 9, 415, 19);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int index, int maxSum, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MaxValue(n, index, maxSum);
+        Utilities.PrintSolution((n, index, maxSum), result);
         Assert.AreEqual(expectedResult, result);
     }
 }
