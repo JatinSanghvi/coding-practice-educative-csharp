@@ -10,18 +10,49 @@
 // Constraints:
 //
 // - 0 ≤ `digits.length` ≤ 4
-//
 // - `digits[i]` is a digit in the range [2,9]
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N11_Subsets.P03_LetterCombinationsOfAPhoneNumber;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*4^n), Space complexity: O(n).
+    public static List<string> LetterCombinations(string digits)
     {
-        return true;
+        var digitLetters = new Dictionary<char, char[]>
+        {
+            ['2'] = ['a', 'b', 'c'],
+            ['3'] = ['d', 'e', 'f'],
+            ['4'] = ['g', 'h', 'i'],
+            ['5'] = ['j', 'k', 'l'],
+            ['6'] = ['m', 'n', 'o'],
+            ['7'] = ['p', 'q', 'r', 's'],
+            ['8'] = ['t', 'u', 'v'],
+            ['9'] = ['w', 'x', 'y', 'z'],
+        };
+
+        var letters = new char[digits.Length];
+        var combinations = new List<string>();
+        Solve(0);
+        return combinations;
+
+        void Solve(int index)
+        {
+            if (index == digits.Length)
+            {
+                combinations.Add(new string(letters));
+                return;
+            }
+
+            foreach (char ch in digitLetters[digits[index]])
+            {
+                letters[index] = ch;
+                Solve(index + 1);
+            }
+        }
     }
 }
 
@@ -29,13 +60,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("", [""]); // Does not agree with evaluation.
+        Run("29", ["aw", "ax", "ay", "az", "bw", "bx", "by", "bz", "cw", "cx", "cy", "cz"]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string digits, string[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        string[] result = Solution.LetterCombinations(digits).ToArray();
+        Utilities.PrintSolution(digits, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

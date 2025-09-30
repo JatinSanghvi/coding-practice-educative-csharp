@@ -11,18 +11,44 @@
 // Constraints:
 //
 // - 1 ≤ `tiles.length` ≤ 7
-//
 // - The `tiles` string consists of uppercase English letters.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N11_Subsets.P06_LetterTilePossibilities;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n!), Space complexity: O(n).
+    public static int NumTilePossibilities(string tiles)
     {
-        return true;
+        var counts = new Dictionary<char, int>();
+        foreach (char ch in tiles)
+        {
+            counts.TryAdd(ch, 0);
+            counts[ch]++;
+        }
+
+        int possibilities = 0;
+        Solve(0);
+        return possibilities - 1; // Ignore empty set.
+
+        void Solve(int index)
+        {
+            possibilities++;
+            if (index == tiles.Length) { return; }
+
+            foreach (char ch in counts.Keys)
+            {
+                if (counts[ch] != 0)
+                {
+                    counts[ch]--;
+                    Solve(index + 1);
+                    counts[ch]++;
+                }
+            }
+        }
     }
 }
 
@@ -30,13 +56,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("ABC", 15);
+        Run("AAB", 8);
+        Run("AAA", 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string tiles, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.NumTilePossibilities(tiles);
+        Utilities.PrintSolution(tiles, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

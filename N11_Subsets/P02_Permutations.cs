@@ -8,20 +8,40 @@
 // Constraints:
 //
 // - All characters in `word` are unique.
-//
 // - 1 ≤ `word.length` ≤ 6
-//
 // - All characters in `word` are lowercase English letters.
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N11_Subsets.P02_Permutations;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*n!), Space complexity: O(n).
+    public static IList<string> PermuteWord(string word)
     {
-        return true;
+        char[] letters = word.ToCharArray();
+        var permutations = new List<string>();
+        Solve(0);
+        return permutations;
+
+        void Solve(int i)
+        {
+            if (i == word.Length)
+            {
+                permutations.Add(new string(letters));
+                return;
+            }
+
+            for (int j = i; j != letters.Length; j++)
+            {
+                (letters[i], letters[j]) = (letters[j], letters[i]);
+                Solve(i + 1);
+                (letters[i], letters[j]) = (letters[j], letters[i]);
+            }
+        }
     }
 }
 
@@ -29,13 +49,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("abc", ["abc", "acb", "bac", "bca", "cba", "cab"]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string word, string[] expectedResult)
     {
-        bool result = Solution.Function();
+        string[] result = Solution.PermuteWord(word).ToArray();
         Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -27,6 +27,7 @@ namespace JatinSanghvi.CodingInterview.N10_ModifiedBinarySearch.P15_SearchInRota
 
 public class Solution
 {
+    // Time complexity: O(n), Space complexity: O(1).
     public static bool Search(int[] arr, int target)
     {
         int low = 0, high = arr.Length - 1;

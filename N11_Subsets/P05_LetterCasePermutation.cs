@@ -9,18 +9,46 @@
 // Constraints:
 //
 // - 1 ≤ `s.length` ≤ 12
-//
 // - `s` consists of lowercase English letters, uppercase English letters, and digits.
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N11_Subsets.P05_LetterCasePermutation;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*2^n), Space complexity: O(n).
+    public IList<string> LetterCasePermutation(string s)
     {
-        return true;
+        char[] letters = s.ToCharArray();
+        var permutations = new List<string>();
+        Solve(0);
+        return permutations;
+
+        void Solve(int index)
+        {
+            if (index == letters.Length)
+            {
+                permutations.Add(new string(letters));
+                return;
+            }
+
+            char ch = letters[index];
+            if (char.IsDigit(ch))
+            {
+                Solve(index + 1);
+            }
+            else
+            {
+                letters[index] = char.ToUpper(ch);
+                Solve(index + 1);
+
+                letters[index] = char.ToLower(ch);
+                Solve(index + 1);
+            }
+        }
     }
 }
 
@@ -28,13 +56,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("a12b", ["A12B", "A12b", "a12B", "a12b"]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string s, string[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        string[] result = new Solution().LetterCasePermutation(s).ToArray();
+        Utilities.PrintSolution(s, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }
