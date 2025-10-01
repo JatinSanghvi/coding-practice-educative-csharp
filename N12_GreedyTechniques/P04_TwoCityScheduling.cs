@@ -17,15 +17,23 @@
 // - `costs.length` is even
 // - 1 ≤ `aCost_i`, `bCost_i` ≤ 1000
 
+using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P04_TwoCityScheduling;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(1).
+    public static int TwoCityScheduling(int[][] costs)
     {
-        return true;
+        Array.Sort(costs, (cost1, cost2) => (cost1[0] - cost1[1]) - (cost2[0] - cost2[1]));
+
+        int total = 0;
+        for (int i = 0; i != costs.Length / 2; i++) { total += costs[i][0]; }
+        for (int i = costs.Length / 2; i != costs.Length; i++) { total += costs[i][1]; }
+        return total;
     }
 }
 
@@ -33,13 +41,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 2], [3, 5], [6, 7], [10, 8]], 19);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] costs, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int[][] costsCopy = costs.ToArray();
+        int result = Solution.TwoCityScheduling(costs);
+        Utilities.PrintSolution(costsCopy, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

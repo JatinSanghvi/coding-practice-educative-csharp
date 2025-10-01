@@ -20,15 +20,35 @@
 // - 1 ≤ `d_i` < `d_{i+1}` < `target`
 // - 1 ≤ `f_i` < 10^9
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P05_MinimumNumberOfRefuelingStops;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(n).
+    public static int MinRefuelStops(int target, int startFuel, int[][] stations)
     {
-        return true;
+        int stops = 0;
+        var availableFuels = new PriorityQueue<int, int>();
+        int index = 0;
+        int range = startFuel;
+
+        while (range < target)
+        {
+            while (index != stations.Length && stations[index][0] <= range)
+            {
+                availableFuels.Enqueue(stations[index][1], -stations[index][1]);
+                index++;
+            }
+
+            if (availableFuels.Count == 0) { return -1; }
+            range += availableFuels.Dequeue();
+            stops++;
+        }
+
+        return stops;
     }
 }
 
@@ -36,13 +56,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(120, 10, [[10, 60], [20, 25], [30, 30], [60, 40]], 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int target, int startFuel, int[][] stations, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MinRefuelStops(target, startFuel, stations);
+        Utilities.PrintSolution((target, startFuel, stations), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

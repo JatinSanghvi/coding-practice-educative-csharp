@@ -17,9 +17,12 @@ namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P12_LargestOddNumber
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static string LargestOddNumber(string num)
     {
-        return true;
+        int right;
+        for (right = num.Length - 1; right != -1 && num[right] % 2 == 0; right--) ;
+        return num[..(right + 1)];
     }
 }
 
@@ -27,13 +30,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("2112", "211");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string num, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = Solution.LargestOddNumber(num);
+        Utilities.PrintSolution(num, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

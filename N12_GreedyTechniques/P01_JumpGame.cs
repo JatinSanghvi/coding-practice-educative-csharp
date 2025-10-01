@@ -11,15 +11,23 @@
 // - 1 ≤ `nums.length` ≤ 10^3
 // - 0 ≤ `nums[i]` ≤ 10^3
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P01_JumpGame;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static bool JumpGame(int[] nums)
     {
-        return true;
+        int max = 0;
+        for (int i = 0; i <= max && max < nums.Length - 1; i++)
+        {
+            max = Math.Max(max, i + nums[i]);
+        }
+
+        return max >= nums.Length - 1;
     }
 }
 
@@ -27,13 +35,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([2, 0, 1, 0], true);
+        Run([1, 0, 2, 0], false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.JumpGame(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

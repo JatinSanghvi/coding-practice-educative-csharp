@@ -25,9 +25,19 @@ namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P14_MinimumReplaceme
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static long MinimumReplacement(int[] nums)
     {
-        return true;
+        int maxAllowed = nums[^1];
+        int operations = 0;
+        for (int i = nums.Length - 2; i != -1; i--)
+        {
+            int splits = (nums[i] - 1) / maxAllowed;
+            maxAllowed = nums[i] / (splits + 1);
+            operations += splits;
+        }
+
+        return operations;
     }
 }
 
@@ -35,13 +45,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([10, 20, 30], 0);
+        Run([30, 20, 10], 3);
+        Run([30, 21, 10], 6);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, long expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        long result = Solution.MinimumReplacement(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

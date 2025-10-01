@@ -21,15 +21,32 @@
 // - 0 ≤ `cookieSizes.length` ≤ 1000
 // - 1 ≤ `greedFactors[i]`, `cookieSizes[j]` ≤ 10^5
 
+using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P07_AssignCookies;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(g*logg + c*logc), Space complexity: O(1).
+    public static int FindContentChildren(int[] greedFactors, int[] cookieSizes)
     {
-        return true;
+        Array.Sort(greedFactors);
+        Array.Sort(cookieSizes);
+
+        int g = 0, c = 0;
+        while (g != greedFactors.Length && c != cookieSizes.Length)
+        {
+            if (cookieSizes[c] >= greedFactors[g])
+            {
+                g++;
+            }
+
+            c++;
+        }
+
+        return g;
     }
 }
 
@@ -37,13 +54,17 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([2, 3, 4], [3, 2, 1], 2);
+        Run([2, 3, 4], [4, 3, 2, 1], 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] greedFactors, int[] cookieSizes, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int[] greedFactorsCopy = greedFactors.ToArray();
+        int[] cookieSizesCopy = cookieSizes.ToArray();
+
+        int result = Solution.FindContentChildren(greedFactors, cookieSizes);
+        Utilities.PrintSolution((greedFactorsCopy, cookieSizesCopy), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

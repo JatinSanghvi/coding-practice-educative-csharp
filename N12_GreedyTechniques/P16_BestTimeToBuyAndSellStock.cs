@@ -13,15 +13,26 @@
 // - 1 ≤ `prices.length` ≤ 10^3
 // - 0 ≤ `prices[i]` ≤ 10^5
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P16_BestTimeToBuyAndSellStock;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int MaxProfit(int[] prices)
     {
-        return true;
+        int minValue = prices[0];
+        int maxProfit = 0;
+
+        for (int i = 1; i != prices.Length; i++)
+        {
+            minValue = Math.Min(minValue, prices[i]);
+            maxProfit = Math.Max(maxProfit, prices[i] - minValue);
+        }
+
+        return maxProfit;
     }
 }
 
@@ -29,13 +40,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([3, 2, 4, 5, 1], 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] prices, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MaxProfit(prices);
+        Utilities.PrintSolution(prices, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

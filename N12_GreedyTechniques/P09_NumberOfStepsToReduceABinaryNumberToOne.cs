@@ -21,9 +21,30 @@ namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P09_NumberOfStepsToR
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int numSteps(string str)
     {
-        return true;
+        int steps = 0;
+        int carry = 0;
+        for (int i = str.Length - 1; i != 0; i--)
+        {
+            int bit = str[i] == '0' ? 0 : 1;
+            int sum = (bit + carry) % 2;
+
+            if (sum == 0)
+            {
+                carry = (bit + carry) / 2;
+                steps++;
+            }
+            else
+            {
+                carry = 1;
+                steps += 2;
+            }
+        }
+
+        // Remaining number is "1" on no carry, and "10" on carry. Add an extra step accordingly.
+        return steps + carry;
     }
 }
 
@@ -31,13 +52,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("101100111", 13);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string str, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.numSteps(str);
+        Utilities.PrintSolution(str, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

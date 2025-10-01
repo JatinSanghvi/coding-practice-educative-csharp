@@ -16,15 +16,32 @@
 // - 1 ≤ `people.length` ≤ 5 × 10^3
 // - 1 ≤ `people[i]` ≤ `limit` ≤ 3 × 10^3
 
+using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P02_BoatsToSavePeople;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(1).
+    public static int RescueBoats(int[] people, int limit)
     {
-        return true;
+        Array.Sort(people);
+        int light = 0, heavy = people.Length - 1;
+        int boats = 0;
+        while (light <= heavy)
+        {
+            if (light != heavy && people[light] + people[heavy] <= limit)
+            {
+                light++;
+            }
+
+            heavy--;
+            boats++;
+        }
+
+        return boats;
     }
 }
 
@@ -32,13 +49,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([4, 3, 2, 1], 4, 3);
+        Run([4, 3, 2, 1], 5, 2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] people, int limit, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int[] peopleCopy = people.ToArray();
+        int result = Solution.RescueBoats(people, limit);
+        Utilities.PrintSolution((peopleCopy, limit), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

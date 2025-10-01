@@ -24,9 +24,26 @@ namespace JatinSanghvi.CodingInterview.N12_GreedyTechniques.P03_GasStation;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int GasStationJourney(int[] gas, int[] cost)
     {
-        return true;
+        int currentGas = 0;
+        int totalGas = 0;
+        int start = 0;
+
+        for (int i = 0; i < gas.Length; i++)
+        {
+            if (currentGas < 0)
+            {
+                currentGas = 0;
+                start = i;
+            }
+
+            currentGas += gas[i] - cost[i];
+            totalGas += gas[i] - cost[i];
+        }
+
+        return totalGas < 0 ? -1 : start;
     }
 }
 
@@ -34,13 +51,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3, 4], [1, 4, 2, 3], 2);
+        Run([1, 2, 3, 4], [1, 4, 2, 4], -1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] gas, int[] cost, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.GasStationJourney(gas, cost);
+        Utilities.PrintSolution((gas, cost), result);
         Assert.AreEqual(expectedResult, result);
     }
 }
