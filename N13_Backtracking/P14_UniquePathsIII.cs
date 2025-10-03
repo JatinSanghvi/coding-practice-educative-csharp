@@ -26,9 +26,57 @@ namespace JatinSanghvi.CodingInterview.N13_Backtracking.P14_UniquePathsIII;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(4^mn), Space complexity: O(mn).
+    public static int UniquePathsIII(int[][] grid)
     {
-        return true;
+        int rows = grid.Length, cols = grid[0].Length;
+
+        int startRow = 0, startCol = 0;
+        int emptyCount = 0;
+        for (int row = 0; row != rows; row++)
+        {
+            for (int col = 0; col != cols; col++)
+            {
+                if (grid[row][col] == 1)
+                {
+                    startRow = row;
+                    startCol = col;
+                    emptyCount++;
+                }
+
+                if (grid[row][col] == 0)
+                {
+                    emptyCount++;
+                }
+            }
+        }
+
+        var visited = new bool[rows, cols];
+        return Solve(startRow, startCol, 0);
+
+        int Solve(int row, int col, int visitCount)
+        {
+            if (row == -1 || row == rows || col == -1 || col == cols || grid[row][col] == -1 || visited[row, col])
+            {
+                return 0;
+            }
+
+            if (grid[row][col] == 2)
+            {
+                return visitCount == emptyCount ? 1 : 0;
+            }
+
+            visited[row, col] = true;
+
+            int paths =
+                Solve(row - 1, col, visitCount + 1) +
+                Solve(row, col - 1, visitCount + 1) +
+                Solve(row, col + 1, visitCount + 1) +
+                Solve(row + 1, col, visitCount + 1);
+
+            visited[row, col] = false;
+            return paths;
+        }
     }
 }
 
@@ -36,13 +84,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 0, 0, 0], [0, 0, 0, 0], [2, 0, 0, -1]], 2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] grid, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.UniquePathsIII(grid);
+        Utilities.PrintSolution(grid, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

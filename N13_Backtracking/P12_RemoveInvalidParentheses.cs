@@ -21,29 +21,36 @@
 // - `s` consists of lowercase English letters and parentheses `'('` and `')'`.
 // - There will be at most `20` parentheses in `s`.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N13_Backtracking.P12_RemoveInvalidParentheses;
 
 public class Solution
 {
-    public static bool Function()
+    public static IList<string> RemoveInvalidParentheses(string s)
     {
-        return true;
-    }
-}
-
-internal static class Tests
-{
-    public static void Run()
-    {
-        Run(true);
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    private static void Run(bool expectedResult)
+    internal static class Tests
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        public static void Run()
+        {
+            Run("(a(b)(()", ["(a(b))", "(ab)()"]);
+        }
+
+        private static void Run(string s, string[] expectedResult)
+        {
+            Assert.Throws<NotImplementedException>(() => Solution.RemoveInvalidParentheses(s));
+
+            // string[] result = Solution.RemoveInvalidParentheses(s).ToArray();
+            // Utilities.PrintSolution(s, result);
+            // CollectionAssert.AreEqual(expectedResult, result);
+        }
     }
 }

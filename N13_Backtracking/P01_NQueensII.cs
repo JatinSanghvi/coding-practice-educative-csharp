@@ -15,9 +15,32 @@ namespace JatinSanghvi.CodingInterview.N13_Backtracking.P01_NQueensII;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n!), Space complexity: O(n).
+    public static int TotalNQueens(int n)
     {
-        return true;
+        var colFilled = new bool[n];
+        var diagFilled = new bool[2 * n - 1];
+        var diag2Filled = new bool[2 * n - 1];
+
+        return Solve(0);
+
+        int Solve(int row)
+        {
+            if (row == n) { return 1; }
+
+            int positions = 0;
+            for (int col = 0; col < n; col++)
+            {
+                if (!(colFilled[col] || diagFilled[row + col] || diag2Filled[row + (n - 1 - col)]))
+                {
+                    (colFilled[col], diagFilled[row + col], diag2Filled[row + (n - 1 - col)]) = (true, true, true);
+                    positions += Solve(row + 1);
+                    (colFilled[col], diagFilled[row + col], diag2Filled[row + (n - 1 - col)]) = (false, false, false);
+                }
+            }
+
+            return positions;
+        }
     }
 }
 
@@ -25,13 +48,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(1, 1);
+        Run(8, 92);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.TotalNQueens(n);
+        Utilities.PrintSolution(n, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -17,15 +17,40 @@
 // - The graph is guaranteed to be a DAG (no cycles).
 // - There are no self-loops (i.e., `graph[i]` does not contain `i`).
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N13_Backtracking.P11_AllPathsFromSourceToTarget;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(edges), Space complexity: O(vertices).
+    public static IList<IList<int>> AllPathsSourceTarget(int[][] graph)
     {
-        return true;
+        var paths = new List<IList<int>>();
+        var path = new LinkedList<int>();
+        Solve(0);
+        return paths;
+
+        void Solve(int i)
+        {
+            path.AddLast(i);
+
+            if (i == graph.Length - 1)
+            {
+                paths.Add(path.ToList());
+            }
+            else
+            {
+                foreach (int j in graph[i])
+                {
+                    Solve(j);
+                }
+            }
+
+            path.RemoveLast();
+        }
     }
 }
 
@@ -33,13 +58,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 2, 3], [4], [4], [4], []], [[0, 1, 4], [0, 2, 4], [0, 3, 4]]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] graph, int[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[][] result = Solution.AllPathsSourceTarget(graph).Select(p => p.ToArray()).ToArray();
+        Utilities.PrintSolution(graph, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

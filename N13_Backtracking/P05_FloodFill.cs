@@ -28,15 +28,39 @@
 // - 0 ≤ `sr` < `grid.length`
 // - 0 ≤ `sc` < `grid[i].length`
 
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N13_Backtracking.P05_FloodFill;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(m*n), Space complexity: O(m*n).
+    public static int[][] FloodFill(int[][] grid, int sr, int sc, int target)
     {
-        return true;
+        int rows = grid.Length, cols = grid[0].Length;
+        int source = grid[sr][sc];
+
+        if (source != target)
+        {
+            Fill(sr, sc);
+        }
+
+        return grid;
+
+        void Fill(int r, int c)
+        {
+            if (r == -1 || r == rows || c == -1 || c == cols || grid[r][c] != source)
+            {
+                return;
+            }
+
+            grid[r][c] = target;
+            Fill(r - 1, c);
+            Fill(r, c - 1);
+            Fill(r, c + 1);
+            Fill(r + 1, c);
+        }
     }
 }
 
@@ -44,13 +68,16 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(
+            [[1, 0, 1, 1], [0, 1, 1, 0], [1, 1, 0, 1]], 1, 2, 2,
+            [[1, 0, 2, 2], [0, 2, 2, 0], [2, 2, 0, 1]]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] grid, int sr, int sc, int target, int[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[][] gridCopy = grid.Select(row => row.ToArray()).ToArray();
+        int[][] result = Solution.FloodFill(grid, sr, sc, target);
+        Utilities.PrintSolution((gridCopy, sr, sc, target), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -17,15 +17,57 @@
 //
 // - 1 ≤ `n` ≤ 9
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N13_Backtracking.P13_NQueens;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n!), Space complexity: O(n^2).
+    public IList<IList<string>> SolveNQueens(int n)
     {
-        return true;
+        var colFilled = new bool[n];
+        var diag1Filled = new bool[2 * n - 1];
+        var diag2Filled = new bool[2 * n - 1];
+
+        var board = new char[n][];
+        for (int row = 0; row < n; row++)
+        {
+            board[row] = new char[n];
+            for (int col = 0; col < n; col++)
+            {
+                board[row][col] = '.';
+            }
+        }
+
+        var arrangements = new List<IList<string>>();
+        Solve(0);
+        return arrangements;
+
+        void Solve(int row)
+        {
+            if (row == n)
+            {
+                arrangements.Add(board.Select(rank => new string(rank)).ToList());
+                return;
+            }
+
+            for (int col = 0; col < n; col++)
+            {
+                if (!(colFilled[col] || diag1Filled[row + col] || diag2Filled[row + (n - 1 - col)]))
+                {
+                    (colFilled[col], diag1Filled[row + col], diag2Filled[row + (n - 1 - col)]) = (true, true, true);
+                    board[row][col] = 'Q';
+
+                    Solve(row + 1);
+
+                    (colFilled[col], diag1Filled[row + col], diag2Filled[row + (n - 1 - col)]) = (false, false, false);
+                    board[row][col] = '.';
+                }
+            }
+        }
     }
 }
 
@@ -33,13 +75,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(1, [["Q"]]);
+        Run(2, []);
+        Run(4, [[".Q..", "...Q", "Q...", "..Q."], ["..Q.", "Q...", "...Q", ".Q.."]]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, string[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        string[][] result = new Solution().SolveNQueens(n).Select(board => board.ToArray()).ToArray();
+        Utilities.PrintSolution(n, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

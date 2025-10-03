@@ -13,15 +13,60 @@
 // - 1 ≤ `amount_i` ≤ 100
 // - `from_i` ≠ `to_i`
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N13_Backtracking.P09_OptimalAccountBalancing;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O((n/2)!), Space complexity: O(n).
+    public int MinTransfers(int[][] transactions)
     {
-        return true;
+        var balances = new Dictionary<int, int>();
+        foreach (int[] transaction in transactions)
+        {
+            (int p1, int p2, int amount) = (transaction[0], transaction[1], transaction[2]);
+
+            balances.TryAdd(p1, 0);
+            balances.TryAdd(p2, 0);
+            balances[p1] -= amount;
+            balances[p2] += amount;
+        }
+
+        var lenders = balances.Select(b => -b.Value).Where(b => b > 0).ToArray();
+        var borrowers = balances.Select(b => b.Value).Where(b => b > 0).ToArray();
+
+        return Solve(0);
+
+        int Solve(int l)
+        {
+            if (l == lenders.Length)
+            {
+                return 0;
+            }
+
+            int minTransfers = int.MaxValue;
+
+            for (int b = 0; b != borrowers.Length; b++)
+            {
+                if (borrowers[b] != 0)
+                {
+                    int amount = Math.Min(lenders[l], borrowers[b]);
+                    lenders[l] -= amount;
+                    borrowers[b] -= amount;
+
+                    minTransfers = Math.Min(minTransfers, Solve(lenders[l] > 0 ? l : l + 1) + 1);
+
+                    lenders[l] += amount;
+                    borrowers[b] += amount;
+                }
+            }
+
+            return minTransfers;
+        }
     }
 }
 
@@ -29,13 +74,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[0, 1, 10], [1, 2, 20], [2, 3, 10], [3, 0, 20]], 2);
+        Run([[0, 1, 10], [1, 2, 20], [2, 3, 30], [3, 0, 40]], 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] transactions, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().MinTransfers(transactions);
+        Utilities.PrintSolution(transactions, result);
         Assert.AreEqual(expectedResult, result);
     }
 }
