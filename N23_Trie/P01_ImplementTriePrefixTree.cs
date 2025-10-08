@@ -20,10 +20,55 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N23_Trie.P01_ImplementTriePrefixTree;
 
-public class Solution
+public class TrieNode(bool isWord)
 {
-    public static bool Function()
+    public bool isWord = isWord;
+    public TrieNode[] children = new TrieNode[26];
+}
+
+// Space complexity: O(n).
+public class Trie()
+{
+    private readonly TrieNode _root = new TrieNode(false);
+
+    // Time complexity: O(n).
+    public void Insert(string word)
     {
+        TrieNode node = _root;
+        foreach (char ch in word)
+        {
+            node.children[ch - 'a'] ??= new TrieNode(false);
+            node = node.children[ch - 'a'];
+        }
+
+        node.isWord = true;
+    }
+
+    // Time complexity: O(n).
+    public bool Search(string word)
+    {
+        TrieNode node = _root;
+
+        foreach (char ch in word)
+        {
+            if (node.children[ch - 'a'] == null) { return false; }
+            node = node.children[ch - 'a'];
+        }
+
+        return node.isWord;
+    }
+
+    // Time complexity: O(n).
+    public bool SearchPrefix(string prefix)
+    {
+        TrieNode node = _root;
+
+        foreach (char ch in prefix)
+        {
+            if (node.children[ch - 'a'] == null) { return false; }
+            node = node.children[ch - 'a'];
+        }
+
         return true;
     }
 }
@@ -32,13 +77,31 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(
+            ["Insert and", "Search and", "Search an", "SearchPrefix an", "Insert an", "Search an"],
+            [null, true, false, true, null, true]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] operations, bool?[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var trie = new Trie();
+
+        for (int i = 0; i != operations.Length; i++)
+        {
+            string[] operation = operations[i].Split();
+            string method = operation[0];
+            string argument = operation[1];
+
+            bool? result = null;
+            switch (method)
+            {
+                case "Insert": trie.Insert(argument); break;
+                case "Search": result = trie.Search(argument); break;
+                case "SearchPrefix": result = trie.SearchPrefix(argument); break;
+            }
+
+            Utilities.PrintSolution(operations[i], result);
+            Assert.AreEqual(expectedResult[i], result);
+        }
     }
 }

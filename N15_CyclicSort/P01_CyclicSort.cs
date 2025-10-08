@@ -10,15 +10,25 @@
 // - 1 ≤ n ≤ 10^3
 // - Each element in `nums` is unique and within the range [1, n].
 
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N15_CyclicSort.P01_CyclicSort;
 
 public class Solution
 {
-    public static bool Function()
+    public int[] CyclicSort(int[] nums)
     {
-        return true;
+        for (int i = 0; i != nums.Length; i++)
+        {
+            while (nums[i] != i + 1)
+            {
+                int j = nums[i] - 1;
+                (nums[i], nums[j]) = (nums[j], nums[i]);
+            }
+        }
+
+        return nums;
     }
 }
 
@@ -26,13 +36,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([4, 3, 2, 1], [1, 2, 3, 4]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] numsCopy = nums.ToArray();
+        int[] result = new Solution().CyclicSort(nums);
+        Utilities.PrintSolution(numsCopy, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

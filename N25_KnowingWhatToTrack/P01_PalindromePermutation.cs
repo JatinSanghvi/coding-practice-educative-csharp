@@ -9,15 +9,31 @@
 // - 1 ≤ `st.length` ≤ 1000
 // - The string will contain lowercase English letters.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P01_PalindromePermutation;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static bool PermutedPalindrome(string st)
     {
-        return true;
+        var counts = new Dictionary<char, int>();
+
+        foreach (char ch in st)
+        {
+            counts.TryAdd(ch, 0);
+            counts[ch]++;
+        }
+
+        int oddCounts = 0;
+        foreach ((char ch, int count) in counts)
+        {
+            if (count % 2 != 0) { oddCounts++; }
+        }
+
+        return oddCounts == 0 || oddCounts == 1;
     }
 }
 
@@ -25,13 +41,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("aabbccc", true);
+        Run("abbbccc", false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string st, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.PermutedPalindrome(st);
+        Utilities.PrintSolution(st, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

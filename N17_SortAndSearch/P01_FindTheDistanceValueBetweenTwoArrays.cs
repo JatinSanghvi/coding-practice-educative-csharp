@@ -13,15 +13,34 @@
 // - -1000 ≤ `arr1[i]`, `arr2[j]` ≤ 1000
 // - 0 ≤ `d` ≤ 100
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N17_SortAndSearch.P01_FindTheDistanceValueBetweenTwoArrays;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O((m + n)*logn), Space complexity: O(1).
+    public static int FindTheDistanceValue(int[] arr1, int[] arr2, int d)
     {
-        return true;
+        Array.Sort(arr2);
+
+        int distance = 0;
+        foreach (int num in arr1)
+        {
+            int low = 0, high = arr2.Length;
+            while (low != high)
+            {
+                int mid = (low + high) / 2;
+                if (arr2[mid] < num - d) { low = mid + 1; }
+                else if (arr2[mid] > num + d) { high = mid; }
+                else { break; }
+            }
+
+            distance += (low == high) ? 1 : 0;
+        }
+
+        return distance;
     }
 }
 
@@ -29,13 +48,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([-20, -10, 0, 10, 20], [-15, 15], 5, 1);
+        Run([-20, -10, 0, 10, 20], [-25, 25], 5, 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] arr1, int[] arr2, int d, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.FindTheDistanceValue(arr1, arr2, d);
+        Utilities.PrintSolution((arr1, arr2, d), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

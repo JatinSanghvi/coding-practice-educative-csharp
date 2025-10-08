@@ -18,15 +18,52 @@
 // - 0 ≤ t ≤ 100
 // - Unique pairs of (x, y), which means that there should be no multiple edges
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N20_Graphs.P01_NetworkDelayTime;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O((v+e)*loge), Space complexity: O(v+e).
+    public static int NetworkDelayTime(int[][] times, int n, int k)
     {
-        return true;
+        var graph = new List<(int to, int delay)>[n + 1];
+        for (int i = 1; i != n + 1; i++)
+        {
+            graph[i] = new List<(int to, int delay)>();
+        }
+
+        foreach (int[] time in times)
+        {
+            (int from, int to, int delay) = (time[0], time[1], time[2]);
+            graph[from].Add((to, delay));
+        }
+
+        var queue = new PriorityQueue<int, int>();
+        queue.Enqueue(k, 0);
+
+        var visited = new bool[n + 1];
+        int visitedNodes = 0;
+        int maxDelay = 0;
+
+        while (queue.Count != 0)
+        {
+            queue.TryDequeue(out int node, out int delay);
+            if (visited[node]) { continue; }
+            visited[node] = true;
+            visitedNodes += 1;
+
+            maxDelay = Math.Max(maxDelay, delay);
+
+            foreach ((int node2, int delay2) in graph[node])
+            {
+                queue.Enqueue(node2, delay + delay2);
+            }
+        }
+
+        return visitedNodes == n ? maxDelay : -1;
     }
 }
 
@@ -34,13 +71,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 2, 10], [2, 3, 10], [1, 3, 15], [3, 4, 10]], 4, 1, 25);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] times, int n, int k, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.NetworkDelayTime(times, n, k);
+        Utilities.PrintSolution((times, n, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }
