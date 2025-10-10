@@ -17,9 +17,22 @@ namespace JatinSanghvi.CodingInterview.N15_CyclicSort.P02_MissingNumber;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int FindMissingNumber(int[] nums)
     {
-        return true;
+        int len = nums.Length;
+        int result = len;
+        for (int i = 0; i != len; i++)
+        {
+            while (nums[i] != i && nums[i] != len)
+            {
+                (nums[i], nums[nums[i]]) = (nums[nums[i]], nums[i]);
+            }
+
+            if (nums[i] == len) { result = i; }
+        }
+
+        return result;
     }
 }
 
@@ -27,13 +40,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([3, 2, 1], 0);
+        Run([2, 1, 0], 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.FindMissingNumber(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

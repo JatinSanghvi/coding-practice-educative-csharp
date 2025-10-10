@@ -9,15 +9,32 @@
 // - 1 ≤ `string.length` ≤ 10^3
 // - `string` consists of lowercase English alphabets.
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N19_Stacks.P02_RemoveAllAdjacentDuplicatesInString;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(n).
+    public static string RemoveDuplicates(string str)
     {
-        return true;
+        var stack = new Stack<char>();
+
+        foreach (char ch in str)
+        {
+            if (stack.Count != 0 && stack.Peek() == ch)
+            {
+                stack.Pop();
+            }
+            else
+            {
+                stack.Push(ch);
+            }
+        }
+
+        return new string(stack.Reverse().ToArray());
     }
 }
 
@@ -25,13 +42,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("abbccbab", "abab");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string str, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = Solution.RemoveDuplicates(str);
+        Utilities.PrintSolution(str, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

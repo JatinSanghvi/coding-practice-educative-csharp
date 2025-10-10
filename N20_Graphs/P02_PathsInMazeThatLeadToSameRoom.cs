@@ -24,15 +24,44 @@
 // - room_1_i ≠ room_2_i
 // - There are no duplicate corridors.
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N20_Graphs.P02_PathsInMazeThatLeadToSameRoom;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*c^2), Space complexity: O(n+c).
+    public static int NumberOfPaths(int n, int[][] corridors)
     {
-        return true;
+        var graph = new Dictionary<int, HashSet<int>>();
+
+        foreach (int[] corridor in corridors)
+        {
+            int room1 = Math.Min(corridor[0], corridor[1]);
+            int room2 = Math.Max(corridor[0], corridor[1]);
+
+            graph.TryAdd(room1, new HashSet<int>());
+            graph[room1].Add(room2);
+        }
+
+        int paths = 0;
+        foreach (HashSet<int> rooms in graph.Values)
+        {
+            foreach (var room1 in rooms)
+            {
+                foreach (var room2 in rooms)
+                {
+                    if (graph.ContainsKey(room1) && graph[room1].Contains(room2))
+                    {
+                        paths++;
+                    }
+                }
+            }
+        }
+
+        return paths;
     }
 }
 
@@ -40,13 +69,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(4, [[1, 2], [2, 3], [3, 4], [4, 1], [1, 3]], 2);
+        Run(4, [[1, 2], [2, 3], [3, 4], [4, 1], [1, 3], [2, 4]], 4);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int[][] corridors, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.NumberOfPaths(n, corridors);
+        Utilities.PrintSolution((n, corridors), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

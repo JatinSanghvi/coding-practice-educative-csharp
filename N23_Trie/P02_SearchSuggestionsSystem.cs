@@ -18,29 +18,67 @@
 // - 1 ≤ `searched word.length` ≤ 1000
 // - The searched word consists of lowercase English letters.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N23_Trie.P02_SearchSuggestionsSystem;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*l*logn + s), Space complexity: O(n*l).
+     // where n:product-count, l:avg-word-length, s:search-word-length.
+    public static IList<IList<string>> SuggestedProducts(string[] products, string searchWord)
     {
-        return true;
+        var root = new TrieNode();
+
+        Array.Sort(products);
+        foreach (string product in products)
+        {
+            TrieNode node = root;
+            foreach (char ch in product)
+            {
+                node = node.children[ch - 'a'] ??= new TrieNode();
+                if (node.words.Count != 3)
+                {
+                    node.words.Add(product);
+                }
+            }
+        }
+
+        var suggested = new List<IList<string>>();
+        TrieNode node2 = root;
+        foreach (char ch in searchWord)
+        {
+            node2 = node2?.children[ch - 'a'];
+            suggested.Add(node2?.words ?? new List<string>());
+        }
+
+        return suggested;
     }
+}
+
+internal class TrieNode()
+{
+    public TrieNode[] children = new TrieNode[26];
+    public List<string> words = new List<string>();
 }
 
 internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["bib", "bag", "ball", "bill", "balm", "bat", "bow"], "bone", [["bag", "ball", "balm"], ["bow"], [], []]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] products, string searchWord, string[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        string[][] result = Solution.SuggestedProducts(products, searchWord)
+            .Select(res => res.ToArray())
+            .ToArray();
+
+        Utilities.PrintSolution((products, searchWord), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }
