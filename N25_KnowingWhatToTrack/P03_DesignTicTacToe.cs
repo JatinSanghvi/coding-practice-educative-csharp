@@ -30,11 +30,39 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P03_DesignTicTacToe;
 
-public class Solution
+// Space complexity: O(n).
+public class TicTacToe
 {
-    public static bool Function()
+    private readonly int _n;
+    private readonly int[] _rows;
+    private readonly int[] _cols;
+    private readonly int[] _diags;
+
+    // Time complexity: O(n).
+    public TicTacToe(int n)
     {
-        return true;
+        _n = n;
+        _rows = new int[n];
+        _cols = new int[n];
+        _diags = new int[2];
+    }
+
+    // Time complexity: O(1).
+    public int Move(int row, int col, int player)
+    {
+        int sign = player == 1 ? 1 : -1;
+
+        _rows[row] += sign;
+        _cols[col] += sign;
+        if (row == col) { _diags[0] += sign; }
+        if (row == _n - 1 - col) { _diags[1] += sign; }
+
+        if (_rows[row] == sign * _n || _cols[col] == sign * _n || _diags[0] == sign * _n || _diags[1] == sign * _n)
+        {
+            return player;
+        }
+
+        return 0;
     }
 }
 
@@ -42,13 +70,27 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(3, [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0)]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, (int, int)[] operations)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var ticTacToe = new TicTacToe(n);
+
+        int row, col, player = 1;
+        int result;
+        for (int i = 0; i != operations.Length - 1; i++)
+        {
+            (row, col) = operations[i];
+            result = ticTacToe.Move(row, col, player);
+            Utilities.PrintSolution((row, col, player), result);
+            Assert.AreEqual(0, result);
+            player = 3 - player;
+        }
+
+        (row, col) = operations[^1];
+        result = ticTacToe.Move(row, col, player);
+        Utilities.PrintSolution((row, col, player), result);
+        Assert.AreEqual(player, result);
     }
 }

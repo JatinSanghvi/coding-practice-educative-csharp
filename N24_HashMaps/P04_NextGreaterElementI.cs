@@ -22,15 +22,36 @@
 // - `nums2` have distinct integers.
 // - All integers in `nums1` also appear in `nums2`.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N24_HashMaps.P04_NextGreaterElementI;
 
 public class Solution
 {
-    public static bool Function()
+    public static int[] NextGreaterElement(int[] nums1, int[] nums2)
     {
-        return true;
+        var nextGreaters2 = new Dictionary<int, int>();
+        var stack = new Stack<int>();
+
+        for (int i = nums2.Length - 1; i != -1; i--)
+        {
+            while (stack.Count != 0 && stack.Peek() <= nums2[i])
+            {
+                stack.Pop();
+            }
+
+            nextGreaters2[nums2[i]] = stack.Count != 0 ? stack.Peek() : -1;
+            stack.Push(nums2[i]);
+        }
+
+        var nextGreaters1 = new int[nums1.Length];
+        for (int i = 0; i != nums1.Length; i++)
+        {
+            nextGreaters1[i] = nextGreaters2[nums1[i]];
+        }
+
+        return nextGreaters1;
     }
 }
 
@@ -38,13 +59,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3, 4, 5], [5, 6, 4, 3, 7, 2, 1], [-1, -1, 7, 7, 6]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums1, int[] nums2, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.NextGreaterElement(nums1, nums2);
+        Utilities.PrintSolution((nums1, nums2), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -18,15 +18,49 @@
 // - No two start events and two end events will happen at the same `timestamp`.
 // - Each function has an `end` log entry for each `start` log entry.
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N19_Stacks.P04_ExclusiveTimeOfFunctions;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(e), Space complexity: O(e).
+    public static List<int> ExclusiveTime(int n, List<string> events)
     {
-        return true;
+        var durations = new int[n];
+        var ids = new Stack<int>();
+        int startTime = 0;
+
+        foreach (string event_ in events)
+        {
+            string[] tokens = event_.Split(':');
+
+            int id = int.Parse(tokens[0]);
+            bool start = tokens[1] == "start";
+            int time = int.Parse(tokens[2]);
+
+            if (start)
+            {
+                if (ids.Count != 0)
+                {
+                    durations[ids.Peek()] += time - startTime;
+                }
+
+                ids.Push(id);
+                startTime = time;
+            }
+            else
+            {
+                int duration = time - startTime + 1;
+                durations[id] += duration;
+                ids.Pop();
+                startTime = time + 1;
+            }
+        }
+
+        return durations.ToList();
     }
 }
 
@@ -34,13 +68,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(3, ["0:start:0", "1:start:2", "1:end:4", "2:start:6", "2:end:8", "1:start:10", "1:end:12", "0:end:14"], [6, 6, 3]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, string[] events, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.ExclusiveTime(n, events.ToList()).ToArray();
+        Utilities.PrintSolution((n, events), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -22,14 +22,37 @@
 // - `order.length` == 26
 // - All the characters in `words[i]` and `order` are lowercase English letters.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N16_TopologicalSort.P03_VerifyingAnAlienDictionary;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(w*m), Space complexity: O(1) where m = word-size limit.
+    public static bool VerifyAlienDictionary(string[] words, string order)
     {
+        var ranks = new Dictionary<char, int>();
+        for (int i = 0; i != 26; i++)
+        {
+            ranks[order[i]] = i;
+        }
+
+        for (int i = 0; i != words.Length - 1; i++)
+        {
+            for (int j = 0; j != words[i].Length; j++)
+            {
+                if (j == words[i + 1].Length) { return false; }
+
+                char ch1 = words[i][j], ch2 = words[i + 1][j];
+                if (ch1 != ch2)
+                {
+                    if (ranks[ch1] >= ranks[ch2]) { return false; }
+                    break;
+                }
+            }
+        }
+
         return true;
     }
 }
@@ -38,13 +61,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["bad", "bcd", "ca", "cab"], "abcdefghijklmnopqrstuvwxyz", true);
+        Run(["bad", "bcd", "cab", "ca"], "abcdefghijklmnopqrstuvwxyz", false);
+        Run(["bcd", "bad", "ca", "cab"], "abcdefghijklmnopqrstuvwxyz", false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] words, string order, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.VerifyAlienDictionary(words, order);
+        Utilities.PrintSolution((words, order), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

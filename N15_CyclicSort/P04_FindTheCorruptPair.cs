@@ -10,15 +10,39 @@
 // - 2 ≤ n ≤ 10^3
 // - 1 ≤ `nums[i]` ≤ n
 
+using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N15_CyclicSort.P04_FindTheCorruptPair;
 
 public class Solution
 {
-    public static bool Function()
+    public static int[] FindCorruptPair(int[] nums)
     {
-        return true;
+        int i = 0;
+        while (i != nums.Length)
+        {
+            int j = nums[i] - 1;
+            if (nums[i] != nums[j])
+            {
+                (nums[i], nums[j]) = (nums[j], nums[i]);
+            }
+            else
+            {
+                i++;
+            }
+        }
+
+        for (i = 0; i != nums.Length; i++)
+        {
+            if (nums[i] != i + 1)
+            {
+                return new int[] { i + 1, nums[i] };
+            }
+        }
+
+        throw new ArgumentException();
     }
 }
 
@@ -26,13 +50,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([3, 2, 1, 2], [4, 2]);
+        Run([2, 3, 4, 3], [1, 3]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] numsCopy = nums.ToArray();
+        int[] result = Solution.FindCorruptPair(nums);
+        Utilities.PrintSolution(numsCopy, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

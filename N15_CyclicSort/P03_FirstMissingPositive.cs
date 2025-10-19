@@ -18,9 +18,32 @@ namespace JatinSanghvi.CodingInterview.N15_CyclicSort.P03_FirstMissingPositive;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int FirstMissingPositiveInteger(int[] nums)
     {
-        return true;
+        int i = 0;
+        while (i != nums.Length)
+        {
+            int j = nums[i] - 1; // Target index.
+            if (j >= 0 && j < nums.Length && nums[i] != nums[j])
+            {
+                (nums[i], nums[j]) = (nums[j], nums[i]);
+            }
+            else
+            {
+                i++;
+            }
+        }
+
+        for (i = 0; i != nums.Length; i++)
+        {
+            if (nums[i] != i + 1)
+            {
+                return i + 1;
+            }
+        }
+
+        return nums.Length + 1;
     }
 }
 
@@ -28,13 +51,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([4, 3, 2, 1], 5);
+        Run([-4, -3, -2, -1], 1);
+        Run([-4, -3, 2, 1, 0], 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.FirstMissingPositiveInteger(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

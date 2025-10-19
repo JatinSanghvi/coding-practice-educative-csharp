@@ -22,9 +22,52 @@ namespace JatinSanghvi.CodingInterview.N20_Graphs.P04_GraphValidTree;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(e), Space complexity: O(n).
+    public static bool IsGraphAValidTree(int n, int[][] edges)
     {
+        if (edges.Length != n - 1) { return false; }
+
+        var parents = new int[n];
+        var ranks = new int[n];
+
+        for (int i = 0; i != n; i++)
+        {
+            parents[i] = i;
+        }
+
+        foreach (int[] edge in edges)
+        {
+            if (!Union(edge[0], edge[1]))
+            {
+                return false;
+            }
+        }
+
         return true;
+
+        bool Union(int node1, int node2)
+        {
+            int parent1 = Find(node1);
+            int parent2 = Find(node2);
+
+            if (parent1 == parent2) { return false; }
+
+            if (ranks[parent1] == ranks[parent2]) { ranks[parent1]++; }
+            if (ranks[parent1] > ranks[parent2]) { parents[parent2] = parent1; }
+            else { parents[parent1] = parent2; }
+
+            return true;
+        }
+
+        int Find(int node)
+        {
+            if (parents[node] != node)
+            {
+                parents[node] = Find(parents[node]);
+            }
+
+            return parents[node];
+        }
     }
 }
 
@@ -32,13 +75,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(4, [[0, 1], [0, 2], [1, 2]], false);
+        Run(4, [[0, 1], [0, 2], [1, 3]], true);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int[][] edges, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.IsGraphAValidTree(n, edges);
+        Utilities.PrintSolution((n, edges), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

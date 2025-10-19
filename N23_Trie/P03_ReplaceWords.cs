@@ -30,29 +30,77 @@
 // - All words in `sentence` are lowercase.
 // - For a word in `sentence`, the length of a prefix can be [1,100], and the length of a postfix can be [0,100].
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N23_Trie.P03_ReplaceWords;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(d+s), Space complexity: O(d+s) where l = average word length;
+    public string ReplaceWords(string sentence, IList<string> dictionary)
     {
-        return true;
+        var trie = new TrieNode();
+
+        // Construct trie from dictionary.
+        foreach (string word in dictionary)
+        {
+            TrieNode node = trie;
+            foreach (char letter in word)
+            {
+                node = (node.children[letter - 'a'] ??= new TrieNode());
+            }
+
+            node.isPrefix = true;
+        }
+
+        // Use tried to construct string with replaced words.
+        var replacedWords = new List<string>();
+        string[] words = sentence.Split(' ');
+        foreach (string word in words)
+        {
+            TrieNode node = trie;
+            int length = 0;
+
+            foreach (char letter in word)
+            {
+                node = node.children[letter - 'a'];
+                length++;
+
+                if (node == null)
+                {
+                    replacedWords.Add(word);
+                    break;
+                }
+                else if (node.isPrefix)
+                {
+                    replacedWords.Add(word[..length]);
+                    break;
+                }
+            }
+        }
+
+        return string.Join(' ', replacedWords);
     }
+}
+
+public class TrieNode
+{
+    public bool isPrefix;
+    public TrieNode[] children = new TrieNode[26];
 }
 
 internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("the quick brown fox", ["the", "quic", "qui", "f"], "the qui brown f");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string sentence, IList<string> dictionary, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = new Solution().ReplaceWords(sentence, dictionary);
+        Utilities.PrintSolution((sentence, dictionary), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -10,10 +10,10 @@ internal static class Utilities
 {
     public static void PrintSolution<TInput, TResult>(TInput input, TResult result)
     {
-        Console.WriteLine(input.Print() + " => " + result.Print());
+        Console.WriteLine(input.ToPrintString() + " => " + result.ToPrintString());
     }
 
-    public static string Print<T>(this T value)
+    public static string ToPrintString<T>(this T value)
     {
         return value switch
         {
@@ -21,8 +21,8 @@ internal static class Utilities
             bool or int or long or float or double or decimal => $"{value}",
             char => $"'{value}'",
             string => $"\"{value}\"",
-            IEnumerable enumerable => $"[{string.Join(", ", enumerable.Cast<object>().Select(Print))}]",
-            ITuple tuple => $"({string.Join(", ", Enumerable.Range(0, tuple.Length).Select(i => tuple[i].Print()))})",
+            IEnumerable enumerable => $"[{string.Join(", ", enumerable.Cast<object>().Select(ToPrintString))}]",
+            ITuple tuple => $"({string.Join(", ", Enumerable.Range(0, tuple.Length).Select(i => tuple[i].ToPrintString()))})",
             _ => throw new NotSupportedException($"Type [{value.GetType()}] is not supported.")
         };
     }

@@ -15,15 +15,29 @@
 // - Timestamps are in ascending order.
 // - Messages can be written in lowercase or uppercase English alphabets.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N24_HashMaps.P03_LoggerRateLimiter;
 
-public class Solution
+// Space complexity: O(n).
+public class Solution(int timeLimit)
 {
-    public static bool Function()
+    private int limit = timeLimit;
+    private Dictionary<string, int> times = new();
+
+    // Time complexity: O(1).
+    public bool MessageRequestDecision(int timestamp, string request)
     {
-        return true;
+        if (times.TryGetValue(request, out int time) && timestamp - time < limit)
+        {
+            return false;
+        }
+        else
+        {
+            times[request] = timestamp;
+            return true;
+        }
     }
 }
 
@@ -31,13 +45,25 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(5, [
+            (0, "hello", true),
+            (2, "bye", true),
+            (4, "hello", false),
+            (5, "hello", true),
+            (6, "bye", false),
+            (7, "bye", true),
+        ]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int timeLimit, (int, string, bool)[] requests)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var solution = new Solution(timeLimit);
+
+        foreach ((int timestamp, string request, bool expectedResult) in requests)
+        {
+            bool result = solution.MessageRequestDecision(timestamp, request);
+            Utilities.PrintSolution((timestamp, request), result);
+            Assert.AreEqual(expectedResult, result);
+        }
     }
 }

@@ -29,9 +29,32 @@ namespace JatinSanghvi.CodingInterview.N18_Matrices.P04_WhereWillTheBallFall;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(r*c), Space complexity: O(1).
+    public static int[] FindExitColumn(int[][] grid)
     {
-        return true;
+        int rows = grid.Length, cols = grid[0].Length;
+        var exitColumns = new int[cols];
+
+        for (int startCol = 0; startCol != cols; startCol++)
+        {
+            int nextCol = startCol;
+            int row;
+            for (row = 0; row != rows; row++)
+            {
+                int col = nextCol;
+                nextCol = col + grid[row][col];
+
+                if (nextCol == -1 || nextCol == cols || grid[row][nextCol] != grid[row][col])
+                {
+                    nextCol = -1;
+                    break;
+                }
+            }
+
+            exitColumns[startCol] = nextCol;
+        }
+
+        return exitColumns;
     }
 }
 
@@ -39,13 +62,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 1, 1], [-1, -1, -1], [1, 1, 1]], [1, 2, -1]);
+        Run([[-1, -1, -1], [1, 1, 1], [-1, -1, -1]], [-1, 0, 1]);
+        Run([[1, 1, -1], [1, 1, -1], [1, 1, -1]], [-1, -1, -1]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] grid, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.FindExitColumn(grid);
+        Utilities.PrintSolution(grid, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }
