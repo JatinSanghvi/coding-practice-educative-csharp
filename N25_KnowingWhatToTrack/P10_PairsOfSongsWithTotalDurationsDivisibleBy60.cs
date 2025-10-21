@@ -20,9 +20,25 @@ namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P10_PairsOfSongsWi
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int NumPairsDivisibleBy60(int[] times)
     {
-        return true;
+        var moduloCounts = new int[60];
+        foreach (int time in times)
+        {
+            moduloCounts[time % 60]++;
+        }
+
+        int pairs = 0;
+        for (int i = 1; i != 30; i++)
+        {
+            pairs += moduloCounts[i] * moduloCounts[60 - i];
+        }
+
+        pairs += moduloCounts[0] * (moduloCounts[0] - 1) / 2;
+        pairs += moduloCounts[30] * (moduloCounts[30] - 1) / 2;
+
+        return pairs;
     }
 }
 
@@ -30,13 +46,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([0, 1, 30, 59, 60, 61, 90, 119], 6);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] times, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.NumPairsDivisibleBy60(times);
+        Utilities.PrintSolution(times, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

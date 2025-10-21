@@ -19,8 +19,19 @@ namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P15_RansomNote;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n+m), Space complexity: O(1).
+    public static bool CanConstruct(string ransomNote, string magazine)
     {
+        var counts = new int[26];
+
+        foreach (char letter in ransomNote) { counts[letter - 'a']--; }
+        foreach (char letter in magazine) { counts[letter - 'a']++; }
+
+        foreach (int count in counts)
+        {
+            if (count < 0) { return false; }
+        }
+
         return true;
     }
 }
@@ -29,13 +40,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("hello", "holler", true);
+        Run("hello", "whole", false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string ransomNote, string magazine, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.CanConstruct(ransomNote, magazine);
+        Utilities.PrintSolution((ransomNote, magazine), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

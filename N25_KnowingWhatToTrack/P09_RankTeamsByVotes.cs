@@ -19,15 +19,54 @@
 // - All characters of `votes[i]` are unique.
 // - All characters present in `votes[0]` are also found in `votes[i]` where 1 ≤ `i` < `votes.length`.
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P09_RankTeamsByVotes;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(t*v+t^2*logt), Space complexity: O(t^2).
+    public static string RankTeams(string[] votes)
     {
-        return true;
+        int teamCount = votes[0].Length;
+        var ranks = new Dictionary<char, int[]>();
+
+        foreach (char team in votes[0])
+        {
+            ranks[team] = new int[teamCount];
+        }
+
+        foreach (string vote in votes)
+        {
+            for (int i = 0; i != vote.Length; i++)
+            {
+                char team = vote[i];
+                ranks[team][i]++;
+            }
+        }
+
+        char[] teams = ranks
+            .Order(new RankCountComparer())
+            .Select(pair => pair.Key)
+            .ToArray();
+
+        return new string(teams);
+    }
+}
+
+internal class RankCountComparer : IComparer<KeyValuePair<char, int[]>>
+{
+    public int Compare(KeyValuePair<char, int[]> team1, KeyValuePair<char, int[]> team2)
+    {
+        for (int i = 0; i != team1.Value.Length; i++)
+        {
+            int count1 = team1.Value[i], count2 = team2.Value[i];
+            if (count1 != count2) { return count2 - count1; }
+        }
+
+        return team1.Key - team2.Key;
     }
 }
 
@@ -35,13 +74,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["XYZ", "XZY", "YXZ"], "XYZ");
+        Run(["XYZ", "YZX", "ZXY"], "XYZ");
+        Run(["ABCDEFGH", "HGFEDCBA"], "AHBGCFDE");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] votes, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = Solution.RankTeams(votes);
+        Utilities.PrintSolution(votes, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

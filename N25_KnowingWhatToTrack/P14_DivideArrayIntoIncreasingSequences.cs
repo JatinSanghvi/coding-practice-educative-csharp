@@ -17,8 +17,21 @@ namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P14_DivideArrayInt
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public bool CanDivideIntoSubsequences(int[] nums, int k)
     {
+        int maxSets = nums.Length / k;
+        int start = 0;
+        for (int curr = 1; curr != nums.Length + 1; curr++)
+        {
+            if (curr == nums.Length || nums[curr] != nums[curr - 1])
+            {
+                int count = curr - start;
+                if (count > maxSets) { return false; }
+                start = curr;
+            }
+        }
+
         return true;
     }
 }
@@ -27,13 +40,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(['1', '1', '1', '2', '2', '2', '3'], 3, false);
+        Run(['1', '1', '1', '2', '2', '2', '3'], 2, true);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int k, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = new Solution().CanDivideIntoSubsequences(nums, k);
+        Utilities.PrintSolution((nums, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

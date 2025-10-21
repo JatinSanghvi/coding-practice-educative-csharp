@@ -14,15 +14,31 @@
 // - 0 ≤ `n` ≤ 100
 // - `tasks` consists of uppercase English letters
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P12_TaskScheduler;
 
 public class Solution
 {
-    public static bool Function()
+    public static int LeastInterval(char[] tasks, int n)
     {
-        return true;
+        var counts = new int[26];
+        foreach (char task in tasks)
+        {
+            counts[task - 'A']++;
+        }
+
+        Array.Sort(counts);
+        int intervals = counts[25] - 1;
+        int emptySlots = n * intervals;
+
+        for (int i = 0; i != 25; i++)
+        {
+            emptySlots -= Math.Min(counts[i], intervals);
+        }
+
+        return Math.Max(0, emptySlots) + tasks.Length;
     }
 }
 
@@ -30,13 +46,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("ABABACACA".ToCharArray(), 0, 9);
+        Run("ABABACACA".ToCharArray(), 1, 9);
+        Run("ABABACACA".ToCharArray(), 2, 13);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(char[] tasks, int n, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.LeastInterval(tasks, n);
+        Utilities.PrintSolution((tasks, n), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

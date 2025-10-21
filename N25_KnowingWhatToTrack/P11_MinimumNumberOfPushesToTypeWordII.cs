@@ -2,11 +2,6 @@
 // ========================================
 //
 // The keys (numbered 2 to 9) on a telephone keypad are associated with specific groups of lowercase English letters.
-// Below is an example of how letters can be mapped to keys on a telephone keypad.
-//
-// Press+to interact
-//
-// ![](data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%27200%27%20height=%27353%27/%3e)![](https://www.educative.io/api/collection/10370001/6349081334775808/page/6458122556538880/image/6095110578503680?page_type=collection_lesson&get_optimised=true&collection_token=xTuSSiuwTp0dI8ow69aP99)
 //
 // > Note: The keys 1, ∗, 0, and # do not map to any letters.
 //
@@ -26,15 +21,31 @@
 // - 1 ≤ `word.length` ≤ 10^3
 // - `word` consists of only lowercase English letters.
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P11_MinimumNumberOfPushesToTypeWordII;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int MinimumPushes(string word)
     {
-        return true;
+        var counts = new int[26];
+        foreach (char letter in word)
+        {
+            counts[letter - 'a']++;
+        }
+
+        Array.Sort(counts);
+
+        int pushes = 0;
+        for (int i = 0; i != 26; i++)
+        {
+            pushes += counts[i] * ((25 - i) / 8 + 1);
+        }
+
+        return pushes;
     }
 }
 
@@ -42,13 +53,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("zyxwvuts", 8);
+        Run("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvabcdefghijklmnabcdef", 124); // 30 * 1 + 22 * 2 + 14 * 3 + 2 * 4
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string word, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MinimumPushes(word);
+        Utilities.PrintSolution(word, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -19,15 +19,49 @@
 // - At most, 2 × 10^3 calls will be made to Push() and Pop().
 // - It is guaranteed that there will be at least one element in the stack before calling Pop().
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P05_MaximumFrequencyStack;
 
-public class Solution
+// Space complexity: O(n), where n = number of operations.
+public class FreqStack
 {
-    public static bool Function()
+    private readonly List<Stack<int>> frequencyStacks = new();
+    private readonly Dictionary<int, int> frequencies = new();
+    private int maxFrequency = 0;
+
+    // Time complexity: O(1).
+    public void Push(int value)
     {
-        return true;
+        frequencies.TryAdd(value, 0);
+        frequencies[value]++;
+
+        if (maxFrequency < frequencies[value])
+        {
+            maxFrequency++;
+        }
+
+        if (frequencyStacks.Count < maxFrequency)
+        {
+            frequencyStacks.Add(new Stack<int>());
+        }
+
+        frequencyStacks[frequencies[value] - 1].Push(value);
+    }
+
+    // Time complexity: O(1).
+    public int Pop()
+    {
+        int value = frequencyStacks[maxFrequency - 1].Pop();
+        frequencies[value]--;
+
+        if (frequencyStacks[maxFrequency - 1].Count == 0)
+        {
+            maxFrequency--;
+        }
+
+        return value;
     }
 }
 
@@ -35,13 +69,22 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["Push 1", "Push 1", "Push 2", "Pop", "Pop", "Pop"], [null, null, null, 1, 2, 1]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] operations, int?[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var stack = new FreqStack();
+
+        for (int i = 0; i != operations.Length; i++)
+        {
+            string[] tokens = operations[i].Split(' ');
+            int? result = null;
+
+            if (tokens[0] == "Push") { stack.Push(int.Parse(tokens[1])); }
+            else if (tokens[0] == "Pop") { result = stack.Pop(); }
+            Utilities.PrintSolution(operations[i], result);
+            Assert.AreEqual(expectedResult[i], result);
+        }
     }
 }

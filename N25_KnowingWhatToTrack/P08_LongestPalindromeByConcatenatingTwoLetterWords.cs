@@ -13,15 +13,49 @@
 // - `words[i].length` = 2
 // - Each word can be used at most once.
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N25_KnowingWhatToTrack.P08_LongestPalindromeByConcatenatingTwoLetterWords;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(n).
+    public static int LongestPalindrome(string[] words)
     {
-        return true;
+        var counts = new Dictionary<string, int>();
+
+        foreach (var word in words)
+        {
+            counts.TryAdd(word, 0);
+            counts[word]++;
+        }
+
+        int length = 0;
+        bool foundMid = false;
+        foreach ((string word, int count) in counts)
+        {
+            if (word[0] < word[1])
+            {
+                var revWord = new string([word[1], word[0]]);
+                if (counts.ContainsKey(revWord))
+                {
+                    length += 4 * Math.Min(count, counts[revWord]);
+                }
+            }
+            else if (word[0] == word[1])
+            {
+                length += 4 * (count / 2);
+                if (!foundMid && count % 2 != 0)
+                {
+                    foundMid = true;
+                    length += 2;
+                }
+            }
+        }
+
+        return length;
     }
 }
 
@@ -29,13 +63,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["xx", "xx", "xx", "yy", "yy", "yy", "xy", "xy", "yx"], 14);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] words, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.LongestPalindrome(words);
+        Utilities.PrintSolution(words, result);
         Assert.AreEqual(expectedResult, result);
     }
 }
