@@ -4,9 +4,7 @@
 // Implement an LRU cache class with the following functions:
 //
 // - Init(capacity): Initializes an LRU cache with the capacity size.
-//
 // - Set(key, value): Adds a new key-value pair or updates an existing key with a new value.
-//
 // - Get(key): Returns the value of the key, or -1 if the key does not exist.
 //
 // If the number of keys has reached the cache capacity, evict the least recently used key and then add the new key.
@@ -23,15 +21,52 @@
 // - 0 ≤ value ≤ 10^5
 // - At most 10^3 calls will be made to Set and Get.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N27_CustomDataStructures.P03_LRUCache;
 
-public class Solution
+// Space complexity: O(capacity).
+public class Solution(int capacity)
 {
-    public static bool Function()
+    private int size = 0;
+    private readonly LinkedList<(int, int)> list = new();
+    private readonly Dictionary<int, LinkedListNode<(int, int)>> nodes = new();
+
+    // Time complexity: O(1).
+    public void Set(int key, int value)
     {
-        return true;
+        if (nodes.ContainsKey(key))
+        {
+            LinkedListNode<(int, int)> node = nodes[key];
+            node.Value = (key, value);
+            list.Remove(node);
+            list.AddFirst(node);
+            return;
+        }
+
+        if (size == capacity)
+        {
+            LinkedListNode<(int, int)> node = list.Last;
+            list.RemoveLast();
+            nodes.Remove(node.Value.Item1);
+            size--;
+        }
+
+        list.AddFirst((key, value));
+        nodes[key] = list.First;
+        size++;
+    }
+
+    // Time complexity: O(1).
+    public int Get(int key)
+    {
+        if (!nodes.ContainsKey(key)) { return -1; }
+
+        LinkedListNode<(int, int)> node = nodes[key];
+        list.Remove(node);
+        list.AddFirst(node);
+        return node.Value.Item2;
     }
 }
 
@@ -39,13 +74,31 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(
+            2,
+            ["Set 1 10", "Set 2 20", "Get 1", "Set 3 30", "Set 3 31", "Get 1", "Get 2", "Get 3"],
+            [null, null, 10, null, null, 10, -1, 31]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int capacity, string[] operations, int?[] expectedResults)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var lruCache = new Solution(capacity);
+        for (int i = 0; i != operations.Length; i++)
+        {
+            int? result = null;
+            string[] operands = operations[i].Split();
+            switch (operands[0])
+            {
+                case "Set":
+                    lruCache.Set(int.Parse(operands[1]), int.Parse(operands[2]));
+                    break;
+                case "Get":
+                    result = lruCache.Get(int.Parse(operands[1]));
+                    break;
+            }
+
+            Utilities.PrintSolution(operations[i], result);
+            Assert.AreEqual(expectedResults[i], result);
+        }
     }
 }
