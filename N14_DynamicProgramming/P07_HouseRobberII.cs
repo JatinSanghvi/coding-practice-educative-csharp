@@ -13,15 +13,35 @@
 // - 1 ≤ `money.length` ≤ 10^3
 // - 0 ≤ `money[i]` ≤ 10^3
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N14_DynamicProgramming.P07_HouseRobberII;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int HouseRobber(int[] money)
     {
-        return true;
+        // If the circle has a single house, it is not considered adjacent to itself.
+        if (money.Length == 1)
+        {
+            return money[0];
+        }
+
+        return Math.Max(Solve(0, money.Length - 1), Solve(1, money.Length));
+
+        int Solve(int start, int end)
+        {
+            int max = 0;
+            int maxWithoutPrev = 0;
+            for (int i = start; i != end; i++)
+            {
+                (max, maxWithoutPrev) = (Math.Max(max, maxWithoutPrev + money[i]), max);
+            }
+
+            return max;
+        }
     }
 }
 
@@ -29,13 +49,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 1, 2, 1], 4);
+        Run([1, 2, 3, 1, 2], 5);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] money, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.HouseRobber(money);
+        Utilities.PrintSolution(money, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

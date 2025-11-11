@@ -14,15 +14,36 @@
 // - `s` and `wordDict[i]` consist of only lowercase English letters.
 // - All the strings of `wordDict` are unique.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N14_DynamicProgramming.P10_WordBreak;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(400s) + O(w * l) where w = word-count, l = avg-word-length.
+    // Space complexity: O(s).
+    public static bool WordBreak(string s, List<string> wordDict)
     {
-        return true;
+        var words = new HashSet<string>(wordDict); // O(w * l)
+        var solvables = new bool[s.Length + 1];
+        solvables[0] = true;
+
+        for (int end = 1; end != s.Length + 1; end++) // O(s)
+        {
+            for (int start = end - 1; start != -1 && start != end - 21; start--) // O(20)
+            {
+                if (solvables[start] && words.Contains(s[start..end])) // O(20)
+                {
+                    solvables[end] = true;
+                    break;
+                }
+            }
+        }
+
+        return solvables[s.Length];
     }
 }
 
@@ -30,13 +51,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("tearear", ["ear", "tea", "are"], false);
+        Run("tearear", ["ear", "tear", "are"], true);
+        Run("tearear", ["rear", "tea", "are"], true);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string s, string[] wordDict, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.WordBreak(s, wordDict.ToList());
+        Utilities.PrintSolution((s, wordDict), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

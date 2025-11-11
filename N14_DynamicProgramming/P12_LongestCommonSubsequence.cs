@@ -16,15 +16,31 @@
 // - 1 ≤ `str2.length` ≤ 500
 // - `str1` and `str2` contain only lowercase English characters.
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N14_DynamicProgramming.P12_LongestCommonSubsequence;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(m * n), Space complexity: O(2n).
+    public static int LongestCommonSubsequence(string str1, string str2)
     {
-        return true;
+        var row = new int[str2.Length + 1];
+
+        foreach (char ch1 in str1)
+        {
+            var newRow = new int[str2.Length + 1];
+            for (int i = 0; i != str2.Length; i++)
+            {
+                char ch2 = str2[i];
+                newRow[i + 1] = ch1 == ch2 ? row[i] + 1 : Math.Max(newRow[i], row[i + 1]);
+            }
+
+            row = newRow;
+        }
+
+        return row[str2.Length];
     }
 }
 
@@ -32,13 +48,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("baba", "aaaa", 2);
+        Run("baba", "abab", 3);
+        Run("aaaaaa", "bb", 0);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string str1, string str2, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.LongestCommonSubsequence(str1, str2);
+        Utilities.PrintSolution((str1, str2), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -14,9 +14,19 @@ namespace JatinSanghvi.CodingInterview.N14_DynamicProgramming.P05_CountingBits;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int[] CountingBits(int n)
     {
-        return true;
+        var bitCounts = new int[n + 1];
+
+        int diff = 1;
+        for (int i = 1; i < n + 1; i++)
+        {
+            if (i == 2 * diff) { diff *= 2; }
+            bitCounts[i] = bitCounts[i - diff] + 1;
+        }
+
+        return bitCounts;
     }
 }
 
@@ -24,13 +34,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(7, [0, 1, 1, 2, 1, 2, 2, 3]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.CountingBits(n);
+        Utilities.PrintSolution(n, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -9,15 +9,30 @@
 // - -10 ≤ `nums[i]` ≤ 10
 // - The product of any prefix or suffix of `nums` is guaranteed to fit in a 32-bit integer.
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N14_DynamicProgramming.P08_MaximumProductSubarray;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int MaxProduct(int[] nums)
     {
-        return true;
+        int maxTill = nums[0], minTill = nums[0];
+        int maxAll = nums[0];
+
+        for (int i = 1; i != nums.Length; i++)
+        {
+            int num = nums[i];
+            (maxTill, minTill) = (
+                Math.Max(num, num * (num < 0 ? minTill : maxTill)),
+                Math.Min(num, num * (num < 0 ? maxTill : minTill)));
+
+            maxAll = Math.Max(maxAll, maxTill);
+        }
+
+        return maxAll;
     }
 }
 
@@ -25,13 +40,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([-1, 2, -3, 4, -5, 0], 120);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MaxProduct(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

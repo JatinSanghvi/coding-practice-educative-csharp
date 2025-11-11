@@ -8,13 +8,9 @@
 // For reference, let's look at the mapping below:
 //
 // `"1"` represents `"A"`
-//
 // `"2"` represents `"B"`
-//
 // `"3"` represents `"C"`
-//
 // ......
-//
 // `"26"` represents `"Z"`
 //
 // How to perform the decode operation?
@@ -43,9 +39,20 @@ namespace JatinSanghvi.CodingInterview.N14_DynamicProgramming.P14_DecodeWays;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int NumOfDecodings(string decodeStr)
     {
-        return true;
+        int prevCount = 0, count = 1;
+
+        for (int end = 0; end != decodeStr.Length; end++)
+        {
+            bool canDecode2 = end != 0 && (decodeStr[end - 1] == '1' || (decodeStr[end - 1] == '2' && decodeStr[end] <= '6'));
+            bool canDecode1 = decodeStr[end] != '0';
+
+            (prevCount, count) = (count, (canDecode2 ? prevCount : 0) + (canDecode1 ? count : 0));
+        }
+
+        return count;
     }
 }
 
@@ -53,13 +60,17 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("0", 0);
+        Run("1", 1);
+        Run("101", 1);
+        Run("1001", 0);
+        Run("123456789", 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string decodeStr, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.NumOfDecodings(decodeStr);
+        Utilities.PrintSolution(decodeStr, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

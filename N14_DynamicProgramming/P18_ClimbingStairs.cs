@@ -14,9 +14,18 @@ namespace JatinSanghvi.CodingInterview.N14_DynamicProgramming.P18_ClimbingStairs
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int ClimbStairs(int n)
     {
-        return true;
+        int prevWays = 1;
+        int ways = 1;
+
+        for (int i = 2; i != n + 1; i++)
+        {
+            (ways, prevWays) = (ways + prevWays, ways);
+        }
+
+        return ways;
     }
 }
 
@@ -24,13 +33,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(1, 1);
+        Run(5, 8);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.ClimbStairs(n);
+        Utilities.PrintSolution(n, result);
         Assert.AreEqual(expectedResult, result);
     }
 }
