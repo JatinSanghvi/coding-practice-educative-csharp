@@ -32,9 +32,20 @@ namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P08_FindMinimumInRo
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(logn), Space complexity: O(1).
+    public static int FindMin(int[] arr)
     {
-        return true;
+        int low = 0, high = arr.Length;
+
+        while (high - low != 1)
+        {
+            int mid = (low + high) / 2;
+
+            if (arr[mid - 1] < arr[high - 1]) { high = mid; }
+            else { low = mid; }
+        }
+
+        return arr[low];
     }
 }
 
@@ -42,13 +53,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3], 1);
+        Run([3, 1, 2], 1);
+        Run([2, 3, 1], 1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] arr, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.FindMin(arr);
+        Utilities.PrintSolution(arr, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

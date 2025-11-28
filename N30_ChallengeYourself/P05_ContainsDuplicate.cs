@@ -8,15 +8,29 @@
 // - 1 ≤ `nums.length` ≤ 10^5
 // - -10^9 ≤ `nums[i]` ≤ 10^9
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P05_ContainsDuplicate;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(n).
+    public static bool ContainsDuplicate(int[] nums)
     {
-        return true;
+        var numSet = new HashSet<int>();
+
+        foreach (int num in nums)
+        {
+            if (numSet.Contains(num))
+            {
+                return true;
+            }
+
+            numSet.Add(num);
+        }
+
+        return false;
     }
 }
 
@@ -24,13 +38,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 4, 8, 4], true);
+        Run([1, 2, 4, 8], false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.ContainsDuplicate(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

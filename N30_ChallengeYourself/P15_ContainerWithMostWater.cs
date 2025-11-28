@@ -15,15 +15,34 @@
 // - 2 ≤ n ≤ 10^3
 // - 0 ≤ `height[i]` ≤ 10^3
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P15_ContainerWithMostWater;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int MaxArea(int[] height)
     {
-        return true;
+        int left = 0, right = height.Length - 1;
+        int area = 0;
+
+        while (left < right)
+        {
+            if (height[left] <= height[right])
+            {
+                area = Math.Max(area, (right - left) * height[left]);
+                left++;
+            }
+            else
+            {
+                area = Math.Max(area, (right - left) * height[right]);
+                right--;
+            }
+        }
+
+        return area;
     }
 }
 
@@ -31,13 +50,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 3, 6, 6, 3, 1], 9);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] height, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MaxArea(height);
+        Utilities.PrintSolution(height, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

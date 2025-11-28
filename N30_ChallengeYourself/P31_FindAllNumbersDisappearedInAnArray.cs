@@ -6,21 +6,41 @@
 //
 // Constraints:
 //
-// - n= `nums.length`
-//
-// - 1≤n≤103
-//
-// - 1≤ `nums[i]` ≤n
+// - n = `nums.length`
+// - 1 ≤ n ≤ 10^3
+// - 1 ≤ `nums[i]` ≤ n
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P31_FindAllNumbersDisappearedInAnArray;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static List<int> FindDisappearedNumbers(int[] nums)
     {
-        return true;
+        for (int i = 0; i != nums.Length; i++)
+        {
+            while (nums[i] != i + 1)
+            {
+                int j = nums[i] - 1;
+                if (nums[i] == nums[j]) { break; }
+                nums[i] = nums[j];
+                nums[j] = j + 1;
+            }
+        }
+
+        var disappeared = new List<int>();
+        for (int i = 0; i != nums.Length; i++)
+        {
+            if (nums[i] != i + 1)
+            {
+                disappeared.Add(i + 1);
+            }
+        }
+
+        return disappeared;
     }
 }
 
@@ -28,13 +48,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3, 4], []);
+        Run([2, 2, 1, 1], [3, 4]);
+        Run([4, 3, 3, 4], [1, 2]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.FindDisappearedNumbers(nums).ToArray();
+        Utilities.PrintSolution(nums, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

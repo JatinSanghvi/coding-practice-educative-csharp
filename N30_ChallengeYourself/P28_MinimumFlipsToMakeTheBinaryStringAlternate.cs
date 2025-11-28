@@ -18,15 +18,42 @@
 // - 1≤ `s.length` ≤105
 // - `s[i]` is either 0 or 1.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P28_MinimumFlipsToMakeTheBinaryStringAlternate;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(n).
+    public static int MinFlips(string s)
     {
-        return true;
+        int len = s.Length;
+        var bits = new List<bool>();
+        bits.AddRange(s.Select(ch => ch == '1'));
+        bits.AddRange(s.Select(ch => ch == '1'));
+
+        int flips = 0;
+        int minFlips = int.MaxValue;
+        for (int i = 0; i != 2 * len; i++)
+        {
+            flips += ((i % 2 == 0) == bits[i]) ? 1 : 0;
+
+            if (i >= len)
+            {
+                flips -= (((i - len) % 2 == 0) == bits[i - len]) ? 1 : 0;
+            }
+
+            if (i >= len - 1)
+            {
+                minFlips = Math.Min(minFlips, flips);
+                minFlips = Math.Min(minFlips, len - flips);
+            }
+        }
+
+        return minFlips;
     }
 }
 
@@ -34,13 +61,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("111000", 2);
+        Run("1111000", 2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string s, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MinFlips(s);
+        Utilities.PrintSolution(s, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

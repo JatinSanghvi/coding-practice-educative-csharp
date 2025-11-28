@@ -20,15 +20,67 @@
 // - All the pairs of `richer` are unique.
 // - The observations in `richer` are all logically consistent.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P18_LoudAndRich;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(m + n), Space complexity: O(m + n).
+    public static int[] LoudAndRich(int[][] richer, int[] quiet)
     {
-        return true;
+        int count = quiet.Length;
+        var poorerList = new List<int>[count];
+        var richerCount = new int[count];
+
+        for (int person = 0; person != count; person++)
+        {
+            poorerList[person] = new List<int>();
+        }
+
+        foreach (int[] people in richer)
+        {
+            int rich = people[0], poor = people[1];
+            poorerList[rich].Add(poor);
+            richerCount[poor]++;
+        }
+
+        var queue = new Queue<int>();
+        for (int person = 0; person != count; person++)
+        {
+            if (richerCount[person] == 0)
+            {
+                queue.Enqueue(person);
+            }
+        }
+
+        var loudest = new int[count];
+        for (int person = 0; person != count; person++)
+        {
+            loudest[person] = person;
+        }
+
+        while (queue.Count != 0)
+        {
+            int rich = queue.Dequeue();
+
+            foreach (int poor in poorerList[rich])
+            {
+                if (quiet[loudest[poor]] > quiet[loudest[rich]])
+                {
+                    loudest[poor] = loudest[rich];
+                }
+
+                richerCount[poor]--;
+                if (richerCount[poor] == 0)
+                {
+                    queue.Enqueue(poor);
+                }
+            }
+        }
+
+        return loudest;
     }
 }
 
@@ -36,13 +88,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[3, 2], [2, 1], [1, 0]], [10, 20, 30, 40], [0, 1, 2, 3]);
+        Run([[3, 2], [2, 1], [1, 0]], [40, 30, 20, 10], [3, 3, 3, 3]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] richer, int[] quiet, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.LoudAndRich(richer, quiet);
+        Utilities.PrintSolution((richer, quiet), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

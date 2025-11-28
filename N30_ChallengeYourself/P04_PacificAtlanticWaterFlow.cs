@@ -29,15 +29,59 @@
 // - 1 ≤ m, n ≤ 200
 // - 0 ≤ `heights[r][c]` ≤ 10^5
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P04_PacificAtlanticWaterFlow;
 
 public class Solution
 {
-    public static bool Function()
+    public static int[][] EstimateWaterFlow(int[][] heights)
     {
-        return true;
+        int rows = heights.Length;
+        int cols = heights[0].Length;
+
+        var pacific = new bool[rows, cols];
+        var atlantic = new bool[rows, cols];
+
+        for (int row = 0; row != rows; row++)
+        {
+            Visit(row, 0, pacific);
+            Visit(row, cols - 1, atlantic);
+        }
+
+        for (int col = 0; col != cols; col++)
+        {
+            Visit(0, col, pacific);
+            Visit(rows - 1, col, atlantic);
+        }
+
+        var result = new List<int[]>();
+
+        for (int row = 0; row != rows; row++)
+        {
+            for (int col = 0; col != cols; col++)
+            {
+                if (pacific[row, col] && atlantic[row, col])
+                {
+                    result.Add(new int[] { row, col });
+                }
+            }
+        }
+
+        return result.ToArray();
+
+        void Visit(int row, int col, bool[,] ocean)
+        {
+            if (ocean[row, col]) { return; }
+            ocean[row, col] = true;
+
+            int height = heights[row][col];
+            if (row != 0 && heights[row - 1][col] >= height) { Visit(row - 1, col, ocean); }
+            if (row != rows - 1 && heights[row + 1][col] >= height) { Visit(row + 1, col, ocean); }
+            if (col != 0 && heights[row][col - 1] >= height) { Visit(row, col - 1, ocean); }
+            if (col != cols - 1 && heights[row][col + 1] >= height) { Visit(row, col + 1, ocean); }
+        }
     }
 }
 
@@ -45,13 +89,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 2, 3], [2, 0, 2], [3, 2, 1]], [[0, 2], [2, 0]]);
+        Run([[2, 1, 2], [1, 2, 1], [2, 1, 2]], [[0, 1], [1, 1], [2, 0]]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] heights, int[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[][] result = Solution.EstimateWaterFlow(heights);
+        Utilities.PrintSolution(heights, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

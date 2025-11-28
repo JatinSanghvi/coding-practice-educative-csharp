@@ -16,9 +16,36 @@ namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P24_LongestPalindro
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n^2), Space complexity: O(1).
+    public static string LongestPalindrome(string s)
     {
-        return true;
+        int longestStart = 0;
+        int longestEnd = 0;
+
+        for (int mid = 0; mid != s.Length; mid++)
+        {
+            int start, end;
+
+            // Odd lengths.
+            for (start = mid - 1, end = mid + 1; start != -1 && end != s.Length && s[start] == s[end]; start--, end++) ;
+
+            if (end - start - 2 > longestEnd - longestStart)
+            {
+                longestStart = start + 1;
+                longestEnd = end - 1;
+            }
+
+            // Even lengths.
+            for (start = mid, end = mid + 1; start != -1 && end != s.Length && s[start] == s[end]; start--, end++) ;
+
+            if (end - start - 2 > longestEnd - longestStart)
+            {
+                longestStart = start + 1;
+                longestEnd = end - 1;
+            }
+        }
+
+        return s[longestStart..(longestEnd + 1)];
     }
 }
 
@@ -26,13 +53,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("abaabaa", "abaaba");
+        Run("bbaabaa", "aabaa");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string s, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = Solution.LongestPalindrome(s);
+        Utilities.PrintSolution(s, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -10,18 +10,27 @@
 //
 // Constraints
 //
-// - 1≤ `nums.length` ≤103
-// - 0≤ `nums[i]` ≤1000
+// - 1 ≤ `nums.length` ≤ 10^3
+// - 0 ≤ `nums[i]` ≤ 1000
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P30_HouseRobber;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int Rob(int[] nums)
     {
-        return true;
+        int withLast = 0, withoutLast = 0;
+
+        foreach (int num in nums)
+        {
+            (withLast, withoutLast) = (withoutLast + num, Math.Max(withLast, withoutLast));
+        }
+
+        return Math.Max(withLast, withoutLast);
     }
 }
 
@@ -29,13 +38,16 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([0, 10, 10, 0], 10);
+        Run([0, 10, 0, 10], 20);
+        Run([10, 0, 10, 0], 20);
+        Run([10, 0, 0, 10], 20);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.Rob(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

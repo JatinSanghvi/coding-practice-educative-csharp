@@ -18,15 +18,40 @@
 // - 1 ≤ `tokens.length` ≤ 10^3
 // - `tokens[i]` is either an operator (`+`, `-`, `*`, or `/`) or an integer in the range [-200,200].
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P16_EvaluateReversePolishNotation;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(n).
+    public static int EvaluateReversePolishNotation(string[] tokens)
     {
-        return true;
+        var stack = new Stack<int>();
+
+        foreach (string token in tokens)
+        {
+            if (!int.TryParse(token, out int result))
+            {
+                int operand2 = stack.Pop();
+                int operand1 = stack.Pop();
+
+                result = token switch
+                {
+                    "+" => operand1 + operand2,
+                    "-" => operand1 - operand2,
+                    "*" => operand1 * operand2,
+                    "/" => operand1 / operand2,
+                    _ => throw new InvalidOperationException(),
+                };
+            }
+
+            stack.Push(result);
+        }
+
+        return stack.Peek();
     }
 }
 
@@ -34,13 +59,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["1", "2", "-", "1", "2", "+", "*", "2", "/"], -1); // (1 - 2) * (1 + 2) / 2
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] tokens, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.EvaluateReversePolishNotation(tokens);
+        Utilities.PrintSolution(tokens, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

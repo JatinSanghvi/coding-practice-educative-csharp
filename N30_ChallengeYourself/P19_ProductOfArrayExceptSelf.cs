@@ -18,9 +18,27 @@ namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P19_ProductOfArrayE
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int[] ProductExceptSelf(int[] arr)
     {
-        return true;
+        var products = new int[arr.Length];
+        products[0] = 1;
+
+        int product = 1;
+        for (int i = 1; i != arr.Length; i++)
+        {
+            product *= arr[i - 1];
+            products[i] = product;
+        }
+
+        product = 1;
+        for (int i = arr.Length - 2; i != -1; i--)
+        {
+            product *= arr[i + 1];
+            products[i] *= product;
+        }
+
+        return products;
     }
 }
 
@@ -28,13 +46,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 1, 2], [4, 2, 4, 2]);
+        Run([0, 1, 2, 3], [6, 0, 0, 0]);
+        Run([3, 2, 1, 0], [0, 0, 0, 6]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] arr, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.ProductExceptSelf(arr);
+        Utilities.PrintSolution(arr, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -10,15 +10,33 @@
 // - 1 ≤ `nums.length` ≤ 1000
 // - -10^4 ≤ `nums[i]` ≤ 10^4
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P20_LongestIncreasingSubsequence;
 
 public class Solution
 {
-    public static bool Function()
+    public static int LengthOfLIS(int[] nums)
     {
-        return true;
+        // Smallest number found at the end of subsequences of particular length.
+        var minimums = new List<int> { int.MinValue };
+
+        foreach (int num in nums)
+        {
+            int i = minimums.Count - 1;
+            for (; i != -1 && num <= minimums[i]; i--) { }
+
+            if (minimums.Count == i + 1)
+            {
+                minimums.Add(int.MaxValue);
+            }
+
+            minimums[i + 1] = Math.Min(minimums[i + 1], num);
+        }
+
+        return minimums.Count - 1;
     }
 }
 
@@ -26,13 +44,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([0, 4, 2, 6, 1, 5, 3, 7], 4);
+        Run([7, 3, 5, 1, 6, 2, 4, 0], 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.LengthOfLIS(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

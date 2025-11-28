@@ -10,18 +10,42 @@
 //
 // Constraints:
 //
-// - 1≤ `bills.length` ≤500
-//
+// - 1 ≤ `bills.length` ≤ 500
 // - `bills[i]` is either 5, 10, or 20.
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P29_LemonadeChange;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static bool LemonadeChange(int[] bills)
     {
+        int count5 = 0, count10 = 0, count20 = 0;
+
+        foreach (int bill in bills)
+        {
+            if (bill == 5)
+            {
+                count5++;
+            }
+            else if (bill == 10)
+            {
+                if (count5 >= 1) { count5--; }
+                else { return false; }
+                count10++;
+            }
+            else
+            {
+                if (count10 >= 1 && count5 >= 1) { count5--; count10--; }
+                else if (count5 >= 3) { count5 -= 3; }
+                else { return false; }
+                count20++;
+            }
+        }
+
         return true;
     }
 }
@@ -30,13 +54,17 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([5, 10, 10, 5, 5, 20], false);
+        Run([5, 5, 10, 10, 20, 5], false);
+        Run([5, 5, 20, 10, 10, 5], false);
+        Run([5, 5, 5, 20, 10, 10], false);
+        Run([5, 10, 5, 20, 5, 10], true);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] bills, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.LemonadeChange(bills);
+        Utilities.PrintSolution(bills, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

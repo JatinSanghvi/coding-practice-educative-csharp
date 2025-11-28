@@ -16,18 +16,36 @@
 // Constraints:
 //
 // - The total number of calls to the two functions are ≤ 104.
-// - 2≤ `path.length` ≤100
-// - 1≤ value ≤109
+// - 2 ≤ `path.length` ≤ 100
+// - 1 ≤ value ≤ 10^9
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P35_DesignFileSystem;
 
-public class Solution
+public class FileSystem
 {
-    public static bool Function()
+    private readonly Dictionary<string, int> pathValues = new()
     {
+        [""] = -1,
+    };
+
+    public bool CreatePath(string path, int value)
+    {
+        if (pathValues.ContainsKey(path)) { return false; }
+
+        int index = path.LastIndexOf('/');
+        string parent = path[..index];
+        if (!pathValues.ContainsKey(parent)) { return false; }
+
+        pathValues[path] = value;
         return true;
+    }
+
+    public int Get(string path)
+    {
+        return pathValues.GetValueOrDefault(path, -1);
     }
 }
 
@@ -35,13 +53,41 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["create /x 1", "get /x"], [true, 1]);
+
+        Run(
+            ["create /a/b 2", "create /a 1", "create /a/b 2", "create /a/b 2", "get /a", "get /a/b", "get /b"],
+            [false, true, true, false, 1, 2, -1]
+        );
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] operations, object[] expectedResults)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var fileSystem = new FileSystem();
+        for (int i = 0; i != operations.Length; i++)
+        {
+            string operation = operations[i];
+            string[] operands = operation.Split();
+
+            switch (operands[0])
+            {
+                case "create":
+                    {
+                        var expectedResult = (bool)expectedResults[i];
+                        bool result = fileSystem.CreatePath(operands[1], int.Parse(operands[2]));
+                        Utilities.PrintSolution(operation, result);
+                        Assert.AreEqual(expectedResult, result);
+                    }
+                    break;
+                case "get":
+                    {
+                        var expectedResult = (int)expectedResults[i];
+                        int result = fileSystem.Get(operands[1]);
+                        Utilities.PrintSolution(operation, result);
+                        Assert.AreEqual(expectedResult, result);
+                    }
+                    break;
+            }
+        }
     }
 }

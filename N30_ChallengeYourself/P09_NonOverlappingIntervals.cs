@@ -15,15 +15,35 @@
 // - `intervals[i].length` == 2
 // - -5×10^4 ≤ start_i < end_i ≤ 5×10^4
 
+using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P09_NonOverlappingIntervals;
 
 public class Solution
 {
-    public static bool Function()
+    public static int RemoveMinIntervals(int[][] intervals)
     {
-        return true;
+        intervals = intervals.OrderBy(i => i[0]).ToArray();
+
+        int refTime = int.MaxValue;
+        int removals = -1;
+
+        foreach (int[] interval in intervals)
+        {
+            if (interval[0] < refTime)
+            {
+                removals++;
+                refTime = Math.Min(refTime, interval[1]);
+            }
+            else
+            {
+                refTime = interval[1];
+            }
+        }
+
+        return removals;
     }
 }
 
@@ -31,13 +51,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 2], [2, 3], [3, 4], [1, 4]], 1);
+        Run([[1, 3], [2, 4], [3, 5], [4, 6]], 2);
+        Run([[1, 7], [2, 6], [3, 5], [4, 4]], 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] intervals, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.RemoveMinIntervals(intervals);
+        Utilities.PrintSolution(intervals, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

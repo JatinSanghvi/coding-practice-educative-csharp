@@ -21,9 +21,15 @@ namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P14_NumberOf1Bits;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(1), Space complexity: O(1).
+    public static int NumberOf1Bits(int n)
     {
-        return true;
+        n = (n & 0x55555555) + ((n >>> 1) & 0x55555555);
+        n = (n & 0x33333333) + ((n >>> 2) & 0x33333333);
+        n = (n & 0x0F0F0F0F) + ((n >>> 4) & 0x0F0F0F0F);
+        n = (n & 0x00FF00FF) + ((n >>> 8) & 0x00FF00FF);
+        n = (n & 0x0000FFFF) + ((n >>> 16) & 0x0000FFFF);
+        return n;
     }
 }
 
@@ -31,13 +37,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(0, 0);
+        Run(int.MaxValue, 31);
+        Run(int.MinValue, 1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.NumberOf1Bits(n);
+        Utilities.PrintSolution(n, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

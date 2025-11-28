@@ -19,9 +19,19 @@ namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P23_UniquePaths;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(m + n), Space complexity: O(1).
+    public static int UniquePaths(int m, int n)
     {
-        return true;
+        long result = 1;
+
+        // Compute (m + n - 2) choose (m - 1).
+        for (int numerator = n; numerator != m + n - 1; numerator++)
+        {
+            int denominator = numerator - n + 1;
+            result = result * numerator / denominator;
+        }
+
+        return (int)result;
     }
 }
 
@@ -29,13 +39,16 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(1, 2, 1);
+        Run(3, 2, 3);
+        Run(3, 4, 10);
+        Run(100, 7, 1609344100); // 100, 8 would exceed integer limit.
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int m, int n, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.UniquePaths(m, n);
+        Utilities.PrintSolution((m, n), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -10,15 +10,25 @@
 // - 1 ≤ `nums.length` ≤ 10^5
 // - -10^4 ≤ `nums[i]` ≤ 10^4
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P06_MaximumSubarray;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int MaxSubArray(int[] nums)
     {
-        return true;
+        int maxSum = nums[0], maxTill = nums[0];
+
+        for (int i = 1; i != nums.Length; i++)
+        {
+            maxTill = Math.Max(maxTill, 0) + nums[i];
+            maxSum = Math.Max(maxSum, maxTill);
+        }
+
+        return maxSum;
     }
 }
 
@@ -26,13 +36,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([0, -2, 1, -3], 1);
+        Run([-0, 2, -1, 3], 4);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MaxSubArray(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

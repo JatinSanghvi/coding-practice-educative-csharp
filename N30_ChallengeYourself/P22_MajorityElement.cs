@@ -18,9 +18,27 @@ namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P22_MajorityElement
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int FindMajorityElement(int[] nums)
     {
-        return true;
+        int count = 0;
+        int majority = 0;
+
+        // The other elements should not be able to drop the count to zero until the end since they are in minority.
+        foreach (int num in nums)
+        {
+            if (count == 0 || majority == num)
+            {
+                majority = num;
+                count++;
+            }
+            else
+            {
+                count--;
+            }
+        }
+
+        return majority;
     }
 }
 
@@ -28,13 +46,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([0, 0, 1, 1, 1], 1);
+        Run([1, 1, 1, 0, 0], 1);
+        Run([1, 0, 1, 0, 1], 1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.FindMajorityElement(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

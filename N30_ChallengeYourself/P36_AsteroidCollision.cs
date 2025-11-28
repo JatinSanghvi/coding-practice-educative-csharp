@@ -14,21 +14,47 @@
 //
 // Constraints:
 //
-// - 2≤ `asteroids.length` ≤103
-//
-// - -103≤ `asteroids[i]` ≤103
-//
-// - `asteroids[i]` ≠0
+// - 2 ≤ `asteroids.length` ≤ 10^3
+// - -10^3 ≤ `asteroids[i]` ≤ 10^3
+// - `asteroids[i]` ≠ 0
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P36_AsteroidCollision;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(n).
+    public static int[] asteroidCollision(int[] asteroids)
     {
-        return true;
+        var survivors = new Stack<int>();
+        foreach (int asteroid in asteroids)
+        {
+            if (asteroid > 0)
+            {
+                survivors.Push(asteroid);
+            }
+            else
+            {
+                while (survivors.Count != 0 && survivors.Peek() > 0 && survivors.Peek() < -asteroid)
+                {
+                    survivors.Pop(); // Remove smaller asteroids in right direction.
+                }
+
+                if (survivors.Count == 0 || survivors.Peek() < 0)
+                {
+                    survivors.Push(asteroid); // Keep asteroid in left direction if it could move all the way.
+                }
+                else if (survivors.Count != 0 && survivors.Peek() == -asteroid)
+                {
+                    survivors.Pop(); // Remove equal asteroid in right direction.
+                }
+            }
+        }
+
+        return survivors.Reverse().ToArray();
     }
 }
 
@@ -36,13 +62,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, -1, -1, -2, 2, 5, 3, -4, 1], [-1, -2, 2, 5, 1]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] asteroids, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.asteroidCollision(asteroids);
+        Utilities.PrintSolution(asteroids, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

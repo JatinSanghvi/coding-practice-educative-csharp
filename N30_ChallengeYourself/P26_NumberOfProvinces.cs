@@ -26,9 +26,34 @@ namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P26_NumberOfProvinc
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n^2), Space complexity: O(n).
+    public static int FindConnectedCities(int[][] cities)
     {
-        return true;
+        int connections = 0;
+        var visited = new bool[cities.Length];
+
+        for (int i = 0; i != cities.Length; i++)
+        {
+            if (!visited[i])
+            {
+                connections++;
+                Visit(i);
+            }
+        }
+
+        return connections;
+
+        void Visit(int i)
+        {
+            visited[i] = true;
+            for (int j = 0; j != cities.Length; j++)
+            {
+                if (!visited[j] && cities[i][j] == 1)
+                {
+                    Visit(j);
+                }
+            }
+        }
     }
 }
 
@@ -36,13 +61,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 0, 1], [0, 1, 0], [1, 0, 1]], 2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] cities, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.FindConnectedCities(cities);
+        Utilities.PrintSolution(cities, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

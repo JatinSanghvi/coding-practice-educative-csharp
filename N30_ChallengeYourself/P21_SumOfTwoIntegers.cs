@@ -13,9 +13,20 @@ namespace JatinSanghvi.CodingInterview.N30_ChallengeYourself.P21_SumOfTwoInteger
 
 public class Solution
 {
-    public static bool Function()
+    public static int IntegerAddition(int a, int b)
     {
-        return true;
+        int result = 0;
+        int cBit = 0;
+
+        for (int pos = 0; pos != 32; pos++)
+        {
+            int aBit = (a & (1 << pos)) >>> pos;
+            int bBit = (b & (1 << pos)) >>> pos;
+            result |= (aBit ^ bBit ^ cBit) << pos;
+            cBit = (aBit + bBit + cBit) >= 2 ? 1 : 0;
+        }
+
+        return result;
     }
 }
 
@@ -23,13 +34,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(1, 1, 2);
+        Run(-1, 1, 0);
+        Run(-1, -1, -2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int a, int b, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.IntegerAddition(a, b);
+        Utilities.PrintSolution((a, b), result);
         Assert.AreEqual(expectedResult, result);
     }
 }
