@@ -19,15 +19,58 @@
 // - 0 ≤ x_i, y_i ≤ 100
 // - All the given points are unique.
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P09_MaximumAreaRectangleWithPointConstraintsI;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n^3), Space complexity: O(n).
+    public int MaxRectangleArea(int[][] points)
     {
-        return true;
+        var pointSet = new HashSet<(int, int)>();
+        foreach (int[] point in points)
+        {
+            pointSet.Add((point[0], point[1]));
+        }
+
+        int maxArea = -1;
+        for (int i = 0; i != points.Length; i++)
+        {
+            for (int j = i + 1; j != points.Length; j++)
+            {
+                if (
+                    points[i][0] != points[j][0] &&
+                    points[i][1] != points[j][1] &&
+                    pointSet.Contains((points[i][0], points[j][1])) &&
+                    pointSet.Contains((points[j][0], points[i][1])))
+                {
+                    bool containsPoint = false;
+                    foreach (int[] point in points)
+                    {
+                        if (
+                            point[0] > Math.Min(points[i][0], points[j][0]) &&
+                            point[0] < Math.Max(points[i][0], points[j][0]) &&
+                            point[1] > Math.Min(points[i][1], points[j][1]) &&
+                            point[1] < Math.Max(points[i][1], points[j][1]))
+                        {
+                            containsPoint = true;
+                            break;
+                        }
+                    }
+
+                    if (!containsPoint)
+                    {
+                        int area = Math.Abs((points[i][0] - points[j][0]) * (points[i][1] - points[j][1]));
+                        maxArea = Math.Max(maxArea, area);
+                    }
+                }
+            }
+        }
+
+        return maxArea;
     }
 }
 
@@ -35,13 +78,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[0, 0], [0, 3], [3, 0], [3, 3], [2, 2], [2, 4], [4, 2], [4, 4]], -1);
+        Run([[0, 0], [0, 3], [3, 0], [3, 3], [1, 1], [1, 3], [3, 1]], 4);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] points, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().MaxRectangleArea(points);
+        Utilities.PrintSolution(points, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

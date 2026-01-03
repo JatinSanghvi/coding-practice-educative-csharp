@@ -30,9 +30,12 @@ namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P03_RectangleOverlap;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(1), Space complexity: O(1).
+    public bool IsRectangleOverlap(int[] rec1, int[] rec2)
     {
-        return true;
+        bool xOverlap = rec1[0] < rec2[2] && rec1[2] > rec2[0];
+        bool yOverlap = rec1[1] < rec2[3] && rec1[3] > rec2[1];
+        return xOverlap && yOverlap;
     }
 }
 
@@ -40,13 +43,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([0, 1, 4, 3], [1, 0, 3, 4], true);
+        Run([0, 0, 4, 4], [1, 1, 3, 3], true);
+        Run([0, 0, 1, 1], [1, 0, 2, 1], false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] rec1, int[] rec2, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = new Solution().IsRectangleOverlap(rec1, rec2);
+        Utilities.PrintSolution((rec1, rec2), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

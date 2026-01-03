@@ -15,15 +15,17 @@
 // - 0 ≤ x_i, y_i ≤ 100
 // - All the given positions are unique.
 
+using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P16_ErectTheFence;
 
 public class Solution
 {
-    public static bool Function()
+    public int[][] OuterTrees(int[][] trees)
     {
-        return true;
+        throw new NotImplementedException();
     }
 }
 
@@ -31,13 +33,19 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        // _ _ _ x
+        // _ x x _
+        // _ x x _
+        // x _ _ _
+        Run([[3, 3], [2, 1], [2, 2], [1, 1], [1, 2], [0, 0]], [[3, 3], [-1, -2], [-3, -3], [-2, -1]]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] trees, int[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        Assert.Throws<NotImplementedException>(() => new Solution().OuterTrees(trees));
+
+        // int[][] result = new Solution().OuterTrees(trees);
+        // Utilities.PrintSolution(trees, result);
+        // CollectionAssert.AreEqual(expectedResult, result);
     }
 }

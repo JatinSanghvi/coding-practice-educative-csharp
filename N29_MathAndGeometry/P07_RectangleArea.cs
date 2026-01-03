@@ -18,15 +18,20 @@
 // - -10^4 ≤ `bx1` ≤ `bx2` ≤ 10^4
 // - -10^4 ≤ `by1` ≤ `by2` ≤ 10^4
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P07_RectangleArea;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(1), Space complexity: O(1).
+    public static int ComputeArea(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2)
     {
-        return true;
+        return
+            (ax2 - ax1) * (ay2 - ay1) + (bx2 - bx1) * (by2 - by1) -
+            Math.Max(0, Math.Min(ax2, bx2) - Math.Max(ax1, bx1)) *
+            Math.Max(0, Math.Min(ay2, by2) - Math.Max(ay1, by1));
     }
 }
 
@@ -34,13 +39,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(0, 1, 4, 3, 1, 0, 3, 4, 12);
+        Run(0, 0, 4, 4, 2, 2, 6, 6, 28);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.ComputeArea(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2);
+        Utilities.PrintSolution((ax1, ay1, ax2, ay2, bx1, by1, bx2, by2), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

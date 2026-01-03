@@ -13,15 +13,16 @@
 // - -100 ≤ x_i, y_i ≤ 100
 // - All the points are unique.
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P17_MinimumNumberOfLinesToCoverPoints;
 
 public class Solution
 {
-    public static bool Function()
+    public int MinimumLines(int[][] points)
     {
-        return true;
+        throw new NotImplementedException();
     }
 }
 
@@ -29,13 +30,19 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        // x _ _ _
+        // x x _ _
+        // X _ x _
+        // x X X X
+        Run([[3, 0], [2, 0], [2, 1], [1, 0], [1, 2], [0, 0], [0, 1], [0, 2], [0, 3]], 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] points, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        Assert.Throws<NotImplementedException>(() => new Solution().MinimumLines(points));
+
+        // int result = new Solution().MinimumLines(points);
+        // Utilities.PrintSolution(points, result);
+        // CollectionAssert.AreEqual(expectedResult, result);
     }
 }

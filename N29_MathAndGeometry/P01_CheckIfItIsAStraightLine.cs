@@ -17,8 +17,28 @@ namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P01_CheckIfItIsAStrai
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public bool CheckStraightLine(int[][] coordinates)
     {
+        // Slope = (y1 - y0) / (x1 - x0) => dy1 / dx1
+        // Slope1 == Slope2 => dy1 / dx1 == dy2 / dx2 => dy1 * dx2 == dy2 * dx1.
+
+        int x0 = coordinates[0][0], y0 = coordinates[0][1];
+
+        int dy1 = coordinates[1][1] - y0;
+        int dx1 = coordinates[1][0] - x0;
+
+        foreach (int[] coordinate in coordinates)
+        {
+            int dy2 = coordinate[1] - y0;
+            int dx2 = coordinate[0] - x0;
+
+            if (dy1 * dx2 != dy2 * dx1)
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 }
@@ -27,13 +47,16 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[2, 1], [-2, -1], [0, 0]], true);
+        Run([[2, 1], [-2, 1], [0, 1]], true);
+        Run([[2, 1], [2, -1], [2, 0]], true);
+        Run([[2, 1], [1, 2], [2, 2]], false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] coordinates, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = new Solution().CheckStraightLine(coordinates);
+        Utilities.PrintSolution(coordinates, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

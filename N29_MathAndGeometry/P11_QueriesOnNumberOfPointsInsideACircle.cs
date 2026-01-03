@@ -21,15 +21,36 @@
 // - 0 ≤ x_j, y_j ≤ 100
 // - 1 ≤ r_j ≤ 100
 
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P11_QueriesOnNumberOfPointsInsideACircle;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(mn), Space complexity: O(1).
+    public static int[] CountPoints(int[][] points, int[][] queries)
     {
-        return true;
+        var counts = new List<int>();
+
+        foreach (int[] query in queries)
+        {
+            (int cx, int cy, int r) = (query[0], query[1], query[2]);
+
+            int count = 0;
+            foreach (int[] point in points)
+            {
+                (int px, int py) = (point[0], point[1]);
+                (int dx, int dy) = (px - cx, py - cy);
+
+                if (dx * dx + dy * dy <= r * r) { count++; }
+            }
+
+            counts.Add(count);
+        }
+
+        return counts.ToArray();
     }
 }
 
@@ -37,13 +58,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[0, 0], [1, 0], [0, 1], [1, 1]], [[0, 0, 1], [0, 1, 1], [0, 2, 1]], [3, 3, 1]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] points, int[][] queries, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.CountPoints(points, queries);
+        Utilities.PrintSolution((points, queries), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

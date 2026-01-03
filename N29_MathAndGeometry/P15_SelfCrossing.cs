@@ -22,9 +22,22 @@ namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P15_SelfCrossing;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public bool IsSelfCrossing(int[] distance)
     {
-        return true;
+        // Any line should intersect with a line earlier in order by 3, 4, or 5 before intersecting any other line.
+        for (int i = 0; i != distance.Length; i++)
+        {
+            if (
+                (i >= 3 && distance[i] >= distance[i - 2] && distance[i - 3] >= distance[i - 1]) ||
+                (i >= 4 && distance[i] + distance[i - 4] >= distance[i - 2] && distance[i - 1] == distance[i - 3]) ||
+                (i >= 5 && distance[i] >= distance[i - 2] - distance[i - 4] && distance[i - 2] > distance[i - 4] && distance[i - 1] <= distance[i - 3] && distance[i - 1] + distance[i - 5] >= distance[i - 3]))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 
@@ -32,13 +45,21 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([2, 2, 2, 1], false);
+        Run([2, 2, 2, 2], true);
+        Run([2, 1, 1, 2], true);
+        Run([1, 1, 3, 1, 1], false);
+        Run([1, 1, 3, 1, 2], true);
+        Run([1, 1, 3, 1, 5], true);
+        Run([1, 1, 2, 3, 1, 1], false);
+        Run([1, 1, 2, 3, 1, 2], true);
+        Run([2, 2, 3, 3, 2, 2], true);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] distance, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = new Solution().IsSelfCrossing(distance);
+        Utilities.PrintSolution(distance, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

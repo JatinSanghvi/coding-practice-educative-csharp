@@ -16,9 +16,23 @@ namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P05_ReverseInteger;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(digits), Space complexity: O(1).
+    public static int Reverse(int num)
     {
-        return true;
+        int reversed = 0;
+
+        int msd = 0;
+        while (num != 0)
+        {
+            reversed = reversed * 10 + (num % 10);
+            msd = num;
+            num /= 10;
+        }
+
+        int lsd = reversed % 10;
+        if (msd != lsd) { return 0; }
+
+        return reversed;
     }
 }
 
@@ -26,13 +40,18 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(1, 1);
+        Run(-1, -1);
+        Run(1_000_000_000, 1);
+        Run(1_463_847_412, 2_147_483_641);
+        Run(-2_147_483_641, -1_463_847_412);
+        Run(1_000_000_003, 0);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int num, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.Reverse(num);
+        Utilities.PrintSolution(num, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

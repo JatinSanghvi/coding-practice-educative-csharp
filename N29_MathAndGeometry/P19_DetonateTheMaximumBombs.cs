@@ -24,15 +24,44 @@
 // - `bombs[i].length` == 3
 // - 1 ≤ x_i, y_i, r_i ≤ 1000
 
+using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P19_DetonateTheMaximumBombs;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n^n), Space complexity: O(n).
+    public static int MaximumDetonation(int[][] bombs)
     {
-        return true;
+        int maxDetonations = 0;
+
+        for (int i = 0; i != bombs.Length; i++)
+        {
+            var detonated = new bool[bombs.Length];
+            int detonations = 0;
+
+            void Detonate(int i)
+            {
+                detonated[i] = true;
+                detonations++;
+
+                for (int j = 0; j != bombs.Length; j++)
+                {
+                    if (!detonated[j] && Math.Pow(bombs[i][0] - bombs[j][0], 2) + Math.Pow(bombs[i][1] - bombs[j][1], 2) <= Math.Pow(bombs[i][2], 2))
+                    {
+                        Detonate(j);
+
+                    }
+                }
+            }
+
+            Detonate(i);
+            maxDetonations = Math.Max(maxDetonations, detonations);
+        }
+
+        return maxDetonations;
     }
 }
 
@@ -40,13 +69,20 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        // 4 _ _ _ 3
+        // _ _ _ _ _
+        // _ _ _ _ _
+        // _ _ _ _ _
+        // 1 _ _ _ 2
+        Run([[1, 1, 1], [5, 1, 2], [5, 5, 3], [1, 5, 4]], 3);
+        Run([[1, 1, 3], [1, 2, 1], [1, 3, 1], [1, 5, 2]], 4);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] bombs, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int[][] bombsCopy = bombs.ToArray();
+        int result = Solution.MaximumDetonation(bombs);
+        Utilities.PrintSolution(bombsCopy, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

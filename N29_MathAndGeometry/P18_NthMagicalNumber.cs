@@ -12,15 +12,34 @@
 // - 1 ≤ `n` ≤ 10^9
 // - 2 ≤ `a`, `b` ≤ 4 × 10^4
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P18_NthMagicalNumber;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(log(n * min(a, b))), Space complexity: O(1).
+    public int NthMagicalNumber(int n, int a, int b)
     {
-        return true;
+        int ab = a * b / GreatestCommonDivisor(a, b);
+
+        long low = 0, high = (long)n * Math.Min(a, b);
+
+        while (high - low > 1)
+        {
+            long mid = (low + high) / 2;
+            long rank = mid / a + mid / b - mid / ab;
+            if (rank < n) { low = mid; }
+            else { high = mid; }
+        }
+
+        return (int)(high % 1_000_000_007);
+    }
+
+    private static int GreatestCommonDivisor(int a, int b)
+    {
+        return b == 0 ? a : GreatestCommonDivisor(b, a % b);
     }
 }
 
@@ -28,13 +47,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(700, 600, 1000, 300_000);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int a, int b, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().NthMagicalNumber(n, a, b);
+        Utilities.PrintSolution((n, a, b), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

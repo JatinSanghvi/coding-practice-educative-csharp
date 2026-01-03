@@ -18,9 +18,12 @@ namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P02_MinimumCutsToDivi
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(1), Space complexity: O(1).
+    public static int NumberOfCuts(int n)
     {
-        return true;
+        if (n == 1) { return 0; }
+        else if (n % 2 == 0) { return n / 2; }
+        else { return n; }
     }
 }
 
@@ -28,13 +31,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(1, 0);
+        Run(2, 1);
+        Run(3, 3);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.NumberOfCuts(n);
+        Utilities.PrintSolution(n, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

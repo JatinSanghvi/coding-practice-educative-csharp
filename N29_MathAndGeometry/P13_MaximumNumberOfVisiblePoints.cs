@@ -25,15 +25,57 @@
 // - 0 ≤ `angle` < 360
 // - 0 ≤ `pos_x`, `pos_y`, `x_i`, `y_i` ≤ 100
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P13_MaximumNumberOfVisiblePoints;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(n).
+    public int VisiblePoints(IList<IList<int>> points, int angle, IList<int> location)
     {
-        return true;
+        int sourcePoints = 0;
+        int x = location[0], y = location[1];
+        var angles = new List<double>();
+
+        foreach (IList<int> point in points)
+        {
+            int px = point[0], py = point[1];
+
+            if (px == x && py == y)
+            {
+                sourcePoints += 1;
+            }
+            else
+            {
+                angles.Add(Math.Atan2(py - y, px - x) / Math.PI * 180);
+            }
+        }
+
+        angles.Sort();
+
+        int len = angles.Count;
+        for (int i = 0; i != len; i++)
+        {
+            angles.Add(angles[i] + 360);
+        }
+
+        int maxVisiblePoints = 0;
+        int high = 0;
+        for (int low = 0; low != len; low++)
+        {
+            while (high != 2 * len && angles[high] - angles[low] <= angle)
+            {
+                high++;
+            }
+
+            maxVisiblePoints = Math.Max(maxVisiblePoints, high - low);
+        }
+
+        return maxVisiblePoints + sourcePoints;
     }
 }
 
@@ -41,13 +83,20 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[6, 1], [7, 1], [6, 2], [5, 2], [5, 1], [6, 0]], 0, [6, 1], 2);
+        Run([[6, 1], [7, 1], [6, 2], [5, 2], [5, 1], [6, 0]], 90, [6, 1], 4);
+        Run([[6, 1], [7, 1], [6, 2], [5, 2], [5, 1], [6, 0]], 359, [6, 1], 6);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] points, int angle, int[] location, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().VisiblePoints(
+            points.Select(point => (IList<int>)point.ToList()).ToList(),
+            angle,
+            location.ToList()
+        );
+
+        Utilities.PrintSolution((points, angle, location), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

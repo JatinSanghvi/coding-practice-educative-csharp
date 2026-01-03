@@ -20,15 +20,26 @@
 // - `points[i].length` = 2
 // - -10^3 ≤ `points[i][0]`, `points[i][1]` ≤ 10^3
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P04_MinimumTimeVisitingAllPoints;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int MinTimeToVisitAllPoints(int[][] points)
     {
-        return true;
+        int time = 0;
+
+        for (int i = 0; i != points.Length - 1; i++)
+        {
+            time += Math.Max(
+                Math.Abs(points[i + 1][0] - points[i][0]),
+                Math.Abs(points[i + 1][1] - points[i][1]));
+        }
+
+        return time;
     }
 }
 
@@ -36,13 +47,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[0, 1], [10, 21], [20, 41]], 40);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] points, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.MinTimeToVisitAllPoints(points);
+        Utilities.PrintSolution(points, result);
         Assert.AreEqual(expectedResult, result);
     }
 }
