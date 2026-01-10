@@ -11,15 +11,49 @@
 // - 0 <= `strings[i].length` <= 200
 // - `strings[i]` consist of any possible combinations of characters from 256 valid ASCII characters.
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N28_BitwiseManipulation.P06_EncodeAndDecodeStrings;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static string Encode(List<string> strings)
     {
-        return true;
+        var charList = new List<char>();
+
+        foreach (string str in strings)
+        {
+            foreach (char ch in str)
+            {
+                if (ch == '\\' || ch == ',') { charList.Add('\\'); }
+                charList.Add(ch);
+            }
+
+            charList.Add(',');
+        }
+
+        return new string(charList.ToArray());
+    }
+
+    // Time complexity: O(n), Space complexity: O(1).
+    public static List<string> Decode(string str)
+    {
+        var strings = new List<string>();
+        var charList = new List<char>();
+        bool escapeChar = false;
+
+        foreach (char ch in str)
+        {
+            if (escapeChar) { charList.Add(ch); escapeChar = false; }
+            else if (ch == '\\') { escapeChar = true; }
+            else if (ch == ',') { strings.Add(new string(charList.ToArray())); charList.Clear(); }
+            else { charList.Add(ch); }
+        }
+
+        return strings;
     }
 }
 
@@ -27,13 +61,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([",,", "\\\\", "aa"]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] strings)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        string[] expectedResult = strings;
+        string[] result = Solution.Decode(Solution.Encode(strings.ToList())).ToArray();
+        Utilities.PrintSolution(strings, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -16,9 +16,33 @@ namespace JatinSanghvi.CodingInterview.N28_BitwiseManipulation.P12_LongestSubarr
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int LongestSubarray(int[] nums)
     {
-        return true;
+        int andTill = 0, andMax = 0;
+        int lengthTill = 0, lengthMax = 0;
+
+        foreach (int num in nums)
+        {
+            if ((andTill & num) >= num)
+            {
+                andTill &= num;
+                lengthTill++;
+            }
+            else
+            {
+                andTill = num;
+                lengthTill = 1;
+            }
+
+            if (andMax < andTill || (andMax == andTill && lengthMax < lengthTill))
+            {
+                andMax = andTill;
+                lengthMax = lengthTill;
+            }
+        }
+
+        return lengthMax;
     }
 }
 
@@ -26,13 +50,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 3, 2], 1);
+        Run([1, 3, 3, 2], 2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.LongestSubarray(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

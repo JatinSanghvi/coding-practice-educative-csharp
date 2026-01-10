@@ -15,9 +15,19 @@ namespace JatinSanghvi.CodingInterview.N28_BitwiseManipulation.P15_ReverseBits;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(1), Space complexity: O(1).
+    public static uint ReverseBits(uint n)
     {
-        return true;
+        uint result = 0;
+        for (int pos = 0; pos != 32; pos++)
+        {
+            if ((n & (1 << pos)) != 0)
+            {
+                result |= 1U << (31 - pos);
+            }
+        }
+
+        return result;
     }
 }
 
@@ -25,13 +35,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(0, 0);
+        Run(0x55555555, 0xAAAAAAAA);
+        Run(0xFFFF0000, 0x0000FFFF);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(uint n, uint expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        uint result = Solution.ReverseBits(n);
+        Utilities.PrintSolution(n, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

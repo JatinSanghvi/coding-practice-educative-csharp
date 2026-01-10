@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -18,7 +17,7 @@ internal static class Utilities
         return value switch
         {
             null => "null",
-            bool or int or long or float or double or decimal => $"{value}",
+            bool or int or uint or long or ulong or float or double or decimal => $"{value}",
             char => $"'{value}'",
             string => $"\"{value}\"",
             IEnumerable enumerable => $"[{string.Join(", ", enumerable.Cast<object>().Select(ToPrintString))}]",

@@ -16,9 +16,17 @@ namespace JatinSanghvi.CodingInterview.N28_BitwiseManipulation.P04_SingleNumber;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int SingleNumber(int[] nums)
     {
-        return true;
+        int result = 0;
+
+        foreach (int num in nums)
+        {
+            result ^= num;
+        }
+
+        return result;
     }
 }
 
@@ -26,13 +34,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1], 1);
+        Run([1, 2, 1], 2);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.SingleNumber(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

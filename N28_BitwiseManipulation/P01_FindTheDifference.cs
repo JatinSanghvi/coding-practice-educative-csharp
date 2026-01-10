@@ -19,9 +19,16 @@ namespace JatinSanghvi.CodingInterview.N28_BitwiseManipulation.P01_FindTheDiffer
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static int ExtraCharacterIndex(string str1, string str2)
     {
-        return true;
+        char xor = '\0';
+
+        foreach (char ch in str1) { xor ^= ch; }
+        foreach (char ch in str2) { xor ^= ch; }
+
+        string longerStr = str1.Length > str2.Length ? str1 : str2;
+        return longerStr.IndexOf(xor);
     }
 }
 
@@ -29,13 +36,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("aabbcc", "abcab", 4);
+        Run("", "a", 0);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string str1, string str2, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.ExtraCharacterIndex(str1, str2);
+        Utilities.PrintSolution((str1, str2), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

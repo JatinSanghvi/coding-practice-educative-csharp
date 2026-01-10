@@ -16,15 +16,25 @@
 // - 1 ≤ n ≤ 20
 // - `images[i][j]` is either 0 or 1.
 
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N28_BitwiseManipulation.P03_FlippingAnImage;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n^2), Space complexity: O(1).
+    public static int[][] FlipAndInvertImage(int[][] image)
     {
-        return true;
+        foreach (int[] row in image)
+        {
+            for (int i1 = 0, i2 = row.Length - 1; i1 <= i2; i1++, i2--)
+            {
+                (row[i1], row[i2]) = (1 - row[i2], 1 - row[i1]);
+            }
+        }
+
+        return image;
     }
 }
 
@@ -32,13 +42,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[0, 0, 0], [0, 0, 1]], [[1, 1, 1], [0, 1, 1]]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] image, int[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[][] imageCopy = image.Select(row => row.ToArray()).ToArray();
+        int[][] result = Solution.FlipAndInvertImage(image);
+        Utilities.PrintSolution(imageCopy, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

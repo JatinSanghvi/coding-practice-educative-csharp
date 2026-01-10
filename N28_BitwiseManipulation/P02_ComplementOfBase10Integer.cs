@@ -13,9 +13,18 @@ namespace JatinSanghvi.CodingInterview.N28_BitwiseManipulation.P02_ComplementOfB
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(1), Space complexity: O(1).
+    public static int FindBitwiseComplement(int num)
     {
-        return true;
+        uint result = ~(uint)num; // 1's complement.
+
+        // Flip all 1s to 0s in the most significant bit positions until a 0 is hit.
+        for (int i = 31; i != 0 && (result & (1 << i)) != 0; i--)
+        {
+            result &= (uint)~(1 << i);
+        }
+
+        return (int)result;
     }
 }
 
@@ -23,13 +32,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(0, 1);
+        Run(1, 0);
+        Run(42, 21);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int num, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.FindBitwiseComplement(num);
+        Utilities.PrintSolution(num, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

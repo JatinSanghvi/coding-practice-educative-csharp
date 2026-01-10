@@ -20,9 +20,32 @@ namespace JatinSanghvi.CodingInterview.N28_BitwiseManipulation.P13_MinimumOneBit
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(1), Space complexity: O(1).
+    public int MinimumOneBitOperations(int n)
     {
-        return true;
+        // The sequence of operations for number 8 will look like:
+        // 1000 -> 1001 -> 1011 -> 1010 -> 1110 -> 1111 -> 1101 -> 1100 ->
+        // 0100 -> 0101 -> 0111 -> 0110 -> 0010 -> 0011 -> 0001 -> 0000 (total 15 operations).
+        // In general, any number like abc10000 needs to be converted to abc11000 in x operations, then to abc01000, and
+        // finally to abc00000 in x more operations. Since the operation is recursive, coversion always takes operation
+        // equal to 2^(bit position that need to be changed).
+        // The number sequence is same as Gray code, when successive numbers only differ by a single bit. We can easily
+        // find the rank of a number in Gray code using the following logic.
+
+        int operations = 0;
+        int toggle = 0;
+
+        for (int pos = 30; pos != -1; pos--)
+        {
+            if ((n & (1 << pos)) != 0)
+            {
+                toggle ^= 1;
+            }
+
+            operations += toggle << pos;
+        }
+
+        return operations;
     }
 }
 
@@ -30,13 +53,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(8, 15);
+        Run(12, 8);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().MinimumOneBitOperations(n);
+        Utilities.PrintSolution(n, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

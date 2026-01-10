@@ -16,9 +16,32 @@ namespace JatinSanghvi.CodingInterview.N28_BitwiseManipulation.P14_TriplesWithBi
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n^2), Space complexity: O(1024).
+    public int CountTriplets(int[] nums)
     {
-        return true;
+        var andCounts = new int[1025];
+
+        foreach (int num1 in nums)
+        {
+            foreach (int num2 in nums)
+            {
+                andCounts[num1 & num2]++;
+            }
+        }
+
+        int triplets = 0;
+        foreach (int num1 in nums)
+        {
+            for (int num2 = 0; num2 != 1025; num2++)
+            {
+                if ((num1 & num2) == 0)
+                {
+                    triplets += andCounts[num2];
+                }
+            }
+        }
+
+        return triplets;
     }
 }
 
@@ -26,13 +49,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([0], 1);
+        Run([3, 5, 6], 6);
+        Run([1, 2, 4], 24);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new Solution().CountTriplets(nums);
+        Utilities.PrintSolution(nums, result);
         Assert.AreEqual(expectedResult, result);
     }
 }
