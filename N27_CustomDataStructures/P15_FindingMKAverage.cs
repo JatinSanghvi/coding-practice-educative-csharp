@@ -29,15 +29,70 @@
 // - 1 ≤ `num` ≤ 10^5
 // - 10^3 calls will be made to `addElement` and `calculateMKAverage`, at most.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N27_CustomDataStructures.P15_FindingMKAverage;
 
-public class Solution
+// Space complexity: O(m).
+public class MKAverage(int m, int k)
 {
-    public static bool Function()
+    private int[] sortedNums = new int[m];
+    private Queue<int> queue = new(m);
+    private int sum = 0;
+
+    // Time complexity: O(m).
+    public void AddElement(int num)
     {
-        return true;
+        int oldNum = 0;
+        if (queue.Count == m)
+        {
+            oldNum = queue.Dequeue();
+        }
+
+        queue.Enqueue(num);
+        int index = FindIndex(oldNum);
+
+        if (sortedNums[index] < num)
+        {
+            while (index != m - 1 && sortedNums[index + 1] < num)
+            {
+                if (index >= k && index <= m - k - 1) { sum += sortedNums[index + 1] - sortedNums[index]; }
+                sortedNums[index] = sortedNums[index + 1];
+                index++;
+            }
+        }
+        else
+        {
+            while (index != 0 && sortedNums[index - 1] > num)
+            {
+                if (index >= k && index <= m - k - 1) { sum += sortedNums[index - 1] - sortedNums[index]; }
+                sortedNums[index] = sortedNums[index - 1];
+                index--;
+            }
+        }
+
+        if (index >= k && index <= m - k - 1) { sum += num - sortedNums[index]; }
+        sortedNums[index] = num;
+    }
+
+    private int FindIndex(int num)
+    {
+        int low = 0, high = m;
+        while (high - low != 1)
+        {
+            int mid = (low + high) / 2;
+            if (sortedNums[mid] <= num) { low = mid; }
+            else { high = mid; }
+        }
+
+        return low;
+    }
+
+    // Time complexity: O(1).
+    public int CalculateMKAverage()
+    {
+        return queue.Count == m ? sum / (m - 2 * k) : -1;
     }
 }
 
@@ -45,13 +100,19 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(4, 1, [0, 20, 40, 60, 10, 30, 50, 70], [-1, -1, -1, 30, 30, 35, 40, 40]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int m, int k, int[] nums, int[] expectedResults)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var mkAverage = new MKAverage(m, k);
+
+        for (int i = 0; i != nums.Length; i++)
+        {
+            mkAverage.AddElement(nums[i]);
+            int result = mkAverage.CalculateMKAverage();
+            Utilities.PrintSolution(nums[i], result);
+            Assert.AreEqual(expectedResults[i], result);
+        }
     }
 }

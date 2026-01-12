@@ -4,7 +4,7 @@
 // Design a data structure that processes a stream of characters and, after each character is received, determines if a
 // suffix of these characters is a string in a given array of strings `words`.
 //
-// For example, if `words` = ["dog"] and the stream adds the characters 'd', 'c', 'a', and 't' in sequence, the
+// For example, if `words` = ["cat", "dog"] and the stream adds the characters 'd', 'c', 'a', and 't' in sequence, the
 // algorithm should detect that the suffix "cat" of the stream "dcat" matches the word "cat" from the list.
 //
 // So, for `words`, the goal is to detect if any of these words appear as a suffix of the stream built so far. To
@@ -23,15 +23,55 @@
 // - `letter` is a lowercase English letter.
 // - At most 4 × 10^2 calls will be made to query.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N27_CustomDataStructures.P13_StreamOfCharacters;
 
-public class Solution
+// Space complexity: O(w*l + s) where w = word count, l = average word length, s = stream length.
+public class StreamChecker
 {
-    public static bool Function()
+    private class TrieNode
     {
-        return true;
+        public bool isWord = false;
+        public TrieNode[] children = new TrieNode[26];
+    }
+
+    private readonly TrieNode root = new();
+    private readonly Stack<char> stream = new();
+
+    // Time complexity: O(w*l).
+    public StreamChecker(string[] words)
+    {
+        // Prepare a trie by inserting each word in reversed letter order. 
+        foreach (string word in words)
+        {
+            TrieNode node = root;
+            foreach (char ch in word.Reverse())
+            {
+                node = node.children[ch - 'a'] ??= new TrieNode();
+            }
+
+            node.isWord = true;
+        }
+    }
+
+    // Time complexity: O(l) where l = maximum word length.
+    public bool Query(char letter)
+    {
+        stream.Push(letter);
+
+        TrieNode node = root;
+        foreach (char ch in stream)
+        {
+            node = node.children[ch - 'a'];
+            if (node == null) { return false; }
+            if (node.isWord) { return true; }
+        }
+
+        return false;
     }
 }
 
@@ -39,13 +79,18 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["ab", "abc", "cde"], "abcde", [false, true, true, false, true]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] words, string letters, bool[] expectedResults)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var streamChecker = new StreamChecker(words);
+
+        for (int i = 0; i != letters.Length; i++)
+        {
+            bool result = streamChecker.Query(letters[i]);
+            Utilities.PrintSolution(letters[i], result);
+            Assert.AreEqual(expectedResults[i], result);
+        }
     }
 }

@@ -7,15 +7,10 @@
 // Implement the following methods for Max Stack:
 //
 // - Constructor: This initializes the Max Stack object.
-//
 // - Void Push(int x): This pushes the provided element, x, onto the stack.
-//
 // - Int Pop( ): This removes and returns the element on the top of the stack.
-//
 // - Int Top( ): This retrieves the most recently added element on the top of the stack without removing it.
-//
 // - Int peekMax( ): This retrieves the maximum element in the stack without removing it.
-//
 // - Int popMax( ): This retrieves the maximum element in the stack and removes it. If there is more than one maximum
 //   element, remove the most recently added one (the topmost).
 //
@@ -25,15 +20,68 @@
 // - A maximum of 100 calls can be made to Push( ), Pop( ), Top( ), peekMax( ) and popMax( ).
 // - The Pop( ), Top( ), peekMax( ), and popMax( ) methods will always be called on a non-empty stack.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N27_CustomDataStructures.P09_MaxStack;
 
-public class Solution
+// Space complexity: O(n) where n is number of operations.
+public class MaxStack
 {
-    public static bool Function()
+    private readonly List<int> stack = new();
+    private int stackSize = 0;
+
+    private readonly SortedSet<(int value, int index)> tree = new();
+    private readonly HashSet<int> poppedIndexes = new();
+
+    // Time complexity: O(logn).
+    public void Push(int x)
     {
-        return true;
+        tree.Add((x, stackSize));
+        stack.Add(x);
+        stackSize++;
+    }
+
+    // Time complexity: O(logn) amortized.
+    public int Pop()
+    {
+        int x = stack[^1];
+        tree.Remove((x, stackSize - 1));
+        stack.RemoveAt(stackSize - 1);
+        stackSize--;
+        Trim();
+        return x;
+    }
+
+    // Time complexity: O(1).
+    public int Top()
+    {
+        return stack[^1];
+    }
+
+    // Time complexity: O(1).
+    public int PeekMax()
+    {
+        return tree.Max.value;
+    }
+
+    // Time complexity: O(logn) amortized.
+    public int PopMax()
+    {
+        (int x, int index) = tree.Max;
+        tree.Remove((x, index));
+        poppedIndexes.Add(index);
+        Trim();
+        return x;
+    }
+
+    private void Trim()
+    {
+        while (poppedIndexes.Remove(stackSize - 1))
+        {
+            stack.RemoveAt(stackSize - 1);
+            stackSize--;
+        }
     }
 }
 
@@ -41,13 +89,49 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(
+            [
+                "Push 1", "Push 2", "Push 3", "Push 2", "Push 1", "Top", "PeekMax",
+                "PopMax", "Top", "PeekMax", "PopMax", "Top", "PeekMax",
+                "Pop", "Top", "PeekMax", "Pop", "Top", "PeekMax", "Pop"
+            ],
+            [
+                null, null, null, null, null, 1, 3,
+                3, 1, 2, 2, 1, 2,
+                1, 2, 2, 2, 1, 1, 1
+            ]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] operations, int?[] expectedResults)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var maxStack = new MaxStack();
+
+        for (int i = 0; i != operations.Length; i++)
+        {
+            int? result = null;
+            string[] operands = operations[i].Split();
+
+            switch (operands[0])
+            {
+                case "Push":
+                    maxStack.Push(int.Parse(operands[1]));
+                    break;
+                case "Pop":
+                    result = maxStack.Pop();
+                    break;
+                case "Top":
+                    result = maxStack.Top();
+                    break;
+                case "PeekMax":
+                    result = maxStack.PeekMax();
+                    break;
+                case "PopMax":
+                    result = maxStack.PopMax();
+                    break;
+            }
+
+            Utilities.PrintSolution(operations[i], result);
+            Assert.AreEqual(expectedResults[i], result);
+        }
     }
 }

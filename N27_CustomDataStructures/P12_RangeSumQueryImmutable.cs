@@ -23,11 +23,25 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N27_CustomDataStructures.P12_RangeSumQueryImmutable;
 
-public class Solution
+// Space complexity: O(n).
+public class NumArray
 {
-    public static bool Function()
+    private readonly int[] sums;
+
+    // Time complexity: O(n).
+    public NumArray(int[] nums)
     {
-        return true;
+        sums = new int[nums.Length + 1];
+        for (int i = 0; i != nums.Length; i++)
+        {
+            sums[i + 1] = sums[i] + nums[i];
+        }
+    }
+
+    // Time complexity: O(1).
+    public int SumRange(int i, int j)
+    {
+        return sums[j + 1] - sums[i];
     }
 }
 
@@ -35,13 +49,19 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 2, 3], [(0, 0), (0, 1), (0, 2), (1, 1), (1, 2), (2, 2)], [1, 3, 6, 2, 5, 3]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums, (int, int)[] sumRangeArgs, int[] expectedResults)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        var numArray = new NumArray(nums);
+
+        for (int index = 0; index != sumRangeArgs.Length; index++)
+        {
+            (int i, int j) = sumRangeArgs[index];
+            int result = numArray.SumRange(i, j);
+            Utilities.PrintSolution((i, j), result);
+            Assert.AreEqual(expectedResults[index], result);
+        }
     }
 }
