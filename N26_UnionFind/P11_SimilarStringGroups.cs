@@ -24,9 +24,55 @@ namespace JatinSanghvi.CodingInterview.N26_UnionFind.P11_SimilarStringGroups;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n^2*len), Space complexity: O(n).
+    public static int NumSimilarGroups(string[] strs)
     {
-        return true;
+        int n = strs.Length;
+        int len = strs[0].Length;
+
+        var parents = new int[n];
+        var ranks = new int[n];
+        int groups = n;
+
+        for (int i = 0; i != n; i++)
+        {
+            parents[i] = i;
+        }
+
+        for (int i = 0; i != n; i++)
+        {
+            for (int j = i + 1; j != n; j++)
+            {
+                int diffs = 0;
+                for (int k = 0; k != len; k++)
+                {
+                    diffs += strs[i][k] != strs[j][k] ? 1 : 0;
+                }
+
+                if (diffs <= 2) { Union(i, j); }
+            }
+        }
+
+        return groups;
+
+        void Union(int x1, int x2)
+        {
+            int p1 = Find(x1);
+            int p2 = Find(x2);
+
+            if (p1 == p2) { return; }
+
+            if (ranks[p1] == ranks[p2]) { ranks[p1]++; }
+            if (ranks[p1] >= ranks[p2]) { parents[p2] = p1; }
+            else { parents[p1] = p2; }
+            groups--;
+        }
+
+        int Find(int x)
+        {
+            if (parents[x] != x) { parents[x] = Find(parents[x]); }
+            return parents[x];
+        }
     }
 }
 
@@ -34,13 +80,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["abbc", "abbc", "abcb"], 1);
+        Run(["abbc", "acbb", "bacb", "bbca"], 2);
+        Run(["abbc", "acbb", "bacb", "bbca", "cbba"], 1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] strs, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.NumSimilarGroups(strs);
+        Utilities.PrintSolution(strs, result);
         Assert.AreEqual(expectedResult, result);
     }
 }

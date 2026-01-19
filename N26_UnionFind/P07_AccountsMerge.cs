@@ -24,15 +24,79 @@
 // - Because `accounts[i][0]` is the name of any person, it should contain only English letters.
 // - For j > 0, `accounts[i][j]` should be a valid email.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N26_UnionFind.P07_AccountsMerge;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(a*e*loge), Space complexity: O(a*e) where a = number of accounts, e = max emails in any account.
+    public static List<List<string>> AccountsMerge(List<List<string>> accounts)
     {
-        return true;
+        var emailAccounts = new Dictionary<string, int>();
+
+        var accountParents = new Dictionary<int, int>();
+        var accountRanks = new Dictionary<int, int>();
+
+        for (int id = 0; id != accounts.Count; id++)
+        {
+            accountParents[id] = id;
+            accountRanks[id] = 1;
+
+            foreach (string email in accounts[id].Skip(1))
+            {
+                if (!emailAccounts.TryGetValue(email, out int previousId))
+                {
+                    emailAccounts[email] = id;
+                }
+                else if (accounts[id][0] != accounts[previousId][0])
+                {
+                    return new List<List<string>>();
+                }
+                else
+                {
+                    Union(id, previousId);
+                }
+            }
+        }
+
+        var mergedAccounts = new Dictionary<int, List<string>>();
+        foreach ((string email, int id) in emailAccounts)
+        {
+            int parentId = Find(id);
+            mergedAccounts.TryAdd(parentId, new List<string>());
+            mergedAccounts[parentId].Add(email);
+        }
+
+        var result = new List<List<string>>();
+        foreach ((int id, List<string> emails) in mergedAccounts)
+        {
+            var account = new List<string> { accounts[id][0] };
+            emails.Sort();
+            account.AddRange(emails);
+            result.Add(account);
+        }
+
+        return result;
+
+        void Union(int id1, int id2)
+        {
+            int p1 = Find(id1);
+            int p2 = Find(id2);
+
+            if (accountRanks[p1] == accountRanks[p2]) { accountRanks[p1]++; }
+            if (accountRanks[p1] >= accountRanks[p2]) { accountParents[p2] = p1; }
+            else { accountParents[p2] = p1; }
+        }
+
+        int Find(int id)
+        {
+            if (accountParents[id] != id) { accountParents[id] = Find(accountParents[id]); }
+            return accountParents[id];
+        }
     }
 }
 
@@ -40,13 +104,39 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(
+            [
+                ["A", "a1", "a2"],
+                ["A", "a3", "a4"],
+                ["A", "a5", "a6"],
+                ["A", "a7", "a1"],
+                ["A", "a8", "a3"],
+                ["A", "a7", "a8"],
+                ["B", "b1", "b2"],
+            ],
+            [
+                ["A", "a1", "a2", "a3", "a4", "a7", "a8"],
+                ["A", "a5", "a6"],
+                ["B", "b1", "b2"],
+            ]
+        );
+
+        Run(
+            [
+                ["A","a3"],
+                ["A","a4","a3"],
+                ["A","a3","a2","a1"],
+            ],
+            [
+                ["A","a1","a2","a3","a4"],
+            ]
+        );
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(List<List<string>> accounts, List<List<string>> expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        List<List<string>> result = Solution.AccountsMerge(accounts);
+        Utilities.PrintSolution(accounts, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

@@ -41,7 +41,7 @@ dotnet run 2 1
 
 ## Requirements
 
-- .NET 9.0 SDK or later
+- .NET 10.0 SDK or later
 
 ## License
 

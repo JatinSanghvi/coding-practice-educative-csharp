@@ -32,15 +32,59 @@
 // - 1 ≤ `c[j].length`, `d[j].length` ≤ 5
 // - `a[i], b[i], c[j], d[j]` consist of lower case English letters and digits.
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N26_UnionFind.P13_EvaluateDivision;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(q*e), Space complexity: O(e).
+    public static double[] EvaluateEquations(string[][] equations, double[] v, string[][] queries)
     {
-        return true;
+        var graph = new Dictionary<string, List<(string den, double val)>>();
+
+        for (int i = 0; i != equations.Length; i++)
+        {
+            string num = equations[i][0];
+            string den = equations[i][1];
+
+            graph.TryAdd(num, new());
+            graph.TryAdd(den, new());
+
+            graph[num].Add((den, v[i]));
+            graph[den].Add((num, 1.0 / v[i]));
+        }
+
+        return queries.Select(Eval).ToArray();
+
+        double Eval(string[] query)
+        {
+            var visited = new HashSet<string>();
+
+            string num = query[0];
+            string den = query[1];
+
+            return graph.ContainsKey(num) && graph.ContainsKey(den) ? GetResult(num) : -1.0;
+
+            double GetResult(string currNum)
+            {
+                if (currNum == den) { return 1.0; }
+
+                if (!visited.Contains(currNum))
+                {
+                    visited.Add(currNum);
+                    foreach ((string currDen, double val) in graph[currNum])
+                    {
+                        double result = GetResult(currDen);
+                        if (result != -1.0) { return val * result; }
+                    }
+                }
+
+                return -1.0;
+            }
+        }
     }
 }
 
@@ -48,13 +92,17 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(
+            [["a", "b"], ["b", "c"]],
+            [2.0, 3.0],
+            [["a", "c"], ["b", "a"], ["a", "e"], ["a", "a"], ["x", "x"]],
+            [6.0, 0.5, -1.0, 1.0, -1.0]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[][] equations, double[] v, string[][] queries, double[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        double[] result = Solution.EvaluateEquations(equations, v, queries);
+        Utilities.PrintSolution((equations, v, queries), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

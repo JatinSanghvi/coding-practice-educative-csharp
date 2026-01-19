@@ -25,15 +25,56 @@
 // - 0 ≤ `height_i` ≤ 10^4
 // - `buildings` is sorted by `left_i` in ascending order.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N26_UnionFind.P10_TheSkylineProblem;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*logn), Space complexity: O(n).
+    public static int[][] GetSkyline(int[][] buildings)
     {
-        return true;
+        var changes = new SortedDictionary<int, List<(bool isStart, int index)>>();
+        for (int i = 0; i != buildings.Length; i++)
+        {
+            changes.TryAdd(buildings[i][0], new List<(bool, int)>());
+            changes.TryAdd(buildings[i][1], new List<(bool, int)>());
+
+            changes[buildings[i][0]].Add((true, i));
+            changes[buildings[i][1]].Add((false, i));
+        }
+
+        var heap = new PriorityQueue<int, int>();
+        var ended = new HashSet<int>();
+        var skyline = new List<int[]>();
+
+        foreach ((int pos, List<(bool, int)> values) in changes)
+        {
+            foreach ((bool isStart, int index) in values)
+            {
+                if (isStart)
+                {
+                    heap.Enqueue(index, -buildings[index][2]); // Height
+                }
+                else
+                {
+                    ended.Add(index);
+                    while (heap.Count != 0 && ended.Contains(heap.Peek()))
+                    {
+                        ended.Remove(heap.Dequeue());
+                    }
+                }
+            }
+
+            int height = heap.Count == 0 ? 0 : buildings[heap.Peek()][2];
+            if (skyline.Count != 0 || height != skyline[^1][1])
+            {
+                skyline.Add([pos, height]);
+            }
+        }
+
+        return skyline.ToArray();
     }
 }
 
@@ -41,13 +82,17 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([[1, 2, 1], [3, 4, 2]], [[1, 1], [2, 0], [3, 2], [4, 0]]); // Disconnected.
+        Run([[1, 2, 1], [2, 3, 3], [3, 4, 2]], [[1, 1], [2, 3], [3, 2], [4, 0]]); // Connected.
+        Run([[1, 4, 1], [2, 3, 2]], [[1, 1], [2, 2], [3, 1], [4, 0]]); // Overlap
+        Run([[1, 4, 1], [2, 4, 2], [3, 4, 3]], [[1, 1], [2, 2], [3, 3], [4, 0]]); // Staircase up.
+        Run([[1, 4, 1], [1, 3, 2], [1, 2, 3]], [[1, 3], [2, 2], [3, 1], [4, 0]]); // Staircase down.
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] buildings, int[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[][] result = Solution.GetSkyline(buildings);
+        Utilities.PrintSolution(buildings, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }
