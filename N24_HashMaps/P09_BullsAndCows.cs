@@ -23,15 +23,40 @@
 // - `secret.length` == `guess.length`
 // - `secret` and `guess` consist of digits only.
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N24_HashMaps.P09_BullsAndCows;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(1).
+    public static string GetHint(string secret, string guess)
     {
-        return true;
+        var counts1 = new int[10];
+        var counts2 = new int[10];
+
+        int bulls = 0;
+        for (int i = 0; i != secret.Length; i++)
+        {
+            if (secret[i] == guess[i])
+            {
+                bulls++;
+            }
+            else
+            {
+                counts1[secret[i] - '0']++;
+                counts2[guess[i] - '0']++;
+            }
+        }
+
+        int cows = 0;
+        for (int i = 0; i != 10; i++)
+        {
+            cows += Math.Min(counts1[i], counts2[i]);
+        }
+
+        return $"{bulls}A{cows}B";
     }
 }
 
@@ -39,13 +64,14 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("00112233", "01230123", "2A6B");
+        Run("00112233", "01234567", "1A3B");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string secret, string guess, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = Solution.GetHint(secret, guess);
+        Utilities.PrintSolution((secret, guess), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

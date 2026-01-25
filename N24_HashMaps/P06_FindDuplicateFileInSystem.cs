@@ -28,15 +28,44 @@
 // - You may assume that each given directory info represents a unique directory. A single blank space separates the
 //   directory path and file info.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N24_HashMaps.P06_FindDuplicateFileInSystem;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n*(l+c)), Space complexity: O(n*(l+c)), where n = total files, l = path length, c = content length.
+    public static IList<IList<string>> FindDuplicate(string[] paths)
     {
-        return true;
+        var contentPaths = new Dictionary<string, List<string>>();
+
+        foreach (string path in paths)
+        {
+            string[] segments = path.Split();
+            for (int i = 1; i != segments.Length; i++)
+            {
+                int index = segments[i].IndexOf('(');
+                string filePath = $"{segments[0]}/{segments[i][..index]}";
+                string content = segments[i][(index + 1)..^1];
+                Console.WriteLine($"{filePath}, {content}");
+                contentPaths.TryAdd(content, new List<string>());
+                contentPaths[content].Add(filePath);
+            }
+        }
+
+        var duplicates = new List<IList<string>>();
+        foreach (List<string> filePaths in contentPaths.Values)
+        {
+            if (filePaths.Count > 1)
+            {
+                duplicates.Add(filePaths);
+            }
+        }
+
+        return duplicates;
     }
 }
 
@@ -44,13 +73,18 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(
+            ["A/A 1.py(c1) 2.py(c2)", "A/B/A 3.py(c1)", "A/B 4.py(c2) 5.py(c3)"],
+            [
+                ["A/A/1.py", "A/B/A/3.py"],
+                ["A/A/2.py", "A/B/4.py"]
+            ]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] paths, string[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        string[][] result = Solution.FindDuplicate(paths).Select(group => group.ToArray()).ToArray();
+        Utilities.PrintSolution(paths, result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

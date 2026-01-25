@@ -20,9 +20,37 @@ namespace JatinSanghvi.CodingInterview.N24_HashMaps.P10_CustomSortString;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(s), Space complexity: O(1).
+    public static string CustomSortString(string order, string s)
     {
-        return true;
+        var counts = new int[26];
+        foreach (char ch in s)
+        {
+            counts[ch - 'a']++;
+        }
+
+        var sorted = new char[s.Length];
+        int pos = 0;
+
+        foreach (char ch in order)
+        {
+            while (counts[ch - 'a'] != 0)
+            {
+                sorted[pos++] = ch;
+                counts[ch - 'a']--;
+            }
+        }
+
+        for (int i = 0; i != 26; i++)
+        {
+            while (counts[i] != 0)
+            {
+                sorted[pos++] = (char)('a' + i);
+                counts[i]--;
+            }
+        }
+
+        return new string(sorted);
     }
 }
 
@@ -30,13 +58,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("dc", "abcdabcd", "ddccaabb");
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string order, string s, string expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        string result = Solution.CustomSortString(order, s);
+        Utilities.PrintSolution((order, s), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -17,15 +17,38 @@
 // - 1 ≤ n ≤ 10^3
 // - 0 ≤ `nums1[i]`, `nums2[i]` ≤ 100
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N24_HashMaps.P07_DotProductOfTwoSparseVectors;
 
-public class Solution
+// Space complexity: O(k) where k = non-zero elements in nums.
+public class SparseVector
 {
-    public static bool Function()
+    public Dictionary<int, int> Nums = new();
+
+    // Time complexity: O(n).
+    public SparseVector(int[] nums)
     {
-        return true;
+        for (int i = 0; i != nums.Length; i++)
+        {
+            if (nums[i] != 0)
+            {
+                Nums[i] = nums[i];
+            }
+        }
+    }
+
+    // Time complexity: O(k).
+    public int DotProduct(SparseVector vec)
+    {
+        int product = 0;
+        foreach ((int i, int num1) in Nums)
+        {
+            product += num1 * (vec.Nums.TryGetValue(i, out int num2) ? num2 : 0);
+        }
+
+        return product;
     }
 }
 
@@ -33,13 +56,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run([1, 0, 2, 0], [0, 0, 3, 4], 6);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[] nums1, int[] nums2, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = new SparseVector(nums1).DotProduct(new SparseVector(nums2));
+        Utilities.PrintSolution((nums1, nums2), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

@@ -17,14 +17,41 @@
 // - The length of the string is 0 ≤ `length` ≤ 5 × 10^4.
 // - The length of both strings is the same.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N24_HashMaps.P05_IsomorphicStrings;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(n), Space complexity: O(n).
+    public static bool IsIsomorphic(string string1, string string2)
     {
+        if (string1.Length != string2.Length) { return false; }
+
+        var forwardMap = new Dictionary<char, char>();
+        var reverseMap = new Dictionary<char, char>();
+
+        for (int i = 0; i != string1.Length; i++)
+        {
+            char ch1 = string1[i];
+            char ch2 = string2[i];
+
+            char ch;
+            if (forwardMap.TryGetValue(ch1, out ch) && ch != ch2)
+            {
+                return false;
+            }
+
+            if (reverseMap.TryGetValue(ch2, out ch) && ch != ch1)
+            {
+                return false;
+            }
+
+            forwardMap[ch1] = ch2;
+            reverseMap[ch2] = ch1;
+        }
+
         return true;
     }
 }
@@ -33,13 +60,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("hello", "teddy", true);
+        Run("hello", "world", false);
+        Run("world", "hello", false);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string string1, string string2, bool expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        bool result = Solution.IsIsomorphic(string1, string2);
+        Utilities.PrintSolution((string1, string2), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

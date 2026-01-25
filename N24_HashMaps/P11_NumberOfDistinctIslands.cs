@@ -12,15 +12,51 @@
 // - 1 ≤ `m`, `n` ≤ 100
 // - `grid[i][j]` is either 0 or 1.
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N24_HashMaps.P11_NumberOfDistinctIslands;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(m*n), Space complexity: O(m*n).
+    public static int NumDistinctIslands(int[][] grid)
     {
-        return true;
+        var shapes = new HashSet<string>();
+
+        int rows = grid.Length;
+        int cols = grid[0].Length;
+
+        for (int r = 0; r != rows; r++)
+        {
+            for (int c = 0; c != cols; c++)
+            {
+                if (grid[r][c] == 1)
+                {
+                    var shape = new StringBuilder();
+                    Walk(r, c);
+                    shapes.Add(shape.ToString());
+
+                    void Walk(int r2, int c2)
+                    {
+                        if (r2 != -1 && r2 != rows && c2 != -1 && c2 != cols && grid[r2][c2] == 1)
+                        {
+                            grid[r2][c2] = 0;
+                            shape.Append($"({r2 - r}, {c2 - c}) ");
+
+                            Walk(r2 - 1, c2);
+                            Walk(r2 + 1, c2);
+                            Walk(r2, c2 - 1);
+                            Walk(r2, c2 + 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        return shapes.Count;
     }
 }
 
@@ -28,13 +64,30 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(
+            [
+                [1, 1, 0, 1],
+                [1, 0, 1, 1],
+                [0, 1, 0, 0],
+                [1, 1, 0, 1],
+            ],
+            3);
+
+        Run(
+            [
+                [1, 1, 1, 1],
+                [0, 0, 0, 0],
+                [1, 1, 1, 1],
+                [0, 0, 0, 0],
+            ],
+            1);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int[][] grid, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int[][] gridCopy = grid.Select(row => row.ToArray()).ToArray();
+        int result = Solution.NumDistinctIslands(grid);
+        Utilities.PrintSolution(gridCopy, result);
         Assert.AreEqual(expectedResult, result);
     }
 }
