@@ -12,15 +12,45 @@
 //
 // - 1 ≤ `k` ≤ `n` ≤ 10^9
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N23_Trie.P09_KthSmallestInLexicographicalOrder;
 
 public class Solution
 {
-    public static bool Function()
+    // Time complexity: O(10*log_10(n)*log_10(n)), Space complexity: O(1).
+    public static int FindKthNumber(int n, int k)
     {
-        return true;
+        int prefix = 1;
+
+        while (k != 1)
+        {
+            int count = CountNumbers(prefix);
+            if (k > count) // Next prefix.
+            {
+                prefix++;
+                k -= count;
+            }
+            else // Same prefix. Go deeper.
+            {
+                prefix *= 10;
+                k -= 1;
+            }
+        }
+
+        return prefix; // Result is same as prefix after it's entirely decoded.
+
+        int CountNumbers(int prefix)
+        {
+            int count = 0;
+            for (long multiple = 1; prefix * multiple <= n; multiple *= 10)
+            {
+                count += Math.Min((int)multiple, n + 1 - prefix * (int)multiple);
+            }
+
+            return count;
+        }
     }
 }
 
@@ -28,13 +58,18 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(123, 1, 1);
+        Run(123, 3, 100);
+        Run(123, 28, 123);
+        Run(123, 123, 99);
+
+        Run(1_000_000_000, 1_000_000_000, 999_999_999);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(int n, int k, int expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
+        int result = Solution.FindKthNumber(n, k);
+        Utilities.PrintSolution((n, k), result);
         Assert.AreEqual(expectedResult, result);
     }
 }

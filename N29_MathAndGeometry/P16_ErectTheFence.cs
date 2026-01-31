@@ -16,7 +16,6 @@
 // - All the given positions are unique.
 
 using System;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N29_MathAndGeometry.P16_ErectTheFence;

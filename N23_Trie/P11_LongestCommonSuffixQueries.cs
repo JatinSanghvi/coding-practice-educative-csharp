@@ -29,9 +29,59 @@ namespace JatinSanghvi.CodingInterview.N23_Trie.P11_LongestCommonSuffixQueries;
 
 public class Solution
 {
-    public static bool Function()
+    private class TrieNode(int wordIndex)
     {
-        return true;
+        public TrieNode[] children = new TrieNode[26];
+        public int wordIndex = wordIndex;
+    }
+
+    // Time complexity: O(c+q), Space complexity: O(c) where c, q are total char lengths of container and query.
+    public static int[] StringIndices(string[] wordsContainer, string[] wordsQuery)
+    {
+        // Construct Trie.
+        var root = new TrieNode(0);
+
+        for (int i = 0; i != wordsContainer.Length; i++)
+        {
+            string word = wordsContainer[i];
+            int len = word.Length;
+
+            TrieNode node = root;
+            if (len < wordsContainer[node.wordIndex].Length)
+            {
+                node.wordIndex = i;
+            }
+
+            for (int j = len - 1; j != -1; j--)
+            {
+                node = node.children[word[j] - 'a'] ??= new TrieNode(-1);
+                if (node.wordIndex == -1 || len < wordsContainer[node.wordIndex].Length)
+                {
+                    node.wordIndex = i;
+                }
+            }
+        }
+
+        // Search within Trie.
+        var indices = new int[wordsQuery.Length];
+
+        for (int i = 0; i != wordsQuery.Length; i++)
+        {
+            string word = wordsQuery[i];
+            int len = word.Length;
+
+            TrieNode node = root;
+            indices[i] = node.wordIndex;
+
+            for (int j = len - 1; j != -1; j--)
+            {
+                node = node.children[word[j] - 'a'];
+                if (node == null) { break; }
+                indices[i] = node.wordIndex;
+            }
+        }
+
+        return indices;
     }
 }
 
@@ -39,13 +89,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["cba", "ba", "a"], ["a", "ca", "cba", "dba", "e"], [2, 2, 0, 1, 2]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] wordsContainer, string[] wordsQuery, int[] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[] result = Solution.StringIndices(wordsContainer, wordsQuery);
+        Utilities.PrintSolution((wordsContainer, wordsQuery), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

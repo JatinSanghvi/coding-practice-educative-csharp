@@ -15,15 +15,49 @@
 // - `text` and `words[i]` consist of lowercase English letters.
 // - All the strings of `words` are unique.
 
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N23_Trie.P08_IndexPairsOfAString;
 
 public class Solution
 {
-    public static bool Function()
+    private class TrieNode
     {
-        return true;
+        public bool isLeaf;
+        public TrieNode[] children = new TrieNode[26];
+    }
+
+    // Time complexity: O(t*l), Space complexity: O(w*l)
+    // , where t = text length, w = number of words, l = average word length. 
+    public static int[][] IndexPairs(string text, string[] words)
+    {
+        var root = new TrieNode();
+
+        foreach (string word in words)
+        {
+            TrieNode node = root;
+            foreach (char ch in word)
+            {
+                node = node.children[ch - 'a'] ??= new TrieNode();
+            }
+
+            node.isLeaf = true;
+        }
+
+        var indexes = new List<int[]>();
+        for (int i = 0; i != text.Length; i++)
+        {
+            TrieNode node = root;
+            for (int j = i; j != text.Length; j++)
+            {
+                node = node.children[text[j] - 'a'];
+                if (node == null) { break; }
+                if (node.isLeaf) { indexes.Add([i, j]); }
+            }
+        }
+
+        return indexes.ToArray();
     }
 }
 
@@ -31,13 +65,13 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run("ababab", ["ab", "aba", "abb"], [[0, 1], [0, 2], [2, 3], [2, 4], [4, 5]]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string text, string[] words, int[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        int[][] result = Solution.IndexPairs(text, words);
+        Utilities.PrintSolution((text, words), result);
+        CollectionAssert.AreEqual(expectedResult, result);
     }
 }

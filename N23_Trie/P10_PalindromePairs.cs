@@ -19,15 +19,18 @@
 // - `words[i]` consists of lowercase English letters
 // - All strings in `words` unique
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JatinSanghvi.CodingInterview.N23_Trie.P10_PalindromePairs;
 
 public class Solution
 {
-    public static bool Function()
+    public IList<IList<int>> PalindromePairs(string[] words)
     {
-        return true;
+        throw new NotImplementedException();
     }
 }
 
@@ -35,13 +38,15 @@ internal static class Tests
 {
     public static void Run()
     {
-        Run(true);
+        Run(["ab", "abbbb", "abc", "ba"], [[0, 3], [1, 3], [2, 3], [3, 0]]);
     }
 
-    private static void Run(bool expectedResult)
+    private static void Run(string[] words, int[][] expectedResult)
     {
-        bool result = Solution.Function();
-        Utilities.PrintSolution(true, result);
-        Assert.AreEqual(expectedResult, result);
+        Assert.Throws<NotImplementedException>(() => new Solution().PalindromePairs(words));
+
+        // int[][] result = new Solution().PalindromePairs(words).Select(indexes => indexes.ToArray()).ToArray();
+        // Utilities.PrintSolution(words, result);
+        // CollectionAssert.AreEqual(expectedResult, result);
     }
 }
